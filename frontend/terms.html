@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service — FelloWorks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Karla:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F7F4EF;
+      --ink: #1C1C1A;
+      --ink-soft: #4A4A45;
+      --ink-muted: #8A8A82;
+      --amber: #C4622D;
+      --amber-light: #E8835A;
+      --amber-pale: #F5E8DF;
+      --rule: #DDD8CE;
+      --white: #FFFFFF;
+    }
+
+    body {
+      font-family: 'Karla', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      background: var(--ink);
+      padding: 32px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+
+    .logo span { color: var(--amber-light); }
+
+    .header-meta {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .hero {
+      border-bottom: 1px solid var(--rule);
+      padding: 64px 48px 48px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--amber);
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(36px, 5vw, 56px);
+      line-height: 1.08;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+
+    .hero-meta {
+      font-size: 14px;
+      color: var(--ink-muted);
+      font-weight: 300;
+    }
+
+    .content {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 48px 80px;
+    }
+
+    section {
+      padding: 48px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      letter-spacing: -0.4px;
+      margin-bottom: 20px;
+      color: var(--ink);
+    }
+
+    h3 {
+      font-family: 'Karla', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      margin-top: 28px;
+      margin-bottom: 10px;
+      color: var(--ink);
+    }
+
+    p {
+      color: var(--ink-soft);
+      font-weight: 300;
+      margin-bottom: 16px;
+      max-width: 680px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    ul {
+      margin: 12px 0 16px 0;
+      padding-left: 20px;
+      max-width: 680px;
+    }
+
+    li {
+      color: var(--ink-soft);
+      font-weight: 300;
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--amber);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    a:hover { border-bottom-color: var(--amber); }
+
+    .callout {
+      background: var(--amber-pale);
+      border-left: 3px solid var(--amber);
+      padding: 20px 24px;
+      border-radius: 0 4px 4px 0;
+      margin: 24px 0;
+      max-width: 680px;
+    }
+
+    .callout p {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .contact-block {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 28px 32px;
+      max-width: 480px;
+      margin-top: 24px;
+    }
+
+    .contact-block p {
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .contact-block p:last-child { margin-bottom: 0; }
+
+    strong { color: var(--ink); font-weight: 500; }
+
+    footer {
+      background: var(--ink);
+      padding: 32px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--white);
+    }
+
+    .footer-logo span { color: var(--amber-light); }
+
+    .footer-note {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    @media (max-width: 680px) {
+      header, footer { padding: 24px; flex-direction: column; gap: 12px; }
+      .hero, .content { padding-left: 24px; padding-right: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="https://fello.works" class="logo">Fello<span>Works</span></a>
+    <span class="header-meta">fello.works</span>
+  </header>
+
+  <div class="hero">
+    <div class="eyebrow">Legal</div>
+    <h1>Terms of Service</h1>
+    <p class="hero-meta">Last updated: April 2026 &nbsp;·&nbsp; Effective from platform launch</p>
+  </div>
+
+  <div class="content">
+
+    <section>
+      <h2>What you're agreeing to</h2>
+      <p>These terms govern your use of FelloWorks — the platform at fello.works and any associated services. By creating an account, you agree to them. If you don't agree, don't use the platform.</p>
+      <p>FelloWorks is operated by Kim Gillick, trading as The Content Strategist, a sole trader registered in Greece (AFM: [YOUR AFM]). References to "FelloWorks", "we", or "us" mean Kim Gillick / The Content Strategist.</p>
+      <div class="callout">
+        <p>Plain version: FelloWorks is a tool for finding collaborators, not a staffing agency, employer, or party to any agreement between members. What happens between members — financially, contractually, professionally — is between them.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>What FelloWorks is</h2>
+      <p>FelloWorks is a curated, invite-only network where European freelancers and consultants find each other for project collaboration. The platform enables members to create profiles, browse other members, post collaboration needs, exchange messages, and provide structured feedback after working together.</p>
+      <p>FelloWorks is not a recruitment agency. It does not place candidates, broker contracts, or take commission on work. It provides access to a curated network — nothing more. Any engagement between members is a direct professional relationship to which FelloWorks is not a party.</p>
+    </section>
+
+    <section>
+      <h2>Membership</h2>
+
+      <h3>Invite-only entry</h3>
+      <p>Membership is by invitation. Every member is either invited by an existing member or accepted directly by FelloWorks during the founding cohort phase. Membership is not a right — it is an agreement to participate in good faith in a professional community with standards.</p>
+
+      <h3>Your account</h3>
+      <p>You are responsible for keeping your account credentials secure. You may not share your account or allow anyone else to access the platform using your credentials. If you become aware of unauthorised access, contact us immediately at <a href="mailto:privacy@fello.works">privacy@fello.works</a>.</p>
+
+      <h3>Eligibility</h3>
+      <p>To create an account you must be at least 18 years old, legally able to enter into contracts in your country of residence, and operating as a freelancer or independent consultant. The platform is designed for European-based professionals, though membership is not legally restricted by geography.</p>
+
+      <h3>Beta period</h3>
+      <p>During the beta phase, membership is free. We make no guarantees about the number of other members, the volume of collaboration opportunities, or the continuity of any specific feature. Beta is a test. We will be honest about that, and we ask that you are too.</p>
+    </section>
+
+    <section>
+      <h2>Your profile and content</h2>
+
+      <h3>Accuracy</h3>
+      <p>Your profile must be an accurate representation of your professional identity. You may not misrepresent your skills, experience, location, or availability. Profiles that are materially inaccurate are grounds for suspension.</p>
+
+      <h3>Your content, your rights</h3>
+      <p>You retain ownership of everything you post — your bio, portfolio links, work samples, and any other content. By posting it, you grant FelloWorks a limited licence to display it to other members of the platform for the purpose of facilitating introductions. We do not use your content for advertising, AI training, or any other purpose.</p>
+
+      <h3>Content you may not post</h3>
+      <p>You may not post content that is false, defamatory, or misleading; that infringes another person's intellectual property; that is unlawful, harassing, or discriminatory; or that is designed to circumvent the platform (for example, directing members to contact you outside FelloWorks before any introduction has been made).</p>
+
+      <h3>Feedback</h3>
+      <p>Post-engagement feedback must be honest and based on a real collaboration. Fabricating, manipulating, or gaming the feedback system is grounds for immediate suspension. Feedback is sent to the recipient for approval before it appears on their profile — recipients can approve or decline. Once approved and published, feedback cannot be deleted by the giver, though it can be reviewed and, if found to be in breach of these terms, removed by FelloWorks.</p>
+    </section>
+
+    <section>
+      <h2>How members interact</h2>
+
+      <h3>Messaging</h3>
+      <p>The platform messaging feature exists to facilitate professional introductions and conversations about potential collaborations. It may not be used for unsolicited commercial messages, bulk outreach, or any form of harassment.</p>
+
+      <h3>Professional conduct</h3>
+      <p>FelloWorks is a professional community. Members are expected to interact with each other with the same standards they would apply in any professional relationship. This includes responding to messages in reasonable time, being honest about availability and capacity, and raising concerns through the platform rather than publicly.</p>
+
+      <h3>What happens between members is between members</h3>
+      <p>FelloWorks facilitates introductions. It does not manage, oversee, or take responsibility for collaborations that result from those introductions. Any contractual, financial, or professional arrangement between members is their own business. FelloWorks is not responsible for disputes, non-payment, scope creep, or any other outcome of a member-to-member engagement.</p>
+      <p>We strongly recommend that members working together formalise their arrangements in writing — a simple project agreement, a statement of work, or at minimum a clear email exchange setting out scope, timeline, and payment terms.</p>
+    </section>
+
+    <section>
+      <h2>Suspension and termination</h2>
+      <p>Membership in FelloWorks is at our discretion. We may suspend or terminate an account if a member:</p>
+      <ul>
+        <li>Breaches these terms, materially or repeatedly</li>
+        <li>Misrepresents their identity or professional credentials</li>
+        <li>Uses the platform to harass, defraud, or harm another member</li>
+        <li>Engages in conduct that is harmful to the reputation or integrity of the network</li>
+        <li>Is found to have gamed or manipulated the feedback system</li>
+      </ul>
+      <p>Where possible, we will contact you before suspending your account. In cases of serious or urgent breaches, we may suspend first and investigate after.</p>
+      <p>You may close your account at any time by contacting <a href="mailto:privacy@fello.works">privacy@fello.works</a>. Your data will be handled in accordance with the <a href="/privacy.html">Privacy Policy</a>.</p>
+    </section>
+
+    <section>
+      <h2>Subscriptions and payment</h2>
+      <p>FelloWorks is free during the beta phase. When paid membership is introduced, the terms — pricing, billing cycle, refund policy — will be published in advance and will require your explicit acceptance before any charge is made. Founding beta members will be given advance notice of any transition to paid membership.</p>
+    </section>
+
+    <section>
+      <h2>Intellectual property</h2>
+      <p>The FelloWorks name, wordmark, and platform design are the property of Kim Gillick / The Content Strategist. You may not reproduce or use them without permission.</p>
+      <p>The software underlying the platform is our property or that of our licensors. You may not copy, reverse engineer, or attempt to extract source code from the platform.</p>
+    </section>
+
+    <section>
+      <h2>Liability</h2>
+      <p>FelloWorks is provided as-is. We do not guarantee uninterrupted access, the accuracy of member-provided information, or the outcome of any introduction made through the platform.</p>
+      <p>To the fullest extent permitted by applicable law, FelloWorks and Kim Gillick / The Content Strategist are not liable for any indirect, incidental, or consequential loss arising from your use of the platform — including disputes between members, loss of business, or loss of data.</p>
+      <p>Nothing in these terms limits liability for fraud, gross negligence, or any liability that cannot be excluded under Greek or EU law.</p>
+    </section>
+
+    <section>
+      <h2>Governing law</h2>
+      <p>These terms are governed by the laws of Greece and, where applicable, EU law. Any dispute that cannot be resolved between us will be subject to the jurisdiction of the courts of Athens, Greece.</p>
+      <p>If you are a consumer under EU law, you may also have access to the EU Online Dispute Resolution platform at <a href="https://ec.europa.eu/consumers/odr" target="_blank">ec.europa.eu/consumers/odr</a>.</p>
+    </section>
+
+    <section>
+      <h2>Changes to these terms</h2>
+      <p>We may update these terms as the platform evolves. If we make material changes, we will notify active members by email at least 14 days before the changes take effect. Continued use of the platform after that date constitutes acceptance. If you disagree with changes, you can close your account.</p>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>Questions about these terms — contact us at <a href="mailto:privacy@fello.works">privacy@fello.works</a>.</p>
+      <div class="contact-block">
+        <p><strong>FelloWorks</strong></p>
+        <p>Kim Gillick (The Content Strategist)</p>
+        <p>Athens, Greece</p>
+        <p><a href="mailto:privacy@fello.works">privacy@fello.works</a></p>
+        <p><a href="https://fello.works">fello.works</a></p>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="footer-logo">Fello<span>Works</span></div>
+    <span class="footer-note">fello.works &nbsp;·&nbsp; privacy@fello.works</span>
+  </footer>
+
+</body>
+</html>

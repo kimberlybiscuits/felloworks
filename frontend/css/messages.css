@@ -183,6 +183,19 @@ body {
   font-weight: var(--weight-medium);
 }
 
+.thread-feedback-link {
+  margin-left: auto;
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.thread-feedback-link:hover {
+  color: var(--ink);
+}
+
 /* Scrollable message area */
 .thread-messages {
   flex: 1;

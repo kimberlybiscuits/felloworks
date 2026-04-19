@@ -276,38 +276,26 @@ const feedbackEntries = [
   {
     reviewer_username: "lea-moreau",
     reviewed_username: "marco-rossi",
-    collaboration_context: "Brand identity project for an architecture firm — I wrote the copy, Marco led the visual identity.",
-    q1_deliver: "Yes, completely. Marco delivered every asset on time and the quality was consistently high. No chasing needed.",
-    q2_communicate: "Very proactively. He flagged a scope issue early in week two before it became a problem. Good instincts.",
-    q3_client_facing: "Absolutely. He's articulate, calm under pressure, and presents well. Clients responded to him well.",
-    q4_strongest: "His ability to translate a vague brief into something specific and visual. He had a clear point of view without being rigid about it.",
+    body: "Marco delivered every asset on time and the quality was consistently high — no chasing needed. He flagged a scope issue early in week two before it became a problem. Articulate and calm under pressure, and clients responded to him well. His real strength is translating a vague brief into something specific and visual. He has a clear point of view without being rigid about it.",
+    would_collaborate_again: true,
   },
   {
     reviewer_username: "marco-rossi",
     reviewed_username: "lea-moreau",
-    collaboration_context: "Worked together on a brand identity project — Léa developed the tone of voice and wrote the full website copy.",
-    q1_deliver: "Yes. Léa delivered two rounds of copy on schedule and handled client feedback graciously.",
-    q2_communicate: "Well. She checked in at the right moments and flagged when a brief was unclear rather than guessing.",
-    q3_client_facing: "Yes. She explained her editorial decisions clearly to the client and held her ground when pushed on the wrong things.",
-    q4_strongest: "The tone of voice work. She nailed the brief on the first attempt — precise, distinctive, and practical to actually use.",
+    body: "Léa delivered two rounds of copy on schedule and handled revisions graciously. She checked in at the right moments and flagged when a brief was unclear rather than guessing. The tone of voice work was exceptional — she nailed the brief on the first attempt. Precise, distinctive, and practical to actually use.",
+    would_collaborate_again: true,
   },
   {
     reviewer_username: "sophie-vanderberg",
     reviewed_username: "tom-eriksson",
-    collaboration_context: "B2B platform project — Sophie designed, Tom built. Six-week engagement.",
-    q1_deliver: "Yes, consistently. Tom flagged early when a design decision had technical implications, which saved time later.",
-    q2_communicate: "Very well. Daily standups were short and useful. He'd surface issues the same day they appeared.",
-    q3_client_facing: "Yes. He joined two client calls and was clear and confident without over-promising.",
-    q4_strongest: "Technical rigour without being precious about it. He made the design system work at a level I hadn't expected.",
+    body: "Tom flagged early when a design decision had technical implications, which saved real time later. Standups were short and useful — he'd surface issues the same day they appeared. He joined two client calls and was clear and confident without over-promising. His technical rigour without being precious about it made the design system work at a level I hadn't expected.",
+    would_collaborate_again: true,
   },
   {
     reviewer_username: "karim-benzali",
     reviewed_username: "david-muller",
-    collaboration_context: "Strategic review for a logistics client — Karim led the strategy, David handled all data analysis and visualisation.",
-    q1_deliver: "Yes. The dashboard he built exceeded what we'd scoped. The client was genuinely impressed.",
-    q2_communicate: "Proactively. He sent a short written update every Friday without being asked.",
-    q3_client_facing: "Yes. He presented the data findings to the exec team and fielded technical questions clearly.",
-    q4_strongest: "Turning messy operational data into something a non-technical board could act on. That's a rare skill.",
+    body: "The dashboard David built exceeded what we'd scoped. He sent a short written update every Friday without being asked. He presented the data findings to the exec team and fielded technical questions clearly. His ability to turn messy operational data into something a non-technical board can act on is a rare and valuable skill.",
+    would_collaborate_again: true,
   },
 ];
 
@@ -550,12 +538,9 @@ async function seed() {
     const { error } = await supabaseAdmin.from("feedback").insert({
       reviewer_id:             reviewerId,
       reviewed_id:             reviewedId,
-      collaboration_context:   f.collaboration_context,
-      q1_deliver:              f.q1_deliver,
-      q2_communicate:          f.q2_communicate,
-      q3_client_facing:        f.q3_client_facing,
-      q4_strongest:            f.q4_strongest,
-      visible_on_profile:      true,
+      body:                    f.body,
+      would_collaborate_again: f.would_collaborate_again,
+      status:                  "approved",
     });
 
     console.log(error ? `ERROR: ${error.message}` : "done.");

@@ -192,18 +192,17 @@ router.get("/:username", requireAuth, async (req, res) => {
     .order("year", { ascending: false })
     .limit(3);
 
-  // Fetch visible feedback for this member
+  // Fetch approved feedback for this member
   const { data: feedback } = await supabaseAdmin
     .from("feedback")
     .select(
       `
-      id, created_at, collaboration_context,
-      q1_deliver, q2_communicate, q3_client_facing, q4_strongest,
-      reviewer:reviewer_id (first_name, last_name, role)
+      id, created_at, body, would_collaborate_again,
+      reviewer:reviewer_id (first_name, last_name, role, username)
     `
     )
     .eq("reviewed_id", member.id)
-    .eq("visible_on_profile", true)
+    .eq("status", "approved")
     .order("created_at", { ascending: false });
 
   res.json({ member, portfolio: portfolio || [], feedback: feedback || [] });

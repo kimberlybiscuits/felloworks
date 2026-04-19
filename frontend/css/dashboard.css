@@ -124,6 +124,51 @@ body {
 }
 
 /* -----------------------------------------------------------------------
+   Pending feedback panel
+   ----------------------------------------------------------------------- */
+
+.feedback-pending-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.feedback-pending-item:last-child {
+  border-bottom: none;
+}
+
+.feedback-pending-item__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+}
+
+.feedback-pending-item__body {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.feedback-pending-item__actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.btn--sm {
+  padding: var(--space-1) var(--space-3);
+  font-size: 0.8125rem;
+}
+
+/* -----------------------------------------------------------------------
    Aside — stacks panels vertically
    ----------------------------------------------------------------------- */
 

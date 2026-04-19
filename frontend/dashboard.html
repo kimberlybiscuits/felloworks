@@ -13,11 +13,9 @@
   <nav class="nav">
     <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
     <ul class="nav__links">
-      <li><a href="/dashboard.html">Dashboard</a></li>
       <li><a href="/browse.html">Browse members</a></li>
       <li><a href="/needs.html">Browse needs</a></li>
       <li><a href="/messages.html">Messages</a></li>
-      <li><a href="/shortlist.html">My shortlist</a></li>
       <li><a href="/profile.html">My profile</a></li>
       <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
       <li><button id="logout-btn" class="nav__logout">Log out</button></li>
@@ -85,6 +83,14 @@
             <p>No messages yet.</p>
           </div>
           <a href="/messages.html" class="dashboard-panel__link">All messages</a>
+        </section>
+
+        <!-- Feedback awaiting approval -->
+        <section class="dashboard-panel" id="feedback-panel" hidden>
+          <h2 class="dashboard-section-title">Feedback to review</h2>
+          <div id="feedback-pending-list">
+            <!-- Populated by JS -->
+          </div>
         </section>
 
         <!-- Shortlist preview -->
@@ -163,6 +169,12 @@
         const { shortlist } = await api.get("/shortlist");
         renderShortlist(shortlist.slice(0, 3));
       } catch { /* silently skip if none */ }
+
+      // Load pending feedback awaiting approval
+      try {
+        const { pending } = await api.get("/feedback/pending");
+        if (pending.length > 0) renderPendingFeedback(pending);
+      } catch { /* silently skip */ }
     }
 
     // Profile completion: check which key fields are missing
@@ -256,6 +268,49 @@
       `).join("");
     }
 
+    function renderPendingFeedback(items) {
+      const panel = document.getElementById("feedback-panel");
+      const list  = document.getElementById("feedback-pending-list");
+
+      list.innerHTML = items.map((f) => `
+        <div class="feedback-pending-item" id="feedback-item-${f.id}">
+          <div class="feedback-pending-item__meta">
+            <strong>${escHtml(`${f.reviewer.first_name} ${f.reviewer.last_name}`)}</strong>
+            <span class="text-muted">${escHtml(f.reviewer.role || "")}</span>
+          </div>
+          <p class="feedback-pending-item__body">${escHtml(f.body)}</p>
+          <div class="feedback-pending-item__actions">
+            <button class="btn btn--primary btn--sm" data-id="${f.id}" data-action="approve">
+              Approve
+            </button>
+            <button class="btn btn--secondary btn--sm" data-id="${f.id}" data-action="decline">
+              Decline
+            </button>
+          </div>
+        </div>
+      `).join("");
+
+      panel.hidden = false;
+
+      list.addEventListener("click", async (e) => {
+        const btn = e.target.closest("[data-action]");
+        if (!btn) return;
+
+        const { id, action } = btn.dataset;
+        btn.disabled = true;
+
+        try {
+          await api.put(`/feedback/${id}/${action}`);
+          const item = document.getElementById(`feedback-item-${id}`);
+          item.remove();
+          if (!list.querySelector(".feedback-pending-item")) panel.hidden = true;
+        } catch (err) {
+          console.error("Feedback action failed:", err.message);
+          btn.disabled = false;
+        }
+      });
+    }
+
     // Escape HTML to prevent XSS when rendering user-supplied strings
     function escHtml(str) {
       return str
@@ -267,6 +322,14 @@
 
     init();
   </script>
+
+  <footer class="site-footer">
+    <span>© 2026 FelloWorks</span>
+    <span class="site-footer__links">
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a>
+    </span>
+  </footer>
 
   <script type="module" src="js/nav.js"></script>
 </body>

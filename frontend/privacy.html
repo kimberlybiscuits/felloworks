@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — FelloWorks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Karla:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --cream: #F7F4EF;
+      --ink: #1C1C1A;
+      --ink-soft: #4A4A45;
+      --ink-muted: #8A8A82;
+      --amber: #C4622D;
+      --amber-light: #E8835A;
+      --amber-pale: #F5E8DF;
+      --rule: #DDD8CE;
+      --white: #FFFFFF;
+    }
+
+    body {
+      font-family: 'Karla', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      background: var(--ink);
+      padding: 32px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+    }
+
+    .logo span { color: var(--amber-light); }
+
+    .header-meta {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .hero {
+      border-bottom: 1px solid var(--rule);
+      padding: 64px 48px 48px;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--amber);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--amber);
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(36px, 5vw, 56px);
+      line-height: 1.08;
+      letter-spacing: -1px;
+      margin-bottom: 24px;
+    }
+
+    .hero-meta {
+      font-size: 14px;
+      color: var(--ink-muted);
+      font-weight: 300;
+    }
+
+    .content {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 48px 80px;
+    }
+
+    section {
+      padding: 48px 0;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+    }
+
+    h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 26px;
+      letter-spacing: -0.4px;
+      margin-bottom: 20px;
+      color: var(--ink);
+    }
+
+    h3 {
+      font-family: 'Karla', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      margin-top: 28px;
+      margin-bottom: 10px;
+      color: var(--ink);
+    }
+
+    p {
+      color: var(--ink-soft);
+      font-weight: 300;
+      margin-bottom: 16px;
+      max-width: 680px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    ul {
+      margin: 12px 0 16px 0;
+      padding-left: 20px;
+      max-width: 680px;
+    }
+
+    li {
+      color: var(--ink-soft);
+      font-weight: 300;
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    a {
+      color: var(--amber);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+
+    a:hover { border-bottom-color: var(--amber); }
+
+    .callout {
+      background: var(--amber-pale);
+      border-left: 3px solid var(--amber);
+      padding: 20px 24px;
+      border-radius: 0 4px 4px 0;
+      margin: 24px 0;
+      max-width: 680px;
+    }
+
+    .callout p {
+      margin: 0;
+      font-size: 15px;
+    }
+
+    .contact-block {
+      background: var(--white);
+      border: 1px solid var(--rule);
+      border-radius: 6px;
+      padding: 28px 32px;
+      max-width: 480px;
+      margin-top: 24px;
+    }
+
+    .contact-block p {
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .contact-block p:last-child { margin-bottom: 0; }
+
+    strong { color: var(--ink); font-weight: 500; }
+
+    footer {
+      background: var(--ink);
+      padding: 32px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 20px;
+      color: var(--white);
+    }
+
+    .footer-logo span { color: var(--amber-light); }
+
+    .footer-note {
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    @media (max-width: 680px) {
+      header, footer { padding: 24px; flex-direction: column; gap: 12px; }
+      .hero, .content { padding-left: 24px; padding-right: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="https://fello.works" class="logo">Fello<span>Works</span></a>
+    <span class="header-meta">fello.works</span>
+  </header>
+
+  <div class="hero">
+    <div class="eyebrow">Legal</div>
+    <h1>Privacy Policy</h1>
+    <p class="hero-meta">Last updated: April 2026 &nbsp;·&nbsp; Effective from platform launch</p>
+  </div>
+
+  <div class="content">
+
+    <section>
+      <h2>Who we are</h2>
+      <p>FelloWorks is a curated, invite-only network for European freelancers and consultants to find trusted collaborators. It is operated by Kim Gillick, trading as The Content Strategist, a sole trader registered in Greece.</p>
+      <div class="contact-block">
+        <p><strong>Data controller</strong></p>
+        <p>Kim Gillick (The Content Strategist)</p>
+        <p>Athens, Greece</p>
+        <p>Greek Tax Number (AFM): [YOUR AFM]</p>
+        <p>Email: <a href="mailto:privacy@fello.works">privacy@fello.works</a></p>
+      </div>
+      <p style="margin-top: 20px;">This policy explains what personal data we collect, why, how long we keep it, and what rights you have over it. If anything here isn't clear, contact us at <a href="mailto:privacy@fello.works">privacy@fello.works</a>.</p>
+    </section>
+
+    <section>
+      <h2>What data we collect and why</h2>
+
+      <h3>Waitlist and pre-launch</h3>
+      <p>Before the platform is live, we collect email addresses from people who sign up to the waitlist. We use these solely to communicate about FelloWorks — launch updates, beta invitations, and relevant news. We use Mailchimp to manage this list. You can unsubscribe at any time via the link in any email we send.</p>
+
+      <h3>Account and profile data</h3>
+      <p>When you join the platform, we collect the information you provide to create your profile. This includes:</p>
+      <ul>
+        <li>Name, email address, and location (country and city)</li>
+        <li>Professional information: skills, languages, availability, and rate range</li>
+        <li>Portfolio links and work samples you choose to upload or link to</li>
+        <li>A short professional bio</li>
+        <li>Any testimonials or external references you add</li>
+      </ul>
+      <p>This information is displayed to other members of the platform so they can find and evaluate potential collaborators. You control what you include. Nothing is required beyond a name and email to create an account, though a complete profile makes you more findable.</p>
+
+      <h3>Messages</h3>
+      <p>The platform includes a messaging feature so members can communicate before committing to a collaboration. Message content is stored in our database to maintain conversation history. Messages are private between the sender and recipient — FelloWorks does not read or share them except where required by law or to investigate a reported breach of our Terms of Service.</p>
+
+      <h3>Needs and project posts</h3>
+      <p>If you post a collaboration need — describing a role, project context, and timeline — this is visible to relevant members of the platform. It is not public outside the platform.</p>
+
+      <h3>Post-engagement feedback</h3>
+      <p>After a collaboration, either party can leave feedback for the other via the platform. Feedback consists of a short written account of the collaboration and a yes/no indication of whether you would collaborate with that person again. Submitted feedback is sent to the recipient for their approval before it appears on their profile. Recipients can approve or decline — only approved feedback is visible to other members. You are not obliged to leave feedback, but it is central to how trust is built on the platform.</p>
+
+      <h3>Technical and usage data</h3>
+      <p>We collect basic technical data when you use the platform: IP address, browser type, pages visited, and timestamps. This is used to maintain security, diagnose problems, and understand how the platform is used. We do not use this data for advertising.</p>
+    </section>
+
+    <section>
+      <h2>Legal basis for processing</h2>
+      <p>Under GDPR, we process your data on the following legal bases:</p>
+      <ul>
+        <li><strong>Contract performance</strong> — processing necessary to provide the service you've signed up for (account data, profile, messaging)</li>
+        <li><strong>Legitimate interests</strong> — basic platform security, fraud prevention, and improving the service</li>
+        <li><strong>Consent</strong> — waitlist email communications, where you can withdraw consent at any time by unsubscribing</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Who we share your data with</h2>
+      <p>We do not sell your data. We do not share it with advertisers. The following third-party services process data on our behalf as data processors, each with a Data Processing Agreement in place:</p>
+      <ul>
+        <li><strong>Supabase</strong> — database and authentication (EU data region)</li>
+        <li><strong>Netlify</strong> — frontend website hosting</li>
+        <li><strong>Render</strong> — backend application hosting</li>
+        <li><strong>Resend</strong> — transactional email (account notifications, password resets)</li>
+        <li><strong>Mailchimp</strong> — waitlist email management</li>
+      </ul>
+      <p>We may also disclose data if required by law, or to protect the safety and security of the platform and its members.</p>
+      <div class="callout">
+        <p>Your profile information — name, skills, availability, portfolio — is visible to other members of FelloWorks. This is the nature of the platform. Only people who have been accepted as members can see your profile.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>How long we keep your data</h2>
+      <p>We keep your data for as long as your account is active. If you close your account, we delete your personal data within 30 days, with the following exceptions:</p>
+      <ul>
+        <li>Feedback you have given to other members becomes part of their profile history. We anonymise rather than delete your attributed feedback when an account is closed, to preserve the integrity of the feedback record.</li>
+        <li>We may retain minimal transactional records (not profile content) for up to 7 years where required for accounting or legal compliance.</li>
+      </ul>
+      <p>Waitlist email addresses are deleted within 90 days of the platform going live, unless you have created an account or explicitly opted in to ongoing communications.</p>
+    </section>
+
+    <section>
+      <h2>Your rights</h2>
+      <p>Under GDPR, you have the following rights. To exercise any of them, contact <a href="mailto:privacy@fello.works">privacy@fello.works</a>. We will respond within 30 days.</p>
+      <ul>
+        <li><strong>Access</strong> — you can request a copy of all personal data we hold about you</li>
+        <li><strong>Rectification</strong> — you can correct inaccurate data (most profile data you can edit directly)</li>
+        <li><strong>Erasure</strong> — you can request deletion of your data, subject to the exceptions above</li>
+        <li><strong>Portability</strong> — you can request your data in a machine-readable format</li>
+        <li><strong>Restriction</strong> — you can ask us to pause processing your data in certain circumstances</li>
+        <li><strong>Objection</strong> — you can object to processing based on legitimate interests</li>
+        <li><strong>Withdraw consent</strong> — for anything based on consent (waitlist emails), you can withdraw at any time</li>
+      </ul>
+      <p>If you believe we have not handled your data properly, you have the right to lodge a complaint with a supervisory authority. In Greece, this is the <a href="https://www.dpa.gr" target="_blank">Hellenic Data Protection Authority (HDPA)</a>.</p>
+    </section>
+
+    <section>
+      <h2>Cookies</h2>
+      <p>FelloWorks uses only the cookies necessary to operate the platform — session authentication and basic security. We do not use advertising cookies or third-party tracking cookies. If this changes, we will update this policy and ask for your consent.</p>
+    </section>
+
+    <section>
+      <h2>Data security</h2>
+      <p>We take reasonable technical and organisational measures to protect your data: encrypted connections (HTTPS), secure authentication, access controls, and reputable infrastructure providers. No system is perfect. If we become aware of a breach that is likely to affect your rights, we will notify you and the relevant supervisory authority as required by law.</p>
+    </section>
+
+    <section>
+      <h2>Changes to this policy</h2>
+      <p>If we make material changes to this policy, we will notify active members by email before the changes take effect. The date at the top of this page reflects when it was last updated.</p>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>Questions, requests, or concerns — contact us at <a href="mailto:privacy@fello.works">privacy@fello.works</a>. We're a small operation and we take this seriously.</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="footer-logo">Fello<span>Works</span></div>
+    <span class="footer-note">fello.works &nbsp;·&nbsp; privacy@fello.works</span>
+  </footer>
+
+</body>
+</html>

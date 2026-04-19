@@ -66,13 +66,16 @@
   font-family: var(--font-sans);
   font-size: 0.9375rem;
   font-weight: var(--weight-medium);
-  opacity: 0.6;
+  opacity: 0.5;
   padding: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
   transition: opacity 0.15s;
 }
 
 .nav__logout:hover {
-  opacity: 1;
+  opacity: 0.85;
 }
 
 
@@ -418,3 +421,31 @@
 
 .progress-bar__step--done     { background-color: var(--amber); }
 .progress-bar__step--current  { background-color: var(--amber-light); }
+
+/* -----------------------------------------------------------------------
+   Site footer — legal links, shown on all authenticated pages
+   ----------------------------------------------------------------------- */
+
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-4) var(--space-8);
+  background-color: var(--ink);
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.site-footer__links {
+  display: flex;
+  gap: var(--space-5);
+}
+
+.site-footer__links a {
+  color: rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+}
+
+.site-footer__links a:hover {
+  color: rgba(255, 255, 255, 0.7);
+}

@@ -260,29 +260,40 @@ body {
   flex-wrap: wrap;
 }
 
-.feedback-entry__header strong {
+.feedback-entry__reviewer {
   font-size: 0.9375rem;
   color: var(--ink);
   font-weight: var(--weight-semibold);
+  text-decoration: none;
 }
 
-.feedback-entry__answers {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: var(--space-2) var(--space-6);
+.feedback-entry__reviewer:hover {
+  text-decoration: underline;
+}
+
+.feedback-entry__date {
+  margin-left: auto;
+}
+
+.feedback-entry__body {
   font-size: 0.9375rem;
-}
-
-.feedback-entry__answers dt {
-  font-weight: var(--weight-medium);
-  color: var(--ink);
-  white-space: nowrap;
-}
-
-.feedback-entry__answers dd {
-  color: var(--ink-soft);
   line-height: 1.6;
+  color: var(--ink-soft);
   margin: 0;
+}
+
+.feedback-entry__collab {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-medium);
+  margin: 0;
+}
+
+.feedback-entry__collab--yes {
+  color: var(--green, #2D6A4F);
+}
+
+.feedback-entry__collab--no {
+  color: var(--ink-muted);
 }
 
 /* Empty state */
