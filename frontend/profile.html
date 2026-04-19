@@ -13,11 +13,14 @@
   <nav class="nav">
     <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
     <ul class="nav__links">
+      <li><a href="/dashboard.html">Dashboard</a></li>
       <li><a href="/browse.html">Browse members</a></li>
       <li><a href="/needs.html">Browse needs</a></li>
+      <li><a href="/messages.html">Messages</a></li>
       <li><a href="/shortlist.html">My shortlist</a></li>
       <li><a href="/profile.html">My profile</a></li>
       <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
+      <li><button id="logout-btn" class="nav__logout">Log out</button></li>
     </ul>
   </nav>
 
@@ -25,7 +28,10 @@
     <div class="profile-edit-container">
 
       <header class="profile-edit-header">
-        <h1 class="profile-edit-title">My profile</h1>
+        <div class="profile-edit-header__row">
+          <h1 class="profile-edit-title">My profile</h1>
+          <a id="view-profile-link" href="#" class="profile-edit-view-link" hidden>View as others see it →</a>
+        </div>
         <p class="profile-edit-sub">
           This is what other members see when they find you. Fill it in at your own pace.
         </p>
@@ -90,7 +96,46 @@
         <div class="form-group">
           <label class="form-label" for="location">Location</label>
           <input class="form-input" type="text" id="location"
-                 placeholder="e.g. Amsterdam, NL" />
+                 placeholder="e.g. Amsterdam, NL"
+                 list="location-suggestions"
+                 autocomplete="off" />
+          <datalist id="location-suggestions">
+            <option value="Amsterdam, NL" />
+            <option value="Athens, GR" />
+            <option value="Barcelona, ES" />
+            <option value="Berlin, DE" />
+            <option value="Brussels, BE" />
+            <option value="Budapest, HU" />
+            <option value="Copenhagen, DK" />
+            <option value="Dublin, IE" />
+            <option value="Edinburgh, UK" />
+            <option value="Frankfurt, DE" />
+            <option value="Geneva, CH" />
+            <option value="Hamburg, DE" />
+            <option value="Helsinki, FI" />
+            <option value="Lisbon, PT" />
+            <option value="Ljubljana, SI" />
+            <option value="London, UK" />
+            <option value="Luxembourg, LU" />
+            <option value="Lyon, FR" />
+            <option value="Madrid, ES" />
+            <option value="Marseille, FR" />
+            <option value="Milan, IT" />
+            <option value="Munich, DE" />
+            <option value="Oslo, NO" />
+            <option value="Paris, FR" />
+            <option value="Prague, CZ" />
+            <option value="Remote" />
+            <option value="Riga, LV" />
+            <option value="Rome, IT" />
+            <option value="Rotterdam, NL" />
+            <option value="Stockholm, SE" />
+            <option value="Tallinn, EE" />
+            <option value="Vienna, AT" />
+            <option value="Vilnius, LT" />
+            <option value="Warsaw, PL" />
+            <option value="Zurich, CH" />
+          </datalist>
         </div>
       </section>
 
@@ -333,6 +378,11 @@
 
     async function loadProfile() {
       const { member } = await api.get("/members/me");
+
+      // Wire up "View as others see it" link
+      const viewLink = document.getElementById("view-profile-link");
+      viewLink.href = `/member.html?username=${encodeURIComponent(member.username)}`;
+      viewLink.hidden = false;
 
       renderAvatarPreview(member);
 
@@ -586,5 +636,6 @@
     loadProfile();
   </script>
 
+  <script type="module" src="js/nav.js"></script>
 </body>
 </html>
