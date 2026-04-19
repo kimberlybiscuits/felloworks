@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Need — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/need.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+    <ul class="nav__links">
+      <li><a href="/browse.html">Browse members</a></li>
+      <li><a href="/needs.html">Browse needs</a></li>
+      <li><a href="/shortlist.html">My shortlist</a></li>
+      <li><a href="/profile.html">My profile</a></li>
+      <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
+    </ul>
+  </nav>
+
+  <!-- Loading state -->
+  <div id="state-loading" class="need-loading">
+    <p class="text-muted">Loading…</p>
+  </div>
+
+  <!-- Not found -->
+  <div id="state-not-found" class="need-not-found" hidden>
+    <p>This need doesn't exist or has been removed.</p>
+    <a href="/dashboard.html" class="btn btn--secondary">Back to dashboard</a>
+  </div>
+
+  <!-- Main content -->
+  <main id="need-main" class="need-main" hidden>
+
+    <a href="javascript:history.back()" class="need-back">← Back</a>
+
+    <div class="need-layout">
+
+      <!-- Left: need details -->
+      <article class="need-article">
+
+        <header class="need-header">
+          <div class="need-header__tags" id="need-tags">
+            <!-- skill pills populated by JS -->
+          </div>
+          <h1 id="need-title" class="need-title"></h1>
+          <p id="need-posted" class="need-posted text-muted"></p>
+        </header>
+
+        <div id="need-description" class="need-description"></div>
+
+        <div class="need-meta-grid" id="need-meta">
+          <!-- detail rows populated by JS -->
+        </div>
+
+      </article>
+
+      <!-- Right: poster card + action -->
+      <aside class="need-aside">
+
+        <div class="need-poster-card">
+          <p class="need-poster-card__label">Posted by</p>
+          <div class="need-poster-card__person">
+            <div id="poster-avatar" class="avatar avatar--lg"></div>
+            <div class="need-poster-card__meta">
+              <a id="poster-name" href="#" class="need-poster-card__name"></a>
+              <p id="poster-role" class="need-poster-card__role text-muted"></p>
+            </div>
+          </div>
+
+          <!-- Own need: edit link; other's need: message button -->
+          <div id="action-own" hidden>
+            <a href="/needs-new.html" id="edit-link" class="btn btn--secondary btn--full">
+              Edit this need
+            </a>
+          </div>
+          <div id="action-other" hidden>
+            <a id="message-link" href="#" class="btn btn--primary btn--full">
+              Message about this
+            </a>
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <script type="module">
+    import api from "./js/api.js";
+    import { requireSession, getSession } from "./js/supabase-client.js";
+
+    await requireSession();
+
+    const params = new URLSearchParams(window.location.search);
+    const needId = params.get("id");
+
+    if (!needId) {
+      showNotFound();
+    } else {
+      loadNeed(needId);
+    }
+
+    async function loadNeed(id) {
+      try {
+        const { need } = await api.get(`/needs/${id}`);
+        renderNeed(need);
+      } catch (err) {
+        showNotFound();
+      }
+    }
+
+    async function renderNeed(need) {
+      // Skill tag pills
+      const tagsEl = document.getElementById("need-tags");
+      if (need.skill_tags?.length) {
+        tagsEl.innerHTML = need.skill_tags
+          .map((t) => `<span class="pill pill--skill">${escHtml(t)}</span>`)
+          .join("");
+      }
+
+      document.getElementById("need-title").textContent = need.skill_title;
+
+      const posted = new Date(need.created_at).toLocaleDateString("en-GB", {
+        day: "numeric", month: "long", year: "numeric",
+      });
+      document.getElementById("need-posted").textContent = `Posted ${posted}`;
+
+      // Description — preserve line breaks
+      const descEl = document.getElementById("need-description");
+      if (need.description) {
+        descEl.innerHTML = escHtml(need.description)
+          .replace(/\n/g, "<br>");
+      } else {
+        descEl.hidden = true;
+      }
+
+      // Meta grid
+      const metaRows = [];
+
+      if (need.start_date_label) {
+        metaRows.push(["Start", need.start_date_label]);
+      }
+      if (need.duration_label) {
+        metaRows.push(["Duration", need.duration_label]);
+      }
+      if (need.commitment_label) {
+        metaRows.push(["Commitment", need.commitment_label]);
+      }
+      if (need.rate_min || need.rate_max) {
+        const rate = need.rate_min && need.rate_max
+          ? `€${need.rate_min}–€${need.rate_max}/day`
+          : need.rate_min ? `from €${need.rate_min}/day` : `up to €${need.rate_max}/day`;
+        metaRows.push(["Budget", rate]);
+      }
+      if (need.rate_notes) {
+        metaRows.push(["Budget notes", need.rate_notes]);
+      }
+      if (need.visibility) {
+        const visLabel = need.visibility === "all" ? "Open to all members" : "Network only";
+        metaRows.push(["Visibility", visLabel]);
+      }
+
+      const metaEl = document.getElementById("need-meta");
+      if (metaRows.length) {
+        metaEl.innerHTML = metaRows.map(([label, value]) => `
+          <div class="need-meta-row">
+            <dt class="need-meta-row__label">${escHtml(label)}</dt>
+            <dd class="need-meta-row__value">${escHtml(value)}</dd>
+          </div>
+        `).join("");
+      } else {
+        metaEl.hidden = true;
+      }
+
+      // Poster card
+      const poster = need.poster;
+      if (poster) {
+        const initials = `${poster.first_name[0]}${poster.last_name[0]}`;
+        document.getElementById("poster-avatar").textContent = initials;
+
+        const nameEl = document.getElementById("poster-name");
+        nameEl.textContent = `${poster.first_name} ${poster.last_name}`;
+        nameEl.href = `/member.html?username=${encodeURIComponent(poster.username)}`;
+
+        document.getElementById("poster-role").textContent = poster.role || "";
+      }
+
+      // Action — own need vs. someone else's
+      const session = await getSession();
+      const myId = session?.user?.id;
+
+      if (need.member_id === myId) {
+        // Own need — show edit link
+        document.getElementById("edit-link").href =
+          `/needs-new.html?edit=${encodeURIComponent(need.id)}`;
+        document.getElementById("action-own").hidden = false;
+      } else {
+        // Other's need — show message link
+        const msgHref = poster?.username
+          ? `/messages.html?with=${encodeURIComponent(need.member_id)}`
+          : "#";
+        document.getElementById("message-link").href = msgHref;
+        document.getElementById("action-other").hidden = false;
+      }
+
+      // Show the page
+      document.getElementById("state-loading").hidden = true;
+      document.getElementById("need-main").hidden = false;
+    }
+
+    function showNotFound() {
+      document.getElementById("state-loading").hidden = true;
+      document.getElementById("state-not-found").hidden = false;
+    }
+
+    function escHtml(str) {
+      return (str || "")
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Member profile — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/member.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+    <ul class="nav__links">
+      <li><a href="/browse.html">Browse members</a></li>
+      <li><a href="/needs.html">Browse needs</a></li>
+      <li><a href="/shortlist.html">My shortlist</a></li>
+      <li><a href="/profile.html">My profile</a></li>
+      <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
+    </ul>
+  </nav>
+
+  <main class="profile-main">
+
+    <a href="/browse.html" class="profile-back">← Back to browse</a>
+
+    <!-- Profile header -->
+    <header class="profile-header">
+      <div class="profile-header__left">
+        <div class="avatar avatar--lg" id="profile-avatar"></div>
+        <div class="profile-header__meta">
+          <h1 id="profile-name" class="profile-name"></h1>
+          <p id="profile-role" class="profile-role"></p>
+          <div class="profile-pills" id="profile-pills"></div>
+          <p id="profile-rate" class="profile-rate text-muted"></p>
+          <p id="profile-location" class="text-muted"></p>
+        </div>
+      </div>
+      <div class="profile-header__actions">
+        <button class="btn btn--primary" id="message-btn">Message this person</button>
+        <button class="shortlist-toggle" id="shortlist-btn" aria-label="Add to shortlist">♡ Add to shortlist</button>
+      </div>
+    </header>
+
+    <div class="profile-body">
+
+      <!-- About -->
+      <section class="profile-section">
+        <h2 class="profile-section__title">About</h2>
+        <p id="profile-bio"></p>
+        <div id="profile-links" class="profile-links"></div>
+      </section>
+
+      <!-- Invited by — visible to all members -->
+      <section class="profile-section" id="inviter-section" hidden>
+        <h2 class="profile-section__title">Introduced by</h2>
+        <div class="inviter-card inviter-card--light" id="profile-inviter-card"></div>
+      </section>
+
+      <!-- Work samples — 3 most recent -->
+      <section class="profile-section">
+        <h2 class="profile-section__title">Work samples</h2>
+        <div id="portfolio-grid" class="portfolio-grid"></div>
+        <div id="portfolio-empty" class="profile-empty" hidden>
+          <p>No work samples added yet.</p>
+        </div>
+      </section>
+
+      <!-- Collaboration feedback -->
+      <section class="profile-section">
+        <h2 class="profile-section__title">Feedback from collaborations</h2>
+        <div id="feedback-list"></div>
+        <div id="feedback-empty" class="profile-empty" hidden>
+          <p class="profile-empty__heading">No collaborations yet on FelloWorks</p>
+          <p id="feedback-empty-body"></p>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Message modal -->
+  <div id="message-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+    <div class="modal__backdrop"></div>
+    <div class="modal__box">
+      <h2 id="modal-heading" class="modal__heading">Send a message</h2>
+      <div id="message-error" class="alert alert--error" hidden></div>
+      <textarea id="message-body" class="form-textarea" rows="5"
+                placeholder="Introduce yourself and explain what you're working on…"></textarea>
+      <div class="modal__actions">
+        <button class="btn btn--primary" id="send-btn">Send</button>
+        <button class="btn btn--secondary" id="cancel-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import api, { renderAvatar } from "./js/api.js";
+    import { requireSession } from "./js/supabase-client.js";
+
+    const session  = await requireSession();
+    const params   = new URLSearchParams(window.location.search);
+    const username = params.get("username");
+
+    if (!username) window.location.href = "/browse.html";
+
+    let memberId; // set once loaded — needed for message/shortlist actions
+
+    async function init() {
+      const { member, portfolio, feedback } = await api.get(`/members/${username}`);
+      memberId = member.id;
+
+      // Avatar — photo if available, initials fallback
+      renderAvatar(document.getElementById("profile-avatar"), member);
+
+      document.title = `${member.first_name} ${member.last_name} — FelloWorks`;
+      document.getElementById("profile-name").textContent     = `${member.first_name} ${member.last_name}`;
+      document.getElementById("profile-role").textContent     = member.role || "";
+      document.getElementById("profile-bio").textContent      = member.bio || "";
+
+      // Availability + language pills
+      const pillsEl = document.getElementById("profile-pills");
+      if (member.availability_status === "now") {
+        pillsEl.innerHTML += `<span class="pill pill--available-now">Available now</span>`;
+      } else if (member.availability_status === "from_date" && member.availability_date) {
+        const date = new Date(member.availability_date).toLocaleDateString("en-GB", { day: "numeric", month: "long" });
+        pillsEl.innerHTML += `<span class="pill pill--available-soon">Available from ${date}</span>`;
+      }
+      (member.languages || []).forEach((l) => {
+        pillsEl.innerHTML += `<span class="pill">${escHtml(l)}</span>`;
+      });
+
+      // Rate
+      if (member.rate_min || member.rate_max) {
+        document.getElementById("profile-rate").textContent =
+          `€${member.rate_min || "?"}–€${member.rate_max || "?"}/day`;
+      }
+      document.getElementById("profile-location").textContent = member.location || "";
+
+      // External links
+      const linksEl = document.getElementById("profile-links");
+      if (member.website_url)  linksEl.innerHTML += `<a href="${escHtml(member.website_url)}" target="_blank" rel="noopener">Website</a>`;
+      if (member.linkedin_url) linksEl.innerHTML += `<a href="${escHtml(member.linkedin_url)}" target="_blank" rel="noopener">LinkedIn</a>`;
+
+      // Inviter card
+      if (member.inviter) {
+        const inv    = member.inviter;
+        const invEl  = document.getElementById("profile-inviter-card");
+        const inInit = `${inv.first_name[0]}${inv.last_name[0]}`.toUpperCase();
+        invEl.innerHTML = `
+          <div class="avatar avatar--sm">${inInit}</div>
+          <div class="inviter-card__meta">
+            <span class="inviter-card__label">Invited by</span>
+            <strong><a href="/member.html?username=${encodeURIComponent(inv.username)}">${escHtml(`${inv.first_name} ${inv.last_name}`)}</a></strong>
+            <span class="text-muted">${escHtml(inv.role || "")}</span>
+          </div>
+        `;
+        document.getElementById("inviter-section").hidden = false;
+      }
+
+      // Portfolio
+      if (portfolio.length === 0) {
+        document.getElementById("portfolio-empty").hidden = false;
+      } else {
+        document.getElementById("portfolio-grid").innerHTML = portfolio.map((p) => `
+          <div class="portfolio-card">
+            ${p.image_url ? `<img src="${escHtml(p.image_url)}" alt="" class="portfolio-card__image" />` : ""}
+            <div class="portfolio-card__body">
+              <div class="portfolio-card__type text-muted">${escHtml(p.type || "")}</div>
+              <div class="portfolio-card__title">${escHtml(p.title)}</div>
+              ${p.year ? `<div class="text-muted">${p.year}</div>` : ""}
+              ${p.project_url ? `<a href="${escHtml(p.project_url)}" target="_blank" rel="noopener" class="portfolio-card__link">View project →</a>` : ""}
+            </div>
+          </div>
+        `).join("");
+      }
+
+      // Feedback — text only, no star ratings
+      if (feedback.length === 0) {
+        const firstName = member.first_name;
+        document.getElementById("feedback-empty-body").textContent =
+          `Feedback builds after completed projects. ${firstName} is a new member — their profile, portfolio, and the person who invited them are the place to start.`;
+        document.getElementById("feedback-empty").hidden = false;
+      } else {
+        document.getElementById("feedback-list").innerHTML = feedback.map((f) => `
+          <div class="feedback-entry">
+            <div class="feedback-entry__header">
+              <strong>${escHtml(`${f.reviewer.first_name} ${f.reviewer.last_name}`)}</strong>
+              <span class="text-muted">${escHtml(f.reviewer.role || "")}</span>
+              <span class="text-muted">${new Date(f.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" })}</span>
+            </div>
+            <dl class="feedback-entry__answers">
+              <dt>Did they deliver on what was agreed?</dt><dd>${escHtml(f.q1_deliver)}</dd>
+              <dt>Did they communicate proactively?</dt><dd>${escHtml(f.q2_communicate)}</dd>
+              <dt>Would you bring them into a client-facing project?</dt><dd>${escHtml(f.q3_client_facing)}</dd>
+              <dt>What was their strongest contribution?</dt><dd>${escHtml(f.q4_strongest)}</dd>
+            </dl>
+          </div>
+        `).join("");
+      }
+
+      // Hide message button if viewing own profile
+      if (member.id === session.user.id) {
+        document.getElementById("message-btn").hidden   = true;
+        document.getElementById("shortlist-btn").hidden = true;
+      }
+    }
+
+    // Message modal
+    document.getElementById("message-btn").addEventListener("click", () => {
+      document.getElementById("message-modal").hidden = false;
+    });
+    document.getElementById("cancel-btn").addEventListener("click", () => {
+      document.getElementById("message-modal").hidden = true;
+    });
+    document.querySelector(".modal__backdrop").addEventListener("click", () => {
+      document.getElementById("message-modal").hidden = true;
+    });
+
+    document.getElementById("send-btn").addEventListener("click", async () => {
+      const body    = document.getElementById("message-body").value.trim();
+      const errEl   = document.getElementById("message-error");
+      const sendBtn = document.getElementById("send-btn");
+
+      if (!body) {
+        errEl.textContent = "Write something before sending.";
+        errEl.hidden = false;
+        return;
+      }
+
+      sendBtn.disabled    = true;
+      sendBtn.textContent = "Sending…";
+
+      try {
+        await api.post("/messages", { recipient_id: memberId, body });
+        document.getElementById("message-modal").hidden = true;
+        document.getElementById("message-body").value = "";
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.hidden      = false;
+        sendBtn.disabled    = false;
+        sendBtn.textContent = "Send";
+      }
+    });
+
+    // Shortlist toggle
+    const shortlistBtn = document.getElementById("shortlist-btn");
+    shortlistBtn.addEventListener("click", async () => {
+      const saved = shortlistBtn.classList.contains("saved");
+      try {
+        if (saved) {
+          await api.delete(`/shortlist/${memberId}`);
+          shortlistBtn.classList.remove("saved");
+          shortlistBtn.textContent = "♡ Add to shortlist";
+        } else {
+          await api.post("/shortlist", { saved_member_id: memberId });
+          shortlistBtn.classList.add("saved");
+          shortlistBtn.textContent = "♥ Saved to shortlist";
+        }
+      } catch (err) {
+        console.error("Shortlist error:", err);
+      }
+    });
+
+    function escHtml(str) {
+      return (str || "")
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    init();
+  </script>
+
+</body>
+</html>

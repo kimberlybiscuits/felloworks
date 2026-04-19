@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Messages — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/messages.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+    <ul class="nav__links">
+      <li><a href="/browse.html">Browse members</a></li>
+      <li><a href="/needs.html">Browse needs</a></li>
+      <li><a href="/shortlist.html">My shortlist</a></li>
+      <li><a href="/profile.html">My profile</a></li>
+      <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
+    </ul>
+  </nav>
+
+  <main class="messages-main">
+
+    <div class="messages-layout">
+
+      <!-- Thread list — left column -->
+      <aside class="thread-list" id="thread-list">
+        <h1 class="thread-list__title">Messages</h1>
+
+        <div id="threads-container">
+          <!-- Populated by JS -->
+        </div>
+
+        <div id="threads-empty" class="messages-empty" hidden>
+          <p>No messages yet.</p>
+          <a href="/browse.html" class="btn btn--secondary">Browse members</a>
+        </div>
+      </aside>
+
+      <!-- Thread view — right column -->
+      <section class="thread-view" id="thread-view">
+
+        <!-- Shown when no thread is selected -->
+        <div id="thread-placeholder" class="thread-placeholder">
+          <p>Select a conversation to read it.</p>
+        </div>
+
+        <!-- Shown when a thread is open -->
+        <div id="thread-open" hidden>
+
+          <header class="thread-header">
+            <div class="avatar avatar--sm" id="thread-partner-avatar"></div>
+            <div>
+              <div class="thread-partner-name" id="thread-partner-name"></div>
+              <a class="thread-partner-link" id="thread-partner-link" href="#">
+                View profile →
+              </a>
+            </div>
+          </header>
+
+          <div class="thread-messages" id="thread-messages">
+            <!-- Messages populated by JS -->
+          </div>
+
+          <form class="thread-compose" id="compose-form">
+            <textarea
+              class="form-textarea thread-compose__input"
+              id="compose-input"
+              rows="3"
+              placeholder="Write a message…"
+            ></textarea>
+            <button type="submit" class="btn btn--primary thread-compose__send">Send</button>
+          </form>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <script type="module">
+    import api, { renderAvatar } from "./js/api.js";
+    import { requireSession } from "./js/supabase-client.js";
+
+    const session = await requireSession();
+    const myId    = session.user.id;
+
+    let activePartnerId = null;
+
+    // ── Load thread list ────────────────────────────────────────────
+
+    async function loadThreads() {
+      const { threads } = await api.get("/messages");
+      const container   = document.getElementById("threads-container");
+      const empty       = document.getElementById("threads-empty");
+
+      if (threads.length === 0) {
+        empty.hidden = false;
+        return;
+      }
+
+      container.innerHTML = threads.map((t) => `
+        <button
+          class="thread-item"
+          data-partner-id="${t.partner.id}"
+          data-partner-name="${escAttr(`${t.partner.first_name} ${t.partner.last_name}`)}"
+          data-partner-username="${escAttr(t.partner.username || "")}"
+          data-initials="${escAttr(`${t.partner.first_name[0]}${t.partner.last_name[0]}`.toUpperCase())}"
+        >
+          <div class="thread-item__avatar avatar avatar--sm">
+            ${t.partner.avatar_url
+              ? `<img src="${escAttr(t.partner.avatar_url)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`
+              : `${t.partner.first_name[0]}${t.partner.last_name[0]}`.toUpperCase()
+            }
+          </div>
+          <div class="thread-item__meta">
+            <span class="thread-item__name">${escHtml(`${t.partner.first_name} ${t.partner.last_name}`)}</span>
+            ${t.unread > 0 ? `<span class="thread-item__badge">${t.unread}</span>` : ""}
+            <span class="thread-item__preview">${escHtml(t.messages[0]?.body || "")}</span>
+          </div>
+        </button>
+      `).join("");
+
+      // Wire up thread buttons
+      container.querySelectorAll(".thread-item").forEach((btn) => {
+        btn.addEventListener("click", () => openThread(btn.dataset));
+      });
+
+      // Auto-open thread from URL param: /messages.html?with=userId
+      const params    = new URLSearchParams(window.location.search);
+      const withId    = params.get("with");
+      const firstItem = container.querySelector(".thread-item");
+
+      if (withId) {
+        const target = container.querySelector(`[data-partner-id="${withId}"]`);
+        if (target) target.click();
+        else openThread({ partnerId: withId }); // New conversation
+      } else if (firstItem) {
+        firstItem.click();
+      }
+    }
+
+    // ── Open a thread ───────────────────────────────────────────────
+
+    async function openThread(dataset) {
+      const partnerId       = dataset.partnerId || dataset["partner-id"];
+      activePartnerId       = partnerId;
+
+      document.getElementById("thread-placeholder").hidden = true;
+      document.getElementById("thread-open").hidden        = false;
+
+      // Mark active thread in sidebar
+      document.querySelectorAll(".thread-item").forEach((b) => {
+        b.classList.toggle("active", b.dataset.partnerId === partnerId);
+      });
+
+      // Populate header
+      const name     = dataset.partnerName || dataset["partner-name"] || "Member";
+      const initials = dataset.initials || name[0].toUpperCase();
+      const username = dataset.partnerUsername || dataset["partner-username"] || "";
+
+      document.getElementById("thread-partner-name").textContent = name;
+      document.getElementById("thread-partner-avatar").textContent = initials;
+      document.getElementById("thread-partner-link").href =
+        username ? `/member.html?username=${encodeURIComponent(username)}` : "#";
+
+      await loadMessages(partnerId);
+    }
+
+    // ── Load messages for a thread ──────────────────────────────────
+
+    async function loadMessages(partnerId) {
+      const container = document.getElementById("thread-messages");
+      container.innerHTML = `<p class="messages-loading text-muted">Loading…</p>`;
+
+      const { messages } = await api.get(`/messages/${partnerId}`);
+      renderMessages(messages);
+    }
+
+    function renderMessages(messages) {
+      const container = document.getElementById("thread-messages");
+
+      if (messages.length === 0) {
+        container.innerHTML = `<p class="text-muted" style="padding:var(--space-6)">No messages yet. Say hello.</p>`;
+        return;
+      }
+
+      container.innerHTML = messages.map((m) => {
+        const mine = m.sender.id === myId;
+        return `
+          <div class="message-bubble ${mine ? "message-bubble--mine" : "message-bubble--theirs"}">
+            <div class="message-bubble__body">${escHtml(m.body)}</div>
+            <div class="message-bubble__time">
+              ${new Date(m.created_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      // Scroll to latest message
+      container.scrollTop = container.scrollHeight;
+    }
+
+    // ── Send a message ──────────────────────────────────────────────
+
+    document.getElementById("compose-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!activePartnerId) return;
+
+      const input = document.getElementById("compose-input");
+      const body  = input.value.trim();
+      if (!body) return;
+
+      input.value    = "";
+      input.disabled = true;
+
+      try {
+        await api.post("/messages", { recipient_id: activePartnerId, body });
+        // Reload the thread to show the sent message
+        await loadMessages(activePartnerId);
+      } catch (err) {
+        console.error("Could not send message:", err.message);
+        input.value = body; // Restore so the user doesn't lose their message
+      }
+
+      input.disabled = false;
+      input.focus();
+    });
+
+    function escHtml(str) {
+      return (str || "")
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function escAttr(str) {
+      return (str || "").replace(/"/g, "&quot;");
+    }
+
+    loadThreads();
+  </script>
+
+</body>
+</html>

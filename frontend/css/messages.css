@@ -1,0 +1,298 @@
+/* Messages screen — /messages.html
+   Two-column: thread list left, active thread right.
+   Full-height layout that doesn't scroll the page — the message area scrolls internally. */
+
+@import './tokens.css';
+
+body {
+  background-color: var(--cream);
+  height: 100vh;
+  overflow: hidden; /* The inner panels scroll, not the page */
+}
+
+/* -----------------------------------------------------------------------
+   Layout
+   ----------------------------------------------------------------------- */
+
+.messages-main {
+  height: calc(100vh - 57px); /* 57px = nav height */
+  overflow: hidden;
+}
+
+.messages-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  height: 100%;
+}
+
+/* -----------------------------------------------------------------------
+   Thread list — left sidebar
+   ----------------------------------------------------------------------- */
+
+.thread-list {
+  background-color: var(--white);
+  border-right: 1.5px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.thread-list__title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--ink);
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--rule);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+#threads-container {
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Individual thread row */
+.thread-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  border-bottom: 1px solid var(--rule);
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.thread-item:hover {
+  background-color: var(--cream);
+}
+
+.thread-item.active {
+  background-color: var(--amber-pale);
+  border-left: 3px solid var(--amber);
+  padding-left: calc(var(--space-5) - 3px);
+}
+
+.thread-item__avatar {
+  flex-shrink: 0;
+}
+
+.thread-item__meta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 2px var(--space-2);
+  min-width: 0;
+  flex: 1;
+}
+
+.thread-item__name {
+  font-weight: var(--weight-semibold);
+  font-size: 0.9375rem;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.thread-item__badge {
+  background-color: var(--amber);
+  color: var(--white);
+  font-size: 0.75rem;
+  font-weight: var(--weight-semibold);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  justify-self: end;
+  align-self: center;
+}
+
+.thread-item__preview {
+  grid-column: 1 / -1;
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Empty state */
+.messages-empty {
+  padding: var(--space-8) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+/* -----------------------------------------------------------------------
+   Thread view — right panel
+   ----------------------------------------------------------------------- */
+
+.thread-view {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--cream);
+}
+
+/* Placeholder when no thread is selected */
+.thread-placeholder {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-muted);
+  font-size: 0.9375rem;
+}
+
+#thread-open {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Thread header — partner name and profile link */
+.thread-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-6);
+  background-color: var(--white);
+  border-bottom: 1.5px solid var(--rule);
+  flex-shrink: 0;
+}
+
+.thread-partner-name {
+  font-weight: var(--weight-semibold);
+  color: var(--ink);
+  font-size: 0.9375rem;
+}
+
+.thread-partner-link {
+  font-size: 0.8125rem;
+  color: var(--amber);
+  font-weight: var(--weight-medium);
+}
+
+/* Scrollable message area */
+.thread-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Message bubbles */
+.message-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 70%;
+}
+
+.message-bubble--mine {
+  align-self: flex-end;
+  align-items: flex-end;
+}
+
+.message-bubble--theirs {
+  align-self: flex-start;
+  align-items: flex-start;
+}
+
+.message-bubble__body {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.message-bubble--mine .message-bubble__body {
+  background-color: var(--amber);
+  color: var(--white);
+  border-bottom-right-radius: var(--radius-sm);
+}
+
+.message-bubble--theirs .message-bubble__body {
+  background-color: var(--white);
+  color: var(--ink-soft);
+  border: 1.5px solid var(--rule);
+  border-bottom-left-radius: var(--radius-sm);
+}
+
+.message-bubble__time {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  padding: 0 var(--space-1);
+}
+
+.messages-loading {
+  padding: var(--space-6);
+  text-align: center;
+}
+
+/* -----------------------------------------------------------------------
+   Compose area
+   ----------------------------------------------------------------------- */
+
+.thread-compose {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-6);
+  background-color: var(--white);
+  border-top: 1.5px solid var(--rule);
+  flex-shrink: 0;
+  align-items: flex-end;
+}
+
+.thread-compose__input {
+  flex: 1;
+  min-height: 52px;
+  max-height: 160px;
+  resize: none;
+  font-size: 0.9375rem;
+}
+
+.thread-compose__send {
+  flex-shrink: 0;
+  align-self: flex-end;
+}
+
+/* -----------------------------------------------------------------------
+   Mobile — stack panels
+   ----------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  body { overflow: auto; }
+
+  .messages-main { height: auto; overflow: visible; }
+
+  .messages-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .thread-list {
+    border-right: none;
+    border-bottom: 1.5px solid var(--rule);
+    overflow: visible;
+    max-height: 40vh;
+  }
+
+  .thread-view {
+    height: 60vh;
+  }
+}

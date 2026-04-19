@@ -1,0 +1,402 @@
+/* FelloWorks component styles
+   Reusable UI elements: nav, buttons, forms, cards, pills, avatars.
+   Edit copy in the HTML files, not here. Edit colours in tokens.css. */
+
+@import './tokens.css';
+
+/* -----------------------------------------------------------------------
+   Navigation
+   ----------------------------------------------------------------------- */
+
+.nav {
+  background-color: var(--ink);
+  padding: var(--space-4) var(--space-8);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav__logo {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--amber);
+  letter-spacing: -0.01em;
+}
+
+.nav__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  list-style: none;
+}
+
+.nav__links a {
+  color: var(--white);
+  font-size: 0.9375rem;
+  font-weight: var(--weight-medium);
+  opacity: 0.85;
+  transition: opacity 0.15s;
+}
+
+.nav__links a:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+
+/* "Post a need" is an amber pill in the nav */
+.nav__links .nav__cta {
+  background-color: var(--amber);
+  color: var(--white);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  opacity: 1;
+  font-weight: var(--weight-semibold);
+}
+
+.nav__links .nav__cta:hover {
+  background-color: var(--amber-light);
+}
+
+
+/* -----------------------------------------------------------------------
+   Buttons
+   ----------------------------------------------------------------------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: var(--weight-semibold);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  padding: var(--space-3) var(--space-6);
+  transition: background-color 0.15s, opacity 0.15s;
+  text-decoration: none;
+}
+
+/* Primary — amber */
+.btn--primary {
+  background-color: var(--amber);
+  color: var(--white);
+}
+
+.btn--primary:hover {
+  background-color: var(--amber-light);
+  text-decoration: none;
+}
+
+/* Secondary — ghost */
+.btn--secondary {
+  background-color: transparent;
+  color: var(--ink);
+  border: 1.5px solid var(--rule);
+}
+
+.btn--secondary:hover {
+  border-color: var(--ink-muted);
+}
+
+/* Full width */
+.btn--full { width: 100%; }
+
+
+/* -----------------------------------------------------------------------
+   Forms
+   ----------------------------------------------------------------------- */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: var(--weight-medium);
+  color: var(--ink);
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background-color: var(--white);
+  color: var(--ink);
+  font-size: 1rem;
+  transition: border-color 0.15s;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: var(--amber);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--ink-muted);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Hint text beneath an input */
+.form-hint {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+}
+
+/* Two-column form row */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+}
+
+@media (max-width: 540px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+
+/* -----------------------------------------------------------------------
+   Avatar — initials circle
+   ----------------------------------------------------------------------- */
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  background-color: var(--amber);
+  color: var(--white);
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  flex-shrink: 0;
+}
+
+.avatar--lg {
+  width: 72px;
+  height: 72px;
+  font-size: 1.5rem;
+}
+
+.avatar--sm {
+  width: 36px;
+  height: 36px;
+  font-size: 0.875rem;
+}
+
+
+/* -----------------------------------------------------------------------
+   Pills — availability status, languages
+   ----------------------------------------------------------------------- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: var(--weight-medium);
+  border: 1.5px solid var(--rule);
+  color: var(--ink-soft);
+  background: transparent;
+}
+
+/* Available now — green border */
+.pill--available-now {
+  border-color: var(--available-now);
+  color: var(--available-now);
+}
+
+/* Available upcoming — amber border */
+.pill--available-soon {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+/* Skill tag — used in filters and cards */
+.pill--skill {
+  background-color: var(--cream);
+  border-color: var(--rule);
+}
+
+/* Selected skill tag */
+.pill--skill.selected {
+  border-color: var(--amber);
+  color: var(--amber);
+  background-color: var(--amber-pale);
+}
+
+
+/* -----------------------------------------------------------------------
+   Member card — used in browse grid
+   ----------------------------------------------------------------------- */
+
+.member-card {
+  background-color: var(--white);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+
+.member-card:hover {
+  border-color: var(--amber);
+  box-shadow: var(--shadow-card-hover);
+  text-decoration: none;
+}
+
+.member-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: var(--space-3);
+}
+
+.member-card__name {
+  font-family: var(--font-serif);
+  font-size: 1.125rem;
+  color: var(--ink);
+  margin-top: var(--space-2);
+}
+
+.member-card__role {
+  font-size: 0.9375rem;
+  font-weight: var(--weight-light);
+  color: var(--ink-soft);
+  margin-bottom: var(--space-3);
+}
+
+.member-card__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-4);
+}
+
+.member-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--rule);
+  padding-top: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+/* Shortlist heart toggle */
+.shortlist-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-size: 1.125rem;
+  padding: var(--space-1);
+  transition: color 0.15s;
+  line-height: 1;
+}
+
+.shortlist-toggle.saved,
+.shortlist-toggle:hover {
+  color: var(--amber);
+}
+
+
+/* -----------------------------------------------------------------------
+   Inviter card — shown on welcome and invite acceptance screens
+   ----------------------------------------------------------------------- */
+
+.inviter-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background-color: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.inviter-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.inviter-card__label {
+  font-size: 0.75rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.inviter-card--light {
+  background-color: var(--amber-pale);
+  border-color: var(--rule);
+}
+
+.inviter-card--light .inviter-card__label {
+  color: var(--ink-muted);
+}
+
+
+/* -----------------------------------------------------------------------
+   Alert / info box
+   ----------------------------------------------------------------------- */
+
+.alert {
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  font-size: 0.9375rem;
+}
+
+.alert--error {
+  background-color: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.alert--info {
+  background-color: var(--amber-pale);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+}
+
+
+/* -----------------------------------------------------------------------
+   Progress bar — for the multi-step need form
+   ----------------------------------------------------------------------- */
+
+.progress-bar {
+  display: flex;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+}
+
+.progress-bar__step {
+  flex: 1;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background-color: var(--rule);
+}
+
+.progress-bar__step--done     { background-color: var(--amber); }
+.progress-bar__step--current  { background-color: var(--amber-light); }

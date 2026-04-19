@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+    <ul class="nav__links">
+      <li><a href="/browse.html">Browse members</a></li>
+      <li><a href="/needs.html">Browse needs</a></li>
+      <li><a href="/shortlist.html">My shortlist</a></li>
+      <li><a href="/profile.html">My profile</a></li>
+      <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
+    </ul>
+  </nav>
+
+  <main class="admin-main">
+
+    <header class="admin-header">
+      <h1 class="admin-title">Admin</h1>
+      <p class="admin-sub">Beta management panel — visible to admin accounts only.</p>
+    </header>
+
+    <!-- Stats bar -->
+    <section class="admin-stats" id="stats-bar">
+      <div class="admin-stat">
+        <span class="admin-stat__value" id="stat-members">—</span>
+        <span class="admin-stat__label">Members</span>
+      </div>
+      <div class="admin-stat">
+        <span class="admin-stat__value" id="stat-invites-total">—</span>
+        <span class="admin-stat__label">Invites sent</span>
+      </div>
+      <div class="admin-stat">
+        <span class="admin-stat__value" id="stat-invites-pending">—</span>
+        <span class="admin-stat__label">Pending invites</span>
+      </div>
+      <div class="admin-stat">
+        <span class="admin-stat__value" id="stat-needs">—</span>
+        <span class="admin-stat__label">Needs posted</span>
+      </div>
+      <div class="admin-stat">
+        <span class="admin-stat__value" id="stat-messages">—</span>
+        <span class="admin-stat__label">Messages sent</span>
+      </div>
+    </section>
+
+    <div class="admin-grid">
+
+      <!-- Left column: member list + invite list -->
+      <div class="admin-col admin-col--main">
+
+        <!-- Member list -->
+        <section class="admin-panel">
+          <h2 class="admin-panel__title">Members</h2>
+          <div class="admin-table-wrap">
+            <table class="admin-table" id="members-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th>Joined</th>
+                  <th>Invited by</th>
+                </tr>
+              </thead>
+              <tbody id="members-tbody">
+                <tr><td colspan="5" class="admin-table__empty">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Invite list -->
+        <section class="admin-panel">
+          <h2 class="admin-panel__title">Invites</h2>
+          <div class="admin-table-wrap">
+            <table class="admin-table" id="invites-table">
+              <thead>
+                <tr>
+                  <th>Invitee email</th>
+                  <th>Sent by</th>
+                  <th>Sent</th>
+                  <th>Expires</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="invites-tbody">
+                <tr><td colspan="5" class="admin-table__empty">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Right column: create invite -->
+      <div class="admin-col admin-col--side">
+
+        <section class="admin-panel">
+          <h2 class="admin-panel__title">Send an invite</h2>
+          <p class="admin-panel__desc">
+            Invite someone directly. The invite email will be sent immediately and expires after 7 days.
+          </p>
+
+          <form id="invite-form" class="admin-invite-form">
+            <div class="form-group">
+              <label for="invitee-email" class="form-label">Recipient email</label>
+              <input
+                type="email"
+                id="invitee-email"
+                name="invitee_email"
+                class="form-input"
+                placeholder="colleague@example.com"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="inviter-select" class="form-label">Send on behalf of</label>
+              <select id="inviter-select" name="inviter_id" class="form-input">
+                <option value="">— myself (admin) —</option>
+                <!-- Populated by JS from member list -->
+              </select>
+            </div>
+
+            <div id="invite-feedback" class="admin-feedback" hidden></div>
+
+            <button type="submit" class="btn btn--primary admin-invite-form__submit">
+              Send invite
+            </button>
+          </form>
+        </section>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script type="module">
+    import api from "./js/api.js";
+    import { requireSession, getSession } from "./js/supabase-client.js";
+
+    await requireSession();
+
+    // Verify the logged-in user is an admin before loading anything
+    try {
+      await api.get("/admin/stats");
+    } catch (err) {
+      // 403 = not admin; redirect home
+      window.location.href = "/dashboard.html";
+    }
+
+    async function init() {
+      await Promise.all([loadStats(), loadMembers(), loadInvites()]);
+    }
+
+    // ── Stats ──────────────────────────────────────────────────────────────
+
+    async function loadStats() {
+      const stats = await api.get("/admin/stats");
+      document.getElementById("stat-members").textContent        = stats.members;
+      document.getElementById("stat-invites-total").textContent  = stats.invites_total;
+      document.getElementById("stat-invites-pending").textContent = stats.invites_pending;
+      document.getElementById("stat-needs").textContent          = stats.needs;
+      document.getElementById("stat-messages").textContent       = stats.messages;
+    }
+
+    // ── Members ────────────────────────────────────────────────────────────
+
+    async function loadMembers() {
+      const { members } = await api.get("/admin/members");
+      const tbody = document.getElementById("members-tbody");
+
+      if (!members.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="admin-table__empty">No members yet.</td></tr>`;
+        return;
+      }
+
+      // Populate the "send on behalf of" dropdown at the same time
+      const select = document.getElementById("inviter-select");
+
+      tbody.innerHTML = members.map((m) => {
+        const joined = new Date(m.created_at).toLocaleDateString("en-GB", {
+          day: "numeric", month: "short", year: "numeric",
+        });
+        const inviter = m.inviter
+          ? escHtml(`${m.inviter.first_name} ${m.inviter.last_name}`)
+          : `<span class="text-muted">—</span>`;
+
+        // Add option to the dropdown
+        const opt = document.createElement("option");
+        opt.value = m.id;
+        opt.textContent = `${m.first_name} ${m.last_name} (${m.email})`;
+        select.appendChild(opt);
+
+        return `
+          <tr>
+            <td>
+              <a href="/member.html?username=${encodeURIComponent(m.username)}" class="admin-table__link">
+                ${escHtml(`${m.first_name} ${m.last_name}`)}
+              </a>
+            </td>
+            <td>${escHtml(m.email)}</td>
+            <td>${escHtml(m.role || "—")}</td>
+            <td class="text-muted">${joined}</td>
+            <td>${inviter}</td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // ── Invites ────────────────────────────────────────────────────────────
+
+    async function loadInvites() {
+      const { invites } = await api.get("/admin/invites");
+      const tbody = document.getElementById("invites-tbody");
+
+      if (!invites.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="admin-table__empty">No invites yet.</td></tr>`;
+        return;
+      }
+
+      const now = new Date();
+
+      tbody.innerHTML = invites.map((inv) => {
+        const sent = new Date(inv.created_at).toLocaleDateString("en-GB", {
+          day: "numeric", month: "short", year: "numeric",
+        });
+        const expires = new Date(inv.expires_at).toLocaleDateString("en-GB", {
+          day: "numeric", month: "short", year: "numeric",
+        });
+
+        let statusClass, statusText;
+        if (inv.used_at) {
+          statusClass = "admin-badge admin-badge--used";
+          statusText  = "Used";
+        } else if (new Date(inv.expires_at) < now) {
+          statusClass = "admin-badge admin-badge--expired";
+          statusText  = "Expired";
+        } else {
+          statusClass = "admin-badge admin-badge--pending";
+          statusText  = "Pending";
+        }
+
+        const sender = inv.inviter
+          ? escHtml(`${inv.inviter.first_name} ${inv.inviter.last_name}`)
+          : `<span class="text-muted">—</span>`;
+
+        return `
+          <tr>
+            <td>${escHtml(inv.invitee_email)}</td>
+            <td>${sender}</td>
+            <td class="text-muted">${sent}</td>
+            <td class="text-muted">${expires}</td>
+            <td><span class="${statusClass}">${statusText}</span></td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    // ── Create invite ──────────────────────────────────────────────────────
+
+    document.getElementById("invite-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const form     = e.target;
+      const feedback = document.getElementById("invite-feedback");
+      const btn      = form.querySelector("button[type=submit]");
+
+      const invitee_email = form.invitee_email.value.trim();
+      const inviter_id    = form.inviter_id.value || undefined;
+
+      btn.disabled = true;
+      feedback.hidden = true;
+
+      try {
+        await api.post("/admin/invites", { invitee_email, inviter_id });
+
+        feedback.textContent = `Invite sent to ${invitee_email}.`;
+        feedback.className = "admin-feedback admin-feedback--success";
+        feedback.hidden = false;
+
+        form.reset();
+
+        // Reload the invite list and stats to reflect the new entry
+        await Promise.all([loadInvites(), loadStats()]);
+      } catch (err) {
+        feedback.textContent = err.message || "Could not send invite. Try again.";
+        feedback.className = "admin-feedback admin-feedback--error";
+        feedback.hidden = false;
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    function escHtml(str) {
+      return (str || "")
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    init();
+  </script>
+
+</body>
+</html>

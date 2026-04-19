@@ -1,0 +1,232 @@
+/* Single need view — /need.html
+   Two-column layout: need details on the left, poster card on the right. */
+
+@import './tokens.css';
+
+body {
+  background-color: var(--cream);
+  min-height: 100vh;
+}
+
+/* -----------------------------------------------------------------------
+   Loading / not-found states
+   ----------------------------------------------------------------------- */
+
+.need-loading,
+.need-not-found {
+  max-width: var(--max-width-content);
+  margin: var(--space-16) auto;
+  padding: 0 var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+/* -----------------------------------------------------------------------
+   Main layout
+   ----------------------------------------------------------------------- */
+
+.need-main {
+  max-width: var(--max-width-wide);
+  margin: 0 auto;
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* Back link */
+.need-back {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  font-weight: var(--weight-medium);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.need-back:hover {
+  color: var(--amber);
+  text-decoration: none;
+}
+
+/* Two-column grid */
+.need-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: var(--space-8);
+  align-items: start;
+}
+
+/* -----------------------------------------------------------------------
+   Article (left column)
+   ----------------------------------------------------------------------- */
+
+.need-article {
+  background-color: var(--white);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-md);
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* Header */
+.need-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--rule);
+}
+
+.need-header__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.need-title {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.need-posted {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Description */
+.need-description {
+  font-size: 1rem;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+/* -----------------------------------------------------------------------
+   Meta grid
+   ----------------------------------------------------------------------- */
+
+.need-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4) var(--space-6);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--rule);
+}
+
+.need-meta-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.need-meta-row__label {
+  font-size: 0.75rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+}
+
+.need-meta-row__value {
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+}
+
+/* -----------------------------------------------------------------------
+   Aside (right column)
+   ----------------------------------------------------------------------- */
+
+.need-aside {
+  position: sticky;
+  top: var(--space-8);
+}
+
+.need-poster-card {
+  background-color: var(--white);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.need-poster-card__label {
+  font-size: 0.75rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.need-poster-card__person {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.need-poster-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.need-poster-card__name {
+  font-family: var(--font-serif);
+  font-size: 1.0625rem;
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 400;
+}
+
+.need-poster-card__name:hover {
+  color: var(--amber);
+  text-decoration: none;
+}
+
+.need-poster-card__role {
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* -----------------------------------------------------------------------
+   Mobile
+   ----------------------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  .need-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .need-aside {
+    position: static;
+  }
+
+  /* Stack poster card above the article on mobile */
+  .need-layout {
+    grid-template-areas:
+      "aside"
+      "article";
+  }
+
+  .need-article { grid-area: article; }
+  .need-aside   { grid-area: aside; }
+
+  .need-meta-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .need-main {
+    padding: var(--space-6) var(--space-5);
+  }
+}

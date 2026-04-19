@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse needs — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/needs.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+    <ul class="nav__links">
+      <li><a href="/browse.html">Browse members</a></li>
+      <li><a href="/needs.html">Browse needs</a></li>
+      <li><a href="/shortlist.html">My shortlist</a></li>
+      <li><a href="/profile.html">My profile</a></li>
+      <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
+    </ul>
+  </nav>
+
+  <main class="needs-main">
+
+    <header class="needs-header">
+      <h1 class="needs-title">Needs</h1>
+      <p class="needs-sub">Active briefs posted by members. Find work that fits your skills.</p>
+    </header>
+
+    <div class="needs-layout">
+
+      <!-- Filter sidebar -->
+      <aside class="needs-sidebar">
+        <fieldset class="filter-group">
+          <legend class="filter-group__label">Filter by skill</legend>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Brand design" /> Brand design</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="UX / product design" /> UX / product design</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Illustration" /> Illustration</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Motion design" /> Motion design</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="3D / CGI" /> 3D / CGI</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Photography" /> Photography</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Video production" /> Video production</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Copywriting" /> Copywriting</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Content strategy" /> Content strategy</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Social media" /> Social media</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="SEO" /> SEO</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Web development" /> Web development</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="App development" /> App development</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="No-code / low-code" /> No-code / low-code</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Data & analytics" /> Data & analytics</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="AI / machine learning" /> AI / machine learning</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Strategy & consulting" /> Strategy & consulting</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Project management" /> Project management</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="PR & communications" /> PR & communications</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Community & events" /> Community & events</label>
+        </fieldset>
+      </aside>
+
+      <!-- Results -->
+      <div class="needs-results">
+        <div id="needs-list" class="needs-list">
+          <!-- Populated by JS -->
+        </div>
+        <div id="needs-empty" class="needs-empty" hidden>
+          <p>No needs posted yet. Be the first.</p>
+          <a href="/needs-new.html" class="btn btn--primary">Post a need</a>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script type="module">
+    import api from "./js/api.js";
+    import { requireSession } from "./js/supabase-client.js";
+
+    await requireSession();
+
+    let allNeeds = [];
+    let selectedSkills = new Set();
+
+    async function init() {
+      const { needs } = await api.get("/needs?all=true");
+      allNeeds = needs;
+      render();
+
+      // Wire up skill filter checkboxes
+      document.querySelectorAll("input[name=skill]").forEach((cb) => {
+        cb.addEventListener("change", () => {
+          if (cb.checked) selectedSkills.add(cb.value);
+          else selectedSkills.delete(cb.value);
+          render();
+        });
+      });
+    }
+
+    function render() {
+      const list  = document.getElementById("needs-list");
+      const empty = document.getElementById("needs-empty");
+
+      let filtered = allNeeds;
+      if (selectedSkills.size > 0) {
+        filtered = allNeeds.filter((n) =>
+          (n.skill_tags || []).some((t) => selectedSkills.has(t))
+        );
+      }
+
+      if (filtered.length === 0) {
+        list.innerHTML = "";
+        empty.hidden = false;
+        return;
+      }
+
+      empty.hidden = true;
+      list.innerHTML = filtered.map((n) => {
+        const posted = new Date(n.created_at).toLocaleDateString("en-GB", {
+          day: "numeric", month: "short", year: "numeric",
+        });
+
+        const tags = (n.skill_tags || [])
+          .map((t) => `<span class="pill pill--skill">${escHtml(t)}</span>`)
+          .join("");
+
+        const meta = [
+          n.start_date_label,
+          n.commitment_label,
+          n.duration_label,
+        ].filter(Boolean).join(" · ");
+
+        const rate = n.rate_min && n.rate_max
+          ? `€${n.rate_min}–€${n.rate_max}/day`
+          : n.rate_min ? `from €${n.rate_min}/day`
+          : n.rate_max ? `up to €${n.rate_max}/day`
+          : "";
+
+        const poster = n.poster
+          ? escHtml(`${n.poster.first_name} ${n.poster.last_name}`)
+          : "";
+
+        return `
+          <a href="/need.html?id=${encodeURIComponent(n.id)}" class="need-card">
+            <div class="need-card__tags">${tags}</div>
+            <h2 class="need-card__title">${escHtml(n.skill_title)}</h2>
+            ${n.description ? `<p class="need-card__desc">${escHtml(n.description)}</p>` : ""}
+            <div class="need-card__footer">
+              <span class="need-card__poster">${poster}</span>
+              <span class="need-card__meta text-muted">${meta || posted}</span>
+              ${rate ? `<span class="need-card__rate">${rate}</span>` : ""}
+            </div>
+          </a>
+        `;
+      }).join("");
+    }
+
+    function escHtml(str) {
+      return (str || "")
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    init();
+  </script>
+
+</body>
+</html>

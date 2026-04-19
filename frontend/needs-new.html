@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post a need — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/needs-new.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+    <ul class="nav__links">
+      <li><a href="/dashboard.html" class="nav__cancel">Cancel</a></li>
+    </ul>
+  </nav>
+
+  <main class="needs-form-main">
+    <div class="needs-form-container">
+
+      <!-- Progress bar — 5 steps -->
+      <div class="progress-bar" role="progressbar" aria-valuemin="1" aria-valuemax="5" id="progress-bar">
+        <div class="progress-bar__step progress-bar__step--current" data-step="1"></div>
+        <div class="progress-bar__step" data-step="2"></div>
+        <div class="progress-bar__step" data-step="3"></div>
+        <div class="progress-bar__step" data-step="4"></div>
+        <div class="progress-bar__step" data-step="5"></div>
+      </div>
+      <p class="step-counter text-muted" id="step-counter">Step 1 of 5</p>
+
+      <div id="error-msg" class="alert alert--error" hidden></div>
+
+      <!-- Step 1: Skill -->
+      <section class="form-step" id="step-1">
+        <h1 class="step-heading">What skill are you looking for?</h1>
+        <p class="step-subhead">Be specific. This is what members will see first.</p>
+        <div class="form-group">
+          <label class="form-label sr-only" for="skill-title">Skill or discipline</label>
+          <input class="form-input" type="text" id="skill-title"
+                 placeholder="Skill or discipline" />
+        </div>
+        <div class="skill-chips" id="skill-chips">
+          <button type="button" class="pill pill--skill" data-skill="Brand design">Brand design</button>
+          <button type="button" class="pill pill--skill" data-skill="UX / product design">UX / product design</button>
+          <button type="button" class="pill pill--skill" data-skill="Content design">Content design</button>
+          <button type="button" class="pill pill--skill" data-skill="Editorial design">Editorial design</button>
+          <button type="button" class="pill pill--skill" data-skill="Motion design">Motion design</button>
+          <button type="button" class="pill pill--skill" data-skill="Illustration">Illustration</button>
+          <button type="button" class="pill pill--skill" data-skill="Art direction">Art direction</button>
+          <button type="button" class="pill pill--skill" data-skill="Photography">Photography</button>
+          <button type="button" class="pill pill--skill" data-skill="Video production">Video production</button>
+          <button type="button" class="pill pill--skill" data-skill="Copywriting">Copywriting</button>
+          <button type="button" class="pill pill--skill" data-skill="Content strategy">Content strategy</button>
+          <button type="button" class="pill pill--skill" data-skill="Communications strategy">Communications strategy</button>
+          <button type="button" class="pill pill--skill" data-skill="Campaign planning">Campaign planning</button>
+          <button type="button" class="pill pill--skill" data-skill="Social media">Social media</button>
+          <button type="button" class="pill pill--skill" data-skill="PR & media relations">PR & media relations</button>
+          <button type="button" class="pill pill--skill" data-skill="Research & insights">Research & insights</button>
+          <button type="button" class="pill pill--skill" data-skill="Translation & localisation">Translation & localisation</button>
+          <button type="button" class="pill pill--skill" data-skill="Frontend development">Frontend development</button>
+          <button type="button" class="pill pill--skill" data-skill="No-code / Webflow">No-code / Webflow</button>
+          <button type="button" class="pill pill--skill" data-skill="Web development">Web development</button>
+        </div>
+      </section>
+
+      <!-- Step 2: Project context -->
+      <section class="form-step" id="step-2" hidden>
+        <h1 class="step-heading">What's the project?</h1>
+        <p class="step-subhead">
+          Give enough context for someone to know if they're a good fit before they message you.
+        </p>
+        <div class="form-group">
+          <label class="form-label sr-only" for="description">Project description</label>
+          <textarea class="form-textarea" id="description" rows="6"
+                    placeholder="Sector, scope, deliverables. You don't need to name the client."></textarea>
+        </div>
+      </section>
+
+      <!-- Step 3: Timeline -->
+      <section class="form-step" id="step-3" hidden>
+        <h1 class="step-heading">When and for how long?</h1>
+        <div class="form-group">
+          <label class="form-label" for="start-date">Start date</label>
+          <select class="form-select" id="start-date">
+            <option value="">Select…</option>
+            <option>Immediately</option>
+            <option>Within 2 weeks</option>
+            <option>Within a month</option>
+            <option>TBD</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="duration">Duration</label>
+          <select class="form-select" id="duration">
+            <option value="">Select…</option>
+            <option>Less than a week</option>
+            <option>1–4 weeks</option>
+            <option>1–3 months</option>
+            <option>Ongoing</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="commitment">Commitment</label>
+          <select class="form-select" id="commitment">
+            <option value="">Select…</option>
+            <option>A few hours</option>
+            <option>Part-time</option>
+            <option>Full-time</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Step 4: Rate -->
+      <section class="form-step" id="step-4" hidden>
+        <h1 class="step-heading">What's the rate?</h1>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="rate-min">Min day rate (€)</label>
+            <input class="form-input" type="number" id="rate-min" placeholder="e.g. 500" min="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rate-max">Max day rate (€)</label>
+            <input class="form-input" type="number" id="rate-max" placeholder="e.g. 900" min="0" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="rate-notes">Rate notes <span class="text-muted">(optional)</span></label>
+          <input class="form-input" type="text" id="rate-notes"
+                 placeholder="Fixed fee, open to discussion, etc." />
+        </div>
+      </section>
+
+      <!-- Step 5: Visibility + review -->
+      <section class="form-step" id="step-5" hidden>
+        <h1 class="step-heading">Who can see this need?</h1>
+
+        <div class="visibility-options">
+          <label class="visibility-option">
+            <input type="radio" name="visibility" value="all" checked />
+            <span class="visibility-option__label">All members</span>
+            <span class="visibility-option__desc">Any FelloWorks member with matching skills</span>
+          </label>
+          <label class="visibility-option">
+            <input type="radio" name="visibility" value="network" />
+            <span class="visibility-option__label">My network</span>
+            <span class="visibility-option__desc">Members connected to me or my inviter</span>
+          </label>
+          <label class="visibility-option">
+            <input type="radio" name="visibility" value="invite" />
+            <span class="visibility-option__label">By invite</span>
+            <span class="visibility-option__desc">Only members you share directly</span>
+          </label>
+        </div>
+
+        <!-- Summary review — read-only before submitting -->
+        <div class="need-summary" id="need-summary">
+          <h2 class="need-summary__heading">Your need</h2>
+          <dl class="need-summary__list">
+            <dt>Skill</dt>        <dd id="summary-skill"></dd>
+            <dt>Project</dt>      <dd id="summary-description"></dd>
+            <dt>Start</dt>        <dd id="summary-start"></dd>
+            <dt>Duration</dt>     <dd id="summary-duration"></dd>
+            <dt>Commitment</dt>   <dd id="summary-commitment"></dd>
+            <dt>Rate</dt>         <dd id="summary-rate"></dd>
+          </dl>
+        </div>
+
+        <button type="button" class="btn btn--primary btn--full" id="submit-btn">
+          Post this need
+        </button>
+      </section>
+
+      <!-- Step navigation -->
+      <div class="step-nav">
+        <button type="button" class="btn btn--secondary" id="back-btn" hidden>Back</button>
+        <button type="button" class="btn btn--primary"   id="next-btn">Next</button>
+      </div>
+
+    </div>
+  </main>
+
+  <script type="module">
+    import api from "./js/api.js";
+    import { requireSession } from "./js/supabase-client.js";
+
+    await requireSession();
+
+    let currentStep   = 1;
+    const totalSteps  = 5;
+    const selectedSkills = new Set();
+
+    // Skill chip toggles
+    document.querySelectorAll(".pill--skill").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const skill = chip.dataset.skill;
+        if (selectedSkills.has(skill)) {
+          selectedSkills.delete(skill);
+          chip.classList.remove("selected");
+        } else {
+          selectedSkills.add(skill);
+          chip.classList.add("selected");
+        }
+        // Mirror into text input if exactly one is selected
+        if (selectedSkills.size === 1) {
+          document.getElementById("skill-title").value = [...selectedSkills][0];
+        }
+      });
+    });
+
+    function updateProgress() {
+      document.getElementById("step-counter").textContent = `Step ${currentStep} of ${totalSteps}`;
+      document.querySelectorAll(".progress-bar__step").forEach((s, i) => {
+        s.classList.toggle("progress-bar__step--done",    i + 1 < currentStep);
+        s.classList.toggle("progress-bar__step--current", i + 1 === currentStep);
+      });
+      document.getElementById("back-btn").hidden = currentStep === 1;
+      document.getElementById("next-btn").hidden = currentStep === totalSteps;
+    }
+
+    function showStep(n) {
+      document.querySelectorAll(".form-step").forEach((el) => {
+        el.hidden = el.id !== `step-${n}`;
+      });
+      if (n === totalSteps) populateSummary();
+      updateProgress();
+    }
+
+    function validate() {
+      const err = document.getElementById("error-msg");
+      err.hidden = true;
+
+      if (currentStep === 1 && !document.getElementById("skill-title").value.trim()) {
+        err.textContent = "Enter or select a skill before continuing.";
+        err.hidden = false;
+        return false;
+      }
+      if (currentStep === 2 && !document.getElementById("description").value.trim()) {
+        err.textContent = "Add a project description before continuing.";
+        err.hidden = false;
+        return false;
+      }
+      return true;
+    }
+
+    document.getElementById("next-btn").addEventListener("click", () => {
+      if (!validate()) return;
+      currentStep++;
+      showStep(currentStep);
+    });
+
+    document.getElementById("back-btn").addEventListener("click", () => {
+      currentStep--;
+      showStep(currentStep);
+    });
+
+    function populateSummary() {
+      const skill      = document.getElementById("skill-title").value;
+      const skillTags  = [...selectedSkills];
+      const desc       = document.getElementById("description").value;
+      const start      = document.getElementById("start-date").value;
+      const duration   = document.getElementById("duration").value;
+      const commitment = document.getElementById("commitment").value;
+      const rateMin    = document.getElementById("rate-min").value;
+      const rateMax    = document.getElementById("rate-max").value;
+      const rateNotes  = document.getElementById("rate-notes").value;
+
+      document.getElementById("summary-skill").textContent       = skill + (skillTags.length ? ` (${skillTags.join(", ")})` : "");
+      document.getElementById("summary-description").textContent = desc || "—";
+      document.getElementById("summary-start").textContent       = start || "—";
+      document.getElementById("summary-duration").textContent    = duration || "—";
+      document.getElementById("summary-commitment").textContent  = commitment || "—";
+      document.getElementById("summary-rate").textContent        =
+        rateMin && rateMax ? `€${rateMin}–€${rateMax}/day${rateNotes ? ` · ${rateNotes}` : ""}` : rateNotes || "—";
+    }
+
+    document.getElementById("submit-btn").addEventListener("click", async () => {
+      const btn        = document.getElementById("submit-btn");
+      btn.disabled     = true;
+      btn.textContent  = "Posting…";
+
+      const visibility = document.querySelector("input[name=visibility]:checked")?.value || "all";
+
+      try {
+        await api.post("/needs", {
+          skill_title:      document.getElementById("skill-title").value.trim(),
+          skill_tags:       [...selectedSkills],
+          description:      document.getElementById("description").value.trim(),
+          start_date_label: document.getElementById("start-date").value,
+          duration_label:   document.getElementById("duration").value,
+          commitment_label: document.getElementById("commitment").value,
+          rate_min:         parseInt(document.getElementById("rate-min").value) || null,
+          rate_max:         parseInt(document.getElementById("rate-max").value) || null,
+          rate_notes:       document.getElementById("rate-notes").value.trim(),
+          visibility,
+        });
+        window.location.href = "/dashboard.html";
+      } catch (err) {
+        const errEl      = document.getElementById("error-msg");
+        errEl.textContent = err.message;
+        errEl.hidden      = false;
+        btn.disabled      = false;
+        btn.textContent   = "Post this need";
+      }
+    });
+
+    // Initialise
+    showStep(1);
+  </script>
+
+</body>
+</html>

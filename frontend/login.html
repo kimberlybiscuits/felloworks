@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign in — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <style>
+    body { background: var(--ink); display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .login-box { background: var(--white); border-radius: var(--radius-lg); padding: var(--space-10); width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: var(--space-5); }
+    .login-title { font-family: var(--font-serif); font-size: 1.75rem; color: var(--ink); margin: 0; }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1 class="login-title">Sign in</h1>
+    <div id="error" class="alert alert--error" hidden></div>
+    <div class="form-group">
+      <label class="form-label" for="email">Email</label>
+      <input class="form-input" type="email" id="email" autocomplete="email" />
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="password">Password</label>
+      <input class="form-input" type="password" id="password" autocomplete="current-password" />
+    </div>
+    <button class="btn btn--primary" id="signin-btn">Sign in</button>
+  </div>
+
+  <script type="module">
+    import { signIn } from "./js/supabase-client.js";
+
+    document.getElementById("signin-btn").addEventListener("click", async () => {
+      const btn   = document.getElementById("signin-btn");
+      const errEl = document.getElementById("error");
+      btn.disabled = true; btn.textContent = "Signing in…";
+      errEl.hidden = true;
+      try {
+        await signIn(
+          document.getElementById("email").value,
+          document.getElementById("password").value
+        );
+        window.location.href = "/dashboard.html";
+      } catch (err) {
+        errEl.textContent = err.message;
+        errEl.hidden = false;
+        btn.disabled = false; btn.textContent = "Sign in";
+      }
+    });
+  </script>
+</body>
+</html>

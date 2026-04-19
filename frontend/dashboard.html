@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+    <ul class="nav__links">
+      <li><a href="/browse.html">Browse members</a></li>
+      <li><a href="/needs.html">Browse needs</a></li>
+      <li><a href="/shortlist.html">My shortlist</a></li>
+      <li><a href="/profile.html">My profile</a></li>
+      <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
+    </ul>
+  </nav>
+
+  <main class="dashboard-main">
+
+    <!-- Header -->
+    <header class="dashboard-header">
+      <h1 id="greeting" class="dashboard-greeting">Good morning.</h1>
+      <p id="member-since" class="text-muted"></p>
+    </header>
+
+    <!-- Profile completion prompt — shown when profile is under 80% complete -->
+    <div id="completion-prompt" class="completion-prompt" hidden>
+      <p class="completion-prompt__heading">Your profile isn't complete yet.</p>
+      <p id="completion-missing" class="completion-prompt__body"></p>
+      <a href="/profile.html" class="btn btn--primary">Fill in my profile</a>
+    </div>
+
+    <div class="dashboard-grid">
+
+      <!-- Primary panel — role-aware: shows either posted needs or matched needs -->
+      <section class="dashboard-panel dashboard-panel--primary">
+
+        <!-- Lead view: has posted needs -->
+        <div id="view-lead" hidden>
+          <h2 class="dashboard-section-title">Your active needs</h2>
+          <div id="my-needs-list">
+            <!-- Populated by JS -->
+          </div>
+          <!-- Empty state -->
+          <div id="my-needs-empty" class="dashboard-empty" hidden>
+            <p>You haven't posted any needs yet.</p>
+            <a href="/needs-new.html" class="btn btn--primary">Post your first need</a>
+          </div>
+        </div>
+
+        <!-- Specialist view: no posted needs — shows matching needs from others -->
+        <div id="view-specialist" hidden>
+          <h2 class="dashboard-section-title">Needs that match your skills</h2>
+          <div id="matched-needs-list">
+            <!-- Populated by JS -->
+          </div>
+          <!-- Empty state -->
+          <div id="matched-needs-empty" class="dashboard-empty" hidden>
+            <p>Check back soon — or update your skill tags.</p>
+            <a href="/profile.html" class="btn btn--secondary">Edit my skills</a>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Secondary panels -->
+      <aside class="dashboard-aside">
+
+        <!-- Recent messages -->
+        <section class="dashboard-panel">
+          <h2 class="dashboard-section-title">Messages</h2>
+          <div id="messages-list">
+            <!-- Populated by JS -->
+          </div>
+          <div id="messages-empty" class="dashboard-empty" hidden>
+            <p>No messages yet.</p>
+          </div>
+          <a href="/messages.html" class="dashboard-panel__link">All messages</a>
+        </section>
+
+        <!-- Shortlist preview -->
+        <section class="dashboard-panel">
+          <h2 class="dashboard-section-title">Shortlist</h2>
+          <div id="shortlist-list">
+            <!-- Populated by JS -->
+          </div>
+          <div id="shortlist-empty" class="dashboard-empty" hidden>
+            <p>Browse members to build your shortlist.</p>
+          </div>
+          <a href="/shortlist.html" class="dashboard-panel__link">See full shortlist</a>
+        </section>
+
+      </aside>
+    </div>
+
+    <!-- Quick actions bar -->
+    <nav class="quick-actions" aria-label="Quick actions">
+      <a href="/browse.html" class="quick-actions__item">Browse members</a>
+      <a href="/needs-new.html" class="quick-actions__item">Post a need</a>
+      <a href="/profile.html" class="quick-actions__item">Edit my profile</a>
+    </nav>
+
+  </main>
+
+  <script type="module">
+    import api from "./js/api.js";
+    import { requireSession } from "./js/supabase-client.js";
+
+    await requireSession();
+
+    // Load member data and populate the dashboard
+    async function init() {
+      const { member } = await api.get("/members/me");
+
+      // Greeting — uses first name and time of day
+      const hour = new Date().getHours();
+      const period = hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
+      document.getElementById("greeting").textContent =
+        `Good ${period}, ${member.first_name}.`;
+
+      // Member since date
+      if (member.member_since) {
+        const since = new Date(member.member_since).toLocaleDateString("en-GB", {
+          month: "long", year: "numeric",
+        });
+        document.getElementById("member-since").textContent = `Member since ${since}`;
+      }
+
+      // Profile completion check
+      checkProfileCompletion(member);
+
+      // Load primary panel based on whether the member has posted needs
+      const { needs: myNeeds } = await api.get("/needs?mine=true");
+
+      if (myNeeds.length > 0) {
+        // Lead view
+        document.getElementById("view-lead").hidden = false;
+        renderMyNeeds(myNeeds);
+      } else {
+        // Specialist view — show matched needs
+        document.getElementById("view-specialist").hidden = false;
+        const { needs: matched } = await api.get("/needs");
+        renderMatchedNeeds(matched);
+      }
+
+      // Load messages preview (last 3 threads)
+      try {
+        const { threads } = await api.get("/messages");
+        renderMessages(threads.slice(0, 3));
+      } catch { /* silently skip if none */ }
+
+      // Load shortlist preview (last 3)
+      try {
+        const { shortlist } = await api.get("/shortlist");
+        renderShortlist(shortlist.slice(0, 3));
+      } catch { /* silently skip if none */ }
+    }
+
+    // Profile completion: check which key fields are missing
+    function checkProfileCompletion(member) {
+      const required = {
+        role:       "Your role",
+        bio:        "A short bio",
+        location:   "Your location",
+        skills:     "At least one skill",
+        rate_min:   "Your day rate",
+        availability_status: "Your availability",
+      };
+
+      const missing = Object.entries(required)
+        .filter(([key]) => {
+          const val = member[key];
+          return !val || (Array.isArray(val) && val.length === 0);
+        })
+        .map(([, label]) => label);
+
+      // Show the prompt only if more than 20% is missing (i.e. < 80% complete)
+      const pct = (Object.keys(required).length - missing.length) / Object.keys(required).length;
+      if (pct < 0.8) {
+        document.getElementById("completion-missing").textContent =
+          `Still needed: ${missing.join(", ")}.`;
+        document.getElementById("completion-prompt").hidden = false;
+      }
+    }
+
+    function renderMyNeeds(needs) {
+      const list = document.getElementById("my-needs-list");
+      if (needs.length === 0) {
+        document.getElementById("my-needs-empty").hidden = false;
+        return;
+      }
+      list.innerHTML = needs.map((n) => `
+        <a href="/need.html?id=${encodeURIComponent(n.id)}" class="need-row">
+          <div class="need-row__title">${escHtml(n.skill_title)}</div>
+          <div class="need-row__meta text-muted">
+            ${n.status} · ${n.collaboration_type || ""} ·
+            Posted ${new Date(n.created_at).toLocaleDateString("en-GB")}
+          </div>
+        </a>
+      `).join("");
+    }
+
+    function renderMatchedNeeds(needs) {
+      const list = document.getElementById("matched-needs-list");
+      if (needs.length === 0) {
+        document.getElementById("matched-needs-empty").hidden = false;
+        return;
+      }
+      list.innerHTML = needs.map((n) => `
+        <a href="/need.html?id=${encodeURIComponent(n.id)}" class="need-row">
+          <div class="need-row__title">${escHtml(n.skill_title)}</div>
+          <div class="need-row__meta text-muted">
+            ${n.poster ? escHtml(`${n.poster.first_name} ${n.poster.last_name}`) : ""}
+            · ${n.start_date_label || ""} · ${n.commitment_label || ""}
+          </div>
+        </a>
+      `).join("");
+    }
+
+    function renderMessages(threads) {
+      const list  = document.getElementById("messages-list");
+      const empty = document.getElementById("messages-empty");
+      if (threads.length === 0) { empty.hidden = false; return; }
+      list.innerHTML = threads.map((t) => `
+        <div class="message-row">
+          <span class="message-row__name">
+            ${escHtml(`${t.partner.first_name} ${t.partner.last_name}`)}
+          </span>
+          ${t.unread > 0
+            ? `<span class="message-row__badge">${t.unread}</span>`
+            : ""}
+        </div>
+      `).join("");
+    }
+
+    function renderShortlist(items) {
+      const list  = document.getElementById("shortlist-list");
+      const empty = document.getElementById("shortlist-empty");
+      if (items.length === 0) { empty.hidden = false; return; }
+      list.innerHTML = items.map((item) => `
+        <a href="/members/${item.saved_member.username}.html" class="shortlist-row">
+          <div class="avatar avatar--sm">
+            ${item.saved_member.first_name[0]}${item.saved_member.last_name[0]}
+          </div>
+          <span>${escHtml(`${item.saved_member.first_name} ${item.saved_member.last_name}`)}</span>
+        </a>
+      `).join("");
+    }
+
+    // Escape HTML to prevent XSS when rendering user-supplied strings
+    function escHtml(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    init();
+  </script>
+
+</body>
+</html>
