@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My shortlist — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/shortlist.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+    <ul class="nav__links">
+      <li><a href="/browse.html">Browse members</a></li>
+      <li><a href="/needs.html">Browse needs</a></li>
+      <li><a href="/messages.html">Messages</a></li>
+      <li><a href="/profile.html">My profile</a></li>
+      <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
+      <li><button id="logout-btn" class="nav__logout">Log out</button></li>
+    </ul>
+  </nav>
+
+  <main class="shortlist-main">
+
+    <header class="shortlist-header">
+      <h1 class="shortlist-title">My shortlist</h1>
+      <p class="shortlist-sub">Members you've saved. Shortlist them from any profile or browse card.</p>
+    </header>
+
+    <!-- Results -->
+    <div id="shortlist-grid" class="shortlist-grid">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Empty state -->
+    <div id="shortlist-empty" class="shortlist-empty" hidden>
+      <p>Nothing saved yet.</p>
+      <a href="/browse.html" class="btn btn--primary">Browse members</a>
+    </div>
+
+  </main>
+
+  <script type="module">
+    import api, { avatarHtml } from "./js/api.js";
+    import { requireSession } from "./js/supabase-client.js";
+
+    await requireSession();
+
+    async function loadShortlist() {
+      const { shortlist } = await api.get("/shortlist");
+      const grid  = document.getElementById("shortlist-grid");
+      const empty = document.getElementById("shortlist-empty");
+
+      if (shortlist.length === 0) {
+        empty.hidden = false;
+        return;
+      }
+
+      grid.innerHTML = shortlist.map((item) => {
+        const m = item.saved_member;
+        const rate = m.rate_min && m.rate_max
+          ? `€${m.rate_min}–€${m.rate_max}/day`
+          : m.rate_min ? `from €${m.rate_min}/day` : "";
+
+        const availPill = m.availability_status === "now"
+          ? `<span class="pill pill--available-now">Available now</span>`
+          : m.availability_status === "from_date" && m.availability_date
+            ? `<span class="pill pill--available-soon">From ${new Date(m.availability_date).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</span>`
+            : "";
+
+        const langPills = (m.languages || [])
+          .map((l) => `<span class="pill">${escHtml(l)}</span>`).join("");
+
+        return `
+          <div class="shortlist-card">
+            <div class="shortlist-card__header">
+              <a href="/member.html?username=${encodeURIComponent(m.username)}" class="shortlist-card__avatar-link">
+                ${avatarHtml(m)}
+              </a>
+              <button
+                class="shortlist-toggle saved"
+                data-item-id="${item.id}"
+                data-member-id="${m.id}"
+                aria-label="Remove from shortlist"
+                title="Remove from shortlist"
+              >♥</button>
+            </div>
+
+            <a href="/member.html?username=${encodeURIComponent(m.username)}" class="shortlist-card__name">
+              ${escHtml(`${m.first_name} ${m.last_name}`)}
+            </a>
+            <p class="shortlist-card__role">${escHtml(m.role || "")}</p>
+
+            <div class="shortlist-card__pills">
+              ${availPill}
+              ${langPills}
+            </div>
+
+            <div class="shortlist-card__footer">
+              <span>${rate}</span>
+              <span>${escHtml(m.location || "")}</span>
+            </div>
+
+            <a href="/messages.html?with=${m.id}" class="btn btn--secondary shortlist-card__msg">
+              Message
+            </a>
+          </div>
+        `;
+      }).join("");
+
+      // Wire up remove buttons
+      grid.querySelectorAll(".shortlist-toggle").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const memberId = btn.dataset.memberId;
+          try {
+            await api.delete(`/shortlist/${memberId}`);
+            // Remove the card from the DOM
+            btn.closest(".shortlist-card").remove();
+            // Show empty state if nothing left
+            if (!grid.querySelector(".shortlist-card")) {
+              empty.hidden = false;
+            }
+          } catch (err) {
+            console.error("Could not remove from shortlist:", err.message);
+          }
+        });
+      });
+    }
+
+    function escHtml(str) {
+      return (str || "")
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    loadShortlist();
+  </script>
+
+  <footer class="site-footer">
+    <span>© 2026 FelloWorks</span>
+    <span class="site-footer__links">
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a>
+    </span>
+  </footer>
+
+  <script type="module" src="js/nav.js"></script>
+</body>
+</html>

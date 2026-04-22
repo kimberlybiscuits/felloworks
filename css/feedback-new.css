@@ -1,0 +1,133 @@
+/* Leave feedback — /feedback-new.html
+   Single column, centred, max-width 560px. */
+
+@import './tokens.css';
+
+body {
+  background-color: var(--cream);
+  min-height: 100vh;
+}
+
+.feedback-main {
+  padding: var(--space-10) var(--space-6);
+}
+
+.feedback-container {
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+/* -----------------------------------------------------------------------
+   Header
+   ----------------------------------------------------------------------- */
+
+.feedback-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-8);
+}
+
+.feedback-back {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.feedback-back:hover {
+  color: var(--ink);
+}
+
+.feedback-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+}
+
+.feedback-sub {
+  font-size: 0.9375rem;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* -----------------------------------------------------------------------
+   Form
+   ----------------------------------------------------------------------- */
+
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+}
+
+/* -----------------------------------------------------------------------
+   Would-collaborate toggle
+   ----------------------------------------------------------------------- */
+
+.collab-toggle {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.collab-toggle__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.collab-toggle__option input[type="radio"] {
+  accent-color: var(--amber);
+  width: 1rem;
+  height: 1rem;
+  cursor: pointer;
+}
+
+.collab-toggle__label {
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+
+/* -----------------------------------------------------------------------
+   Actions row
+   ----------------------------------------------------------------------- */
+
+.feedback-form__actions {
+  display: flex;
+  gap: var(--space-3);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--rule);
+}
+
+/* -----------------------------------------------------------------------
+   Success state
+   ----------------------------------------------------------------------- */
+
+.feedback-success {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-top: var(--space-10);
+}
+
+/* -----------------------------------------------------------------------
+   Mobile
+   ----------------------------------------------------------------------- */
+
+@media (max-width: 540px) {
+  .feedback-main {
+    padding: var(--space-6) var(--space-5);
+  }
+
+  .feedback-form__actions {
+    flex-direction: column-reverse;
+  }
+
+  .feedback-form__actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

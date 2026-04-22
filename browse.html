@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Browse members — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/browse.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+    <ul class="nav__links">
+      <li><a href="/browse.html">Browse members</a></li>
+      <li><a href="/needs.html">Browse needs</a></li>
+      <li><a href="/messages.html">Messages</a></li>
+      <li><a href="/profile.html">My profile</a></li>
+      <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
+      <li><button id="logout-btn" class="nav__logout">Log out</button></li>
+    </ul>
+  </nav>
+
+  <main class="browse-main">
+
+    <!-- Search bar — full width above the two-column layout -->
+    <div class="browse-search">
+      <input
+        type="search"
+        id="search-input"
+        class="form-input browse-search__input"
+        placeholder="Search by skill, discipline, or keyword…"
+        aria-label="Search members"
+      />
+      <button class="btn btn--primary browse-search__btn" id="search-btn">Search</button>
+    </div>
+
+    <!-- Active filter pills — shown when filters are applied -->
+    <div id="active-filters" class="active-filters" hidden aria-live="polite">
+      <!-- Pills injected by JS -->
+    </div>
+
+    <div class="browse-layout">
+
+      <!-- Filter sidebar -->
+      <aside class="browse-sidebar">
+
+        <fieldset class="filter-group">
+          <legend class="filter-group__label">Skill</legend>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Brand design" /> Brand design</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="UX / product design" /> UX / product design</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Content design" /> Content design</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Editorial design" /> Editorial design</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Motion design" /> Motion design</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Illustration" /> Illustration</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Art direction" /> Art direction</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Photography" /> Photography</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Video production" /> Video production</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Copywriting" /> Copywriting</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Content strategy" /> Content strategy</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Communications strategy" /> Communications strategy</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Campaign planning" /> Campaign planning</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Social media" /> Social media</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="PR & media relations" /> PR & media relations</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Research & insights" /> Research & insights</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Translation & localisation" /> Translation & localisation</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Frontend development" /> Frontend development</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="No-code / Webflow" /> No-code / Webflow</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Web development" /> Web development</label>
+        </fieldset>
+
+        <fieldset class="filter-group">
+          <legend class="filter-group__label">Availability</legend>
+          <label class="filter-option"><input type="checkbox" name="availability" value="now" /> Available now</label>
+          <label class="filter-option"><input type="checkbox" name="availability" value="2-4-weeks" /> Available in 2–4 weeks</label>
+          <label class="filter-option"><input type="checkbox" name="availability" value="1-2-months" /> Available in 1–2 months</label>
+          <label class="filter-option"><input type="checkbox" name="availability" value="after-2-months" /> Available after 2 months</label>
+        </fieldset>
+
+        <fieldset class="filter-group">
+          <legend class="filter-group__label">Day rate</legend>
+          <label class="filter-group__sublabel" for="rate-slider">Drag to set max day rate</label>
+          <input
+            type="range"
+            id="rate-slider"
+            name="rate_max"
+            min="400"
+            max="2000"
+            step="50"
+            value="2000"
+            class="rate-slider"
+          />
+          <output id="rate-output" class="rate-output">Up to €2000/day</output>
+        </fieldset>
+
+        <fieldset class="filter-group">
+          <legend class="filter-group__label">Language</legend>
+          <label class="filter-option"><input type="checkbox" name="language" value="English" /> English</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="French" /> French</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="Spanish" /> Spanish</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="German" /> German</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="Italian" /> Italian</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="Dutch" /> Dutch</label>
+        </fieldset>
+
+      </aside>
+
+      <!-- Results area -->
+      <div class="browse-results">
+
+        <div class="browse-results__header">
+          <p id="results-count" class="results-count" aria-live="polite"></p>
+          <div class="results-sort">
+            <label class="form-label sr-only" for="sort-select">Sort by</label>
+            <select id="sort-select" class="form-select results-sort__select">
+              <option value="">Recently active</option>
+              <option value="available-soonest">Available soonest</option>
+              <option value="rate-low">Rate: low to high</option>
+              <option value="rate-high">Rate: high to low</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Member cards grid -->
+        <div id="results-grid" class="results-grid">
+          <!-- Cards injected by JS -->
+        </div>
+
+        <!-- Empty state -->
+        <div id="results-empty" class="browse-empty" hidden>
+          <p>No members match these filters. Try broadening your search.</p>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <script type="module">
+    import api, { avatarHtml } from "./js/api.js";
+    import { requireSession } from "./js/supabase-client.js";
+
+    await requireSession();
+
+    // Track the current filter state
+    const filters = { q: "", skill: [], availability: [], rate_max: 2000, language: [], sort: "" };
+
+    // Rate slider — update the displayed value live
+    const slider = document.getElementById("rate-slider");
+    const output = document.getElementById("rate-output");
+    slider.addEventListener("input", () => {
+      const val = parseInt(slider.value);
+      filters.rate_max = val;
+      output.textContent = val >= 2000 ? "Any day rate" : `Up to €${val}/day`;
+      fetchAndRender();
+    });
+
+    // Search button and Enter key in search input
+    const searchInput = document.getElementById("search-input");
+    document.getElementById("search-btn").addEventListener("click", () => {
+      filters.q = searchInput.value.trim();
+      fetchAndRender();
+    });
+    searchInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        filters.q = searchInput.value.trim();
+        fetchAndRender();
+      }
+    });
+
+    // Checkbox filters — skill, availability, language
+    document.querySelectorAll("input[type=checkbox]").forEach((cb) => {
+      cb.addEventListener("change", () => {
+        const group = cb.name; // "skill", "availability", or "language"
+        filters[group] = [...document.querySelectorAll(`input[name=${group}]:checked`)]
+          .map((el) => el.value);
+        fetchAndRender();
+      });
+    });
+
+    // Sort dropdown
+    document.getElementById("sort-select").addEventListener("change", (e) => {
+      filters.sort = e.target.value;
+      fetchAndRender();
+    });
+
+    async function fetchAndRender() {
+      const params = new URLSearchParams();
+      if (filters.q)                params.set("q", filters.q);
+      if (filters.skill.length)     params.set("skill", filters.skill[0]); // API takes one skill for now
+      if (filters.availability[0])  params.set("availability", filters.availability[0]);
+      if (filters.rate_max < 2000)  params.set("rate_max", filters.rate_max);
+      if (filters.language.length)  params.set("language", filters.language[0]);
+      if (filters.sort)             params.set("sort", filters.sort);
+
+      try {
+        const { members } = await api.get(`/members?${params.toString()}`);
+        renderResults(members);
+        renderActivePills();
+      } catch (err) {
+        console.error("Error fetching members:", err);
+      }
+    }
+
+    function renderResults(members) {
+      const grid  = document.getElementById("results-grid");
+      const empty = document.getElementById("results-empty");
+      const count = document.getElementById("results-count");
+
+      count.textContent = `${members.length} member${members.length === 1 ? "" : "s"} match your search`;
+
+      if (members.length === 0) {
+        grid.innerHTML = "";
+        empty.hidden = false;
+        return;
+      }
+
+      empty.hidden = true;
+      grid.innerHTML = members.map((m) => buildCard(m)).join("");
+
+      // Wire up shortlist toggles
+      grid.querySelectorAll(".shortlist-toggle").forEach((btn) => {
+        btn.addEventListener("click", async (e) => {
+          e.preventDefault();
+          const memberId = btn.dataset.memberId;
+          const saved    = btn.classList.contains("saved");
+          try {
+            if (saved) {
+              await api.delete(`/shortlist/${memberId}`);
+              btn.classList.remove("saved");
+              btn.setAttribute("aria-label", "Add to shortlist");
+            } else {
+              await api.post("/shortlist", { saved_member_id: memberId });
+              btn.classList.add("saved");
+              btn.setAttribute("aria-label", "Remove from shortlist");
+            }
+          } catch (err) {
+            console.error("Shortlist error:", err);
+          }
+        });
+      });
+    }
+
+    function buildCard(m) {
+      const availPill    = availabilityPill(m);
+      const langPills    = (m.languages || []).map((l) =>
+        `<span class="pill">${escHtml(l)}</span>`).join("");
+      const rate         = m.rate_min && m.rate_max
+        ? `€${m.rate_min}–€${m.rate_max}/day`
+        : m.rate_min ? `from €${m.rate_min}/day` : "";
+
+      return `
+        <a href="/member.html?username=${encodeURIComponent(m.username)}" class="member-card">
+          <div class="member-card__header">
+            ${avatarHtml(m)}
+            <button
+              class="shortlist-toggle"
+              data-member-id="${m.id}"
+              aria-label="Add to shortlist"
+              title="Add to shortlist"
+            >♡</button>
+          </div>
+          <div class="member-card__name">${escHtml(`${m.first_name} ${m.last_name}`)}</div>
+          <div class="member-card__role">${escHtml(m.role || "")}</div>
+          <div class="member-card__pills">
+            ${availPill}
+            ${langPills}
+          </div>
+          <div class="member-card__footer">
+            <span>${rate}</span>
+            <span>${escHtml(m.location || "")}</span>
+          </div>
+        </a>
+      `;
+    }
+
+    function availabilityPill(m) {
+      if (m.availability_status === "now") {
+        return `<span class="pill pill--available-now">Available now</span>`;
+      }
+      if (m.availability_status === "from_date" && m.availability_date) {
+        const date = new Date(m.availability_date).toLocaleDateString("en-GB", {
+          day: "numeric", month: "short",
+        });
+        return `<span class="pill pill--available-soon">From ${date}</span>`;
+      }
+      return "";
+    }
+
+    function renderActivePills() {
+      const container = document.getElementById("active-filters");
+      const active    = [];
+
+      if (filters.q)               active.push({ label: `"${filters.q}"`, key: "q" });
+      filters.skill.forEach((s)   => active.push({ label: s, key: `skill:${s}` }));
+      filters.availability.forEach((a) => active.push({ label: a, key: `availability:${a}` }));
+      if (filters.rate_max < 2000) active.push({ label: `Max €${filters.rate_max}/day`, key: "rate_max" });
+      filters.language.forEach((l) => active.push({ label: l, key: `language:${l}` }));
+
+      if (active.length === 0) {
+        container.hidden = true;
+        return;
+      }
+
+      container.hidden   = false;
+      container.innerHTML =
+        active.map((f) => `<span class="active-pill">${escHtml(f.label)} <button class="active-pill__remove" data-key="${f.key}" aria-label="Remove filter">×</button></span>`).join("") +
+        `<button class="active-pill__clear" id="clear-all">Clear all</button>`;
+
+      // Clear individual pills
+      container.querySelectorAll(".active-pill__remove").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          // Reset the filter identified by key
+          const key = btn.dataset.key;
+          if (key === "q")         { filters.q = ""; searchInput.value = ""; }
+          else if (key === "rate_max") { filters.rate_max = 2000; slider.value = 2000; output.textContent = "Any day rate"; }
+          else {
+            const [group, val] = key.split(":");
+            filters[group] = filters[group].filter((v) => v !== val);
+            document.querySelector(`input[name="${group}"][value="${val}"]`).checked = false;
+          }
+          fetchAndRender();
+        });
+      });
+
+      // Clear all
+      document.getElementById("clear-all")?.addEventListener("click", () => {
+        filters.q = ""; filters.skill = []; filters.availability = [];
+        filters.rate_max = 2000; filters.language = [];
+        searchInput.value = "";
+        slider.value = 2000;
+        output.textContent = "Any day rate";
+        document.querySelectorAll("input[type=checkbox]").forEach((cb) => cb.checked = false);
+        fetchAndRender();
+      });
+    }
+
+    function escHtml(str) {
+      return (str || "")
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    // Initial load
+    fetchAndRender();
+  </script>
+
+  <footer class="site-footer">
+    <span>© 2026 FelloWorks</span>
+    <span class="site-footer__links">
+      <a href="/terms.html">Terms</a>
+      <a href="/privacy.html">Privacy</a>
+    </span>
+  </footer>
+
+  <script type="module" src="js/nav.js"></script>
+</body>
+</html>

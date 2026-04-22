@@ -1,0 +1,83 @@
+/* FelloWorks base styles
+   Reset, typography defaults, and utility classes.
+   No component-specific rules here. */
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Karla:wght@300;400;500;600&display=swap');
+@import './tokens.css';
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure the hidden attribute always wins regardless of CSS specificity */
+[hidden] { display: none !important; }
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: var(--weight-regular);
+  color: var(--ink-soft);
+  background-color: var(--cream);
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  color: var(--ink);
+  line-height: 1.2;
+}
+
+a {
+  color: var(--amber);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+input, textarea, select {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+}
+
+/* -----------------------------------------------------------------------
+   Utility classes
+   ----------------------------------------------------------------------- */
+
+/* Visually hidden — for screen readers only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Muted text */
+.text-muted { color: var(--ink-muted); }
+
+/* Amber accent text */
+.text-amber { color: var(--amber); }
+
+/* Italic serif — used for the stylised word in headings */
+.serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  color: var(--amber);
+}

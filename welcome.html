@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create your account — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/welcome.css" />
+</head>
+<body>
+
+  <div class="welcome-layout">
+
+    <!-- Left panel — ink background, welcome copy and inviter context -->
+    <div class="welcome-left">
+      <div class="welcome-wordmark">FelloWorks</div>
+
+      <div class="welcome-left__content">
+        <p class="welcome-eyebrow">You're in</p>
+
+        <h1 class="welcome-heading">
+          Welcome to the <span class="serif-italic">network.</span>
+        </h1>
+
+        <p class="welcome-body">
+          FelloWorks is invite-only for a reason. You're here because someone already inside
+          thought you belonged. That means something — to them, and to every other member
+          you'll work with.
+        </p>
+
+        <!-- Inviter card — populated by JS -->
+        <div class="inviter-card" id="inviter-card">
+          <div class="avatar" id="inviter-avatar" aria-hidden="true">–</div>
+          <div class="inviter-card__meta">
+            <span class="inviter-card__label">Invited by</span>
+            <strong id="inviter-name">–</strong>
+            <span id="inviter-role" class="inviter-role"></span>
+          </div>
+        </div>
+      </div>
+
+      <footer class="welcome-left__footer">
+        fello.works · Beta · April 2026
+      </footer>
+    </div>
+
+    <!-- Right panel — cream background, account creation form -->
+    <div class="welcome-right">
+      <div class="welcome-right__inner">
+        <h2 class="welcome-form-heading">Create your account</h2>
+        <p class="welcome-form-subhead">
+          Takes thirty seconds. Your profile comes next — at your own pace.
+        </p>
+
+        <!-- Error message — hidden unless there's a problem -->
+        <div id="error-msg" class="alert alert--error" hidden></div>
+
+        <form id="signup-form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="first-name">First name</label>
+              <input class="form-input" type="text" id="first-name" name="first_name"
+                     autocomplete="given-name" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="last-name">Last name</label>
+              <input class="form-input" type="text" id="last-name" name="last_name"
+                     autocomplete="family-name" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email address</label>
+            <!-- Pre-filled and locked if the invite includes a specific email -->
+            <input class="form-input" type="email" id="email" name="email"
+                   autocomplete="email" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-input" type="password" id="password" name="password"
+                   autocomplete="new-password" required minlength="8" />
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--full" id="submit-btn">
+            Create my account
+          </button>
+
+          <p class="welcome-terms">
+            By creating an account you agree to the
+            <a href="/terms.html">member terms</a> and <a href="/privacy.html">privacy policy</a>.
+          </p>
+        </form>
+
+        <!-- "What happens next" block -->
+        <div class="welcome-next">
+          <p class="welcome-next__heading">What happens next</p>
+          <ol class="welcome-next__list">
+            <li>You'll land on your dashboard — empty for now, yours to fill.</li>
+            <li>Build your profile when you're ready. No deadline, no pressure.</li>
+            <li>Browse the network, post a need, or just get a feel for it first.</li>
+          </ol>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <script type="module">
+    import api from "./js/api.js";
+    import { signIn } from "./js/supabase-client.js";
+
+    const params = new URLSearchParams(window.location.search);
+    const token  = params.get("token");
+
+    // Redirect away if no token is present
+    if (!token) {
+      window.location.href = "/";
+    }
+
+    // Load invite details to display the inviter card and pre-fill email
+    async function loadInvite() {
+      try {
+        const { invite } = await api.get(`/invites/${token}`);
+
+        const inviterName = `${invite.inviter.first_name} ${invite.inviter.last_name}`;
+        const initials    = `${invite.inviter.first_name[0]}${invite.inviter.last_name[0]}`.toUpperCase();
+
+        document.getElementById("inviter-avatar").textContent = initials;
+        document.getElementById("inviter-name").textContent   = inviterName;
+        document.getElementById("inviter-role").textContent   = invite.inviter.role || "";
+
+        // Pre-fill and lock the email field if the invite specifies an address
+        if (invite.invitee_email) {
+          const emailField = document.getElementById("email");
+          emailField.value    = invite.invitee_email;
+          emailField.readOnly = true;
+          emailField.classList.add("form-input--locked");
+        }
+      } catch (err) {
+        // Invalid or expired token — show error and disable form
+        showError("This invitation isn't valid or has expired.");
+        document.getElementById("submit-btn").disabled = true;
+      }
+    }
+
+    function showError(msg) {
+      const el  = document.getElementById("error-msg");
+      el.textContent = msg;
+      el.hidden = false;
+    }
+
+    // Handle form submission
+    document.getElementById("signup-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("submit-btn");
+      btn.disabled    = true;
+      btn.textContent = "Creating your account…";
+
+      const form = new FormData(e.target);
+
+      try {
+        // Send to the backend — which creates the auth user + member record + marks invite used
+        await api.post("/invites/accept", {
+          token,
+          first_name: form.get("first_name"),
+          last_name:  form.get("last_name"),
+          email:      form.get("email"),
+          password:   form.get("password"),
+        });
+
+        // Sign in with the new credentials and redirect to dashboard
+        await signIn(form.get("email"), form.get("password"));
+        window.location.href = "/dashboard.html";
+
+      } catch (err) {
+        showError(err.message);
+        btn.disabled    = false;
+        btn.textContent = "Create my account";
+      }
+    });
+
+    loadInvite();
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,276 @@
+/* Admin panel — /admin.html
+   Stats bar, member table, invite table, create invite form. */
+
+@import './tokens.css';
+
+body {
+  background-color: var(--cream);
+  min-height: 100vh;
+}
+
+/* -----------------------------------------------------------------------
+   Layout
+   ----------------------------------------------------------------------- */
+
+.admin-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-10) var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* -----------------------------------------------------------------------
+   Header
+   ----------------------------------------------------------------------- */
+
+.admin-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-bottom: var(--space-6);
+  border-bottom: 1px solid var(--rule);
+}
+
+.admin-title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+}
+
+.admin-sub {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+/* -----------------------------------------------------------------------
+   Stats bar
+   ----------------------------------------------------------------------- */
+
+.admin-stats {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.admin-stat {
+  flex: 1;
+  background-color: var(--white);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-md);
+  padding: var(--space-5) var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.admin-stat__value {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.admin-stat__label {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* -----------------------------------------------------------------------
+   Two-column grid
+   ----------------------------------------------------------------------- */
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+.admin-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* -----------------------------------------------------------------------
+   Panels
+   ----------------------------------------------------------------------- */
+
+.admin-panel {
+  background-color: var(--white);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.admin-panel__title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+}
+
+.admin-panel__desc {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* -----------------------------------------------------------------------
+   Tables
+   ----------------------------------------------------------------------- */
+
+.admin-table-wrap {
+  overflow-x: auto;
+  margin: 0 calc(-1 * var(--space-6));
+  padding: 0 var(--space-6);
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.admin-table thead th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-muted);
+  padding: 0 var(--space-3) var(--space-3);
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+
+.admin-table thead th:first-child { padding-left: 0; }
+
+.admin-table tbody td {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-soft);
+  vertical-align: middle;
+}
+
+.admin-table tbody td:first-child { padding-left: 0; }
+
+.admin-table tbody tr:last-child td { border-bottom: none; }
+
+.admin-table__empty {
+  color: var(--ink-muted);
+  font-style: italic;
+  text-align: center;
+  padding: var(--space-8) 0 !important;
+}
+
+.admin-table__link {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: var(--weight-medium);
+}
+
+.admin-table__link:hover {
+  color: var(--amber);
+}
+
+/* -----------------------------------------------------------------------
+   Status badges
+   ----------------------------------------------------------------------- */
+
+.admin-badge {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.02em;
+}
+
+.admin-badge--pending {
+  background-color: #FFF7E6;
+  color: #B45309;
+}
+
+.admin-badge--used {
+  background-color: #ECFDF5;
+  color: #065F46;
+}
+
+.admin-badge--expired {
+  background-color: var(--cream);
+  color: var(--ink-muted);
+}
+
+/* -----------------------------------------------------------------------
+   Invite form
+   ----------------------------------------------------------------------- */
+
+.admin-invite-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.admin-invite-form__submit {
+  align-self: flex-start;
+}
+
+/* -----------------------------------------------------------------------
+   Feedback message
+   ----------------------------------------------------------------------- */
+
+.admin-feedback {
+  font-size: 0.9375rem;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+}
+
+.admin-feedback--success {
+  background-color: #ECFDF5;
+  color: #065F46;
+}
+
+.admin-feedback--error {
+  background-color: #FEF2F2;
+  color: #991B1B;
+}
+
+/* -----------------------------------------------------------------------
+   Mobile
+   ----------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-stats {
+    flex-wrap: wrap;
+  }
+
+  .admin-stat {
+    flex: 1 1 calc(50% - var(--space-2));
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-main {
+    padding: var(--space-6) var(--space-5);
+  }
+
+  .admin-stat {
+    flex: 1 1 100%;
+  }
+}

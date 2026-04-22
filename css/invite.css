@@ -1,0 +1,133 @@
+/* Invite acceptance screen — /invite.html
+   Full viewport, ink background, centred single column.
+   The first thing an invited person sees. */
+
+@import './tokens.css';
+
+body.invite-page {
+  background-color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-8) var(--space-6);
+}
+
+.invite-container {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+/* Wordmark */
+.invite-wordmark {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--amber);
+  letter-spacing: -0.01em;
+}
+
+/* Content panels — only one shown at a time depending on token state */
+.invite-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* "You've been invited" eyebrow */
+.invite-eyebrow {
+  font-size: 0.75rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--amber);
+  margin: 0;
+}
+
+/* Main heading — inviter name in white, rest in white */
+.invite-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* Body copy */
+.invite-body {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+.invite-body a {
+  color: var(--amber-light);
+}
+
+/* Inviter card — dark variant for ink background */
+.invite-container .inviter-card {
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.invite-container .inviter-card__label {
+  color: var(--ink-muted);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.invite-container .inviter-card strong {
+  color: var(--white);
+  font-size: 0.9375rem;
+}
+
+.invite-container .inviter-card .text-muted {
+  color: var(--ink-muted);
+  font-size: 0.875rem;
+}
+
+/* Accept CTA */
+.invite-container .btn--primary {
+  padding: var(--space-4) var(--space-6);
+  font-size: 1rem;
+  justify-content: center;
+}
+
+/* Expiry note below CTA */
+.invite-expiry {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  margin: 0;
+  text-align: center;
+}
+
+/* Loading state */
+#state-loading .text-muted {
+  color: var(--ink-muted);
+}
+
+/* Error/invalid states */
+#state-used .invite-heading,
+#state-invalid .invite-heading {
+  font-size: 1.75rem;
+}
+
+/* -----------------------------------------------------------------------
+   Mobile
+   ----------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  body.invite-page {
+    align-items: flex-start;
+    padding: var(--space-8) var(--space-5);
+  }
+
+  /* On mobile, dark background forms get a right border per spec */
+  .invite-container .btn--primary {
+    border-right: 1.5px solid rgba(255, 255, 255, 0.15);
+  }
+}

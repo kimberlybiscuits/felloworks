@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>FelloWorks</title>
+</head>
+<body>
+  <script type="module">
+    import { getSession } from "./js/supabase-client.js";
+    const session = await getSession();
+    window.location.href = session ? "/dashboard.html" : "/invite.html";
+  </script>
+</body>
+</html>

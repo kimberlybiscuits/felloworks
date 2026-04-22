@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>You've been invited — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/invite.css" />
+</head>
+<body class="invite-page">
+
+  <main class="invite-container">
+
+    <!-- FelloWorks wordmark -->
+    <div class="invite-wordmark">FelloWorks</div>
+
+    <!-- Shown while the token is being validated -->
+    <div id="state-loading" class="invite-content" aria-live="polite">
+      <p class="text-muted">Checking your invitation…</p>
+    </div>
+
+    <!-- Shown when the invite is valid -->
+    <div id="state-valid" class="invite-content" hidden>
+      <p class="invite-eyebrow">You've been invited</p>
+
+      <!-- Heading is populated by JS once we know the inviter's name -->
+      <h1 class="invite-heading">
+        <span id="inviter-name"></span> invited you to FelloWorks.
+      </h1>
+
+      <p class="invite-body">
+        FelloWorks is invite-only. Every member has been vouched for by someone already inside.
+        <span id="inviter-name-repeat"></span> thought you'd be a good fit.
+      </p>
+
+      <!-- Inviter card -->
+      <div class="inviter-card">
+        <div class="avatar" id="inviter-avatar" aria-hidden="true"></div>
+        <div class="inviter-card__meta">
+          <span class="inviter-card__label">Invited by</span>
+          <strong id="inviter-full-name"></strong>
+          <span id="inviter-role" class="text-muted"></span>
+        </div>
+      </div>
+
+      <!-- Accept CTA — links to /welcome.html with the token in the query string -->
+      <a id="accept-link" href="#" class="btn btn--primary btn--full">
+        Accept your invitation
+      </a>
+
+      <p class="invite-expiry text-muted" id="expiry-text"></p>
+    </div>
+
+    <!-- Shown when the invite has already been used -->
+    <div id="state-used" class="invite-content" hidden>
+      <h1 class="invite-heading">This invitation has already been accepted.</h1>
+      <p class="invite-body">
+        If you already have an account, <a href="/dashboard.html">go to your dashboard</a>.
+        If something seems wrong, get in touch at <a href="mailto:hello@fello.works">hello@fello.works</a>.
+      </p>
+    </div>
+
+    <!-- Shown when the invite is invalid or expired -->
+    <div id="state-invalid" class="invite-content" hidden>
+      <h1 class="invite-heading">This invitation isn't valid.</h1>
+      <p class="invite-body">
+        It may have expired or the link may be incomplete.
+        Get in touch at <a href="mailto:hello@fello.works">hello@fello.works</a> and we'll sort it out.
+      </p>
+    </div>
+
+  </main>
+
+  <script type="module">
+    import api from "./js/api.js";
+
+    // Read the invite token from the URL: /invite.html?token=abc123
+    const params  = new URLSearchParams(window.location.search);
+    const token   = params.get("token");
+
+    const states = {
+      loading: document.getElementById("state-loading"),
+      valid:   document.getElementById("state-valid"),
+      used:    document.getElementById("state-used"),
+      invalid: document.getElementById("state-invalid"),
+    };
+
+    // Show only the named state panel
+    function show(name) {
+      Object.entries(states).forEach(([key, el]) => {
+        el.hidden = key !== name;
+      });
+    }
+
+    async function init() {
+      if (!token) {
+        show("invalid");
+        return;
+      }
+
+      try {
+        // Validate the token server-side
+        const { invite } = await api.get(`/invites/${token}`);
+
+        // Populate inviter details
+        const inviterName = `${invite.inviter.first_name} ${invite.inviter.last_name}`;
+        const initials    = `${invite.inviter.first_name[0]}${invite.inviter.last_name[0]}`.toUpperCase();
+
+        document.getElementById("inviter-name").textContent        = inviterName;
+        document.getElementById("inviter-name-repeat").textContent = inviterName;
+        document.getElementById("inviter-full-name").textContent   = inviterName;
+        document.getElementById("inviter-role").textContent        = invite.inviter.role || "";
+        document.getElementById("inviter-avatar").textContent      = initials;
+
+        // Calculate days until expiry
+        const daysLeft = Math.max(
+          0,
+          Math.ceil((new Date(invite.expires_at) - Date.now()) / 86400000)
+        );
+        document.getElementById("expiry-text").textContent =
+          `Invitation expires in ${daysLeft} day${daysLeft === 1 ? "" : "s"}.`;
+
+        // Wire up the CTA — passes the token to the welcome screen
+        document.getElementById("accept-link").href =
+          `/welcome.html?token=${encodeURIComponent(token)}`;
+
+        show("valid");
+
+      } catch (err) {
+        if (err.message.includes("already been accepted")) {
+          show("used");
+        } else {
+          show("invalid");
+        }
+      }
+    }
+
+    init();
+  </script>
+
+</body>
+</html>

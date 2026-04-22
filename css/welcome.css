@@ -1,0 +1,252 @@
+/* Welcome / account creation screen — /welcome.html
+   Two-column, full viewport height.
+   Left: ink background, welcome copy and inviter context.
+   Right: cream background, account creation form. */
+
+@import './tokens.css';
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+/* -----------------------------------------------------------------------
+   Two-column layout
+   ----------------------------------------------------------------------- */
+
+.welcome-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+/* -----------------------------------------------------------------------
+   Left panel — ink background
+   ----------------------------------------------------------------------- */
+
+.welcome-left {
+  background-color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-10) var(--space-12);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.welcome-wordmark {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--amber);
+  letter-spacing: -0.01em;
+  margin-bottom: var(--space-16);
+}
+
+.welcome-left__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  justify-content: center;
+}
+
+/* "You're in" eyebrow */
+.welcome-eyebrow {
+  font-size: 0.75rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--amber);
+  margin: 0;
+}
+
+/* Main heading */
+.welcome-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.15;
+  margin: 0;
+}
+
+/* Body copy */
+.welcome-body {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--ink-muted);
+  margin: 0;
+  max-width: 38ch;
+}
+
+/* Inviter card — dark variant */
+.welcome-left .inviter-card {
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  max-width: 340px;
+}
+
+.welcome-left .inviter-card__label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-muted);
+  display: block;
+  margin-bottom: 2px;
+}
+
+.welcome-left .inviter-card__meta strong {
+  display: block;
+  color: var(--white);
+  font-size: 0.9375rem;
+  font-weight: var(--weight-medium);
+}
+
+.inviter-role {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+}
+
+/* Footer */
+.welcome-left__footer {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  opacity: 0.6;
+}
+
+
+/* -----------------------------------------------------------------------
+   Right panel — cream background
+   ----------------------------------------------------------------------- */
+
+.welcome-right {
+  background-color: var(--cream);
+  overflow-y: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-16) var(--space-10);
+}
+
+.welcome-right__inner {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.welcome-form-heading {
+  font-family: var(--font-serif);
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+}
+
+.welcome-form-subhead {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+  margin: calc(var(--space-2) * -1) 0 0;
+  line-height: 1.6;
+}
+
+/* Form */
+#signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Locked email field — pre-filled from invite */
+.form-input--locked {
+  background-color: var(--cream);
+  color: var(--ink-muted);
+  cursor: not-allowed;
+}
+
+/* Terms copy */
+.welcome-terms {
+  font-size: 0.8125rem;
+  color: var(--ink-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.welcome-terms a {
+  color: var(--amber);
+}
+
+/* "What happens next" block */
+.welcome-next {
+  background-color: var(--amber-pale);
+  border-radius: var(--radius-md);
+  padding: var(--space-5) var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.welcome-next__heading {
+  font-size: 0.8125rem;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--amber);
+  margin: 0;
+}
+
+.welcome-next__list {
+  margin: 0;
+  padding-left: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.welcome-next__list li {
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+
+/* -----------------------------------------------------------------------
+   Mobile — stack panels vertically
+   ----------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  .welcome-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .welcome-left {
+    position: static;
+    height: auto;
+    padding: var(--space-8) var(--space-6);
+  }
+
+  .welcome-wordmark {
+    margin-bottom: var(--space-8);
+  }
+
+  .welcome-right {
+    padding: var(--space-8) var(--space-6);
+  }
+
+  /* Mobile dark background form border — per spec */
+  .welcome-left .form-input,
+  .welcome-left .btn {
+    border-right: 1.5px solid rgba(255, 255, 255, 0.15);
+  }
+}

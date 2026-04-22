@@ -1,0 +1,366 @@
+/* Profile edit screen — /profile.html
+   Single column, max-width 680px, centred. Sectioned form. */
+
+@import './tokens.css';
+
+body {
+  background-color: var(--cream);
+  min-height: 100vh;
+}
+
+/* -----------------------------------------------------------------------
+   Layout
+   ----------------------------------------------------------------------- */
+
+.profile-edit-main {
+  padding: var(--space-10) var(--space-6);
+}
+
+.profile-edit-container {
+  max-width: 680px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+/* -----------------------------------------------------------------------
+   Header
+   ----------------------------------------------------------------------- */
+
+.profile-edit-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-bottom: var(--space-8);
+  border-bottom: 1px solid var(--rule);
+}
+
+.profile-edit-header__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.profile-edit-view-link {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.profile-edit-view-link:hover {
+  color: var(--amber);
+  text-decoration: none;
+}
+
+.profile-edit-title {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+}
+
+.profile-edit-sub {
+  font-size: 0.9375rem;
+  color: var(--ink-muted);
+  margin: 0;
+}
+
+/* -----------------------------------------------------------------------
+   Save / error banners
+   ----------------------------------------------------------------------- */
+
+.save-banner {
+  background-color: #D1FAE5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+  border-radius: var(--radius-sm);
+  padding: var(--space-3) var(--space-5);
+  font-size: 0.9375rem;
+  font-weight: var(--weight-medium);
+}
+
+/* -----------------------------------------------------------------------
+   Avatar upload
+   ----------------------------------------------------------------------- */
+
+.avatar-upload {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+/* The avatar circle doubles as the preview container */
+.avatar-upload .avatar--lg {
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.avatar-upload__controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+/* Hide the native file input — the label acts as the button */
+.avatar-upload__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.avatar-upload__label {
+  cursor: pointer;
+}
+
+.avatar-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.avatar-remove-btn:hover {
+  color: var(--ink);
+}
+
+/* -----------------------------------------------------------------------
+   Section blocks
+   ----------------------------------------------------------------------- */
+
+.profile-section-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-bottom: var(--space-10);
+  border-bottom: 1px solid var(--rule);
+}
+
+.profile-section-block:last-of-type {
+  border-bottom: none;
+}
+
+.profile-section-block__title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--ink);
+  margin: 0;
+}
+
+.profile-section-block__desc {
+  font-size: 0.875rem;
+  color: var(--ink-muted);
+  line-height: 1.6;
+  margin: calc(var(--space-3) * -1) 0 0;
+}
+
+/* -----------------------------------------------------------------------
+   Skill chips
+   ----------------------------------------------------------------------- */
+
+.skill-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.skill-chips .pill--skill {
+  cursor: pointer;
+  border: 1.5px solid var(--rule);
+  background: var(--white);
+  font-size: 0.875rem;
+  font-family: var(--font-sans);
+  transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+}
+
+.skill-chips .pill--skill:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+
+.skill-chips .pill--skill.selected {
+  border-color: var(--amber);
+  color: var(--amber);
+  background-color: var(--amber-pale);
+}
+
+/* -----------------------------------------------------------------------
+   Language checkboxes
+   ----------------------------------------------------------------------- */
+
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-3);
+}
+
+.filter-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.filter-option input[type="checkbox"] {
+  accent-color: var(--amber);
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* -----------------------------------------------------------------------
+   Availability
+   ----------------------------------------------------------------------- */
+
+.availability-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.availability-option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 0.9375rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.availability-option input[type="radio"] {
+  accent-color: var(--amber);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.form-input--date {
+  max-width: 240px;
+}
+
+.availability-updated {
+  font-size: 0.8125rem;
+  margin: 0;
+}
+
+/* -----------------------------------------------------------------------
+   Portfolio items
+   ----------------------------------------------------------------------- */
+
+#portfolio-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.portfolio-item-block {
+  background-color: var(--white);
+  border: 1.5px solid var(--rule);
+  border-radius: var(--radius-md);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.portfolio-item-block__url-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.portfolio-item-block__url-row .form-group {
+  flex: 1;
+}
+
+.portfolio-fetch-btn {
+  flex-shrink: 0;
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.portfolio-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ink-muted);
+  font-size: 1.375rem;
+  line-height: 1;
+  padding: var(--space-2);
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.portfolio-remove-btn:hover {
+  color: var(--ink);
+}
+
+.portfolio-item-block__fields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.portfolio-item-block__preview {
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  max-height: 200px;
+}
+
+.portfolio-preview-img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+/* -----------------------------------------------------------------------
+   Save bar
+   ----------------------------------------------------------------------- */
+
+.profile-save-bar {
+  display: flex;
+  gap: var(--space-3);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--rule);
+}
+
+/* -----------------------------------------------------------------------
+   Mobile
+   ----------------------------------------------------------------------- */
+
+@media (max-width: 600px) {
+  .profile-edit-main {
+    padding: var(--space-6) var(--space-5);
+  }
+
+  .checkbox-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .portfolio-item-block__url-row {
+    flex-wrap: wrap;
+  }
+
+  .profile-save-bar {
+    flex-direction: column;
+  }
+
+  .profile-save-bar .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
