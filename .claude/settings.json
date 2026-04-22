@@ -1,0 +1,18 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit*)",
+            "command": "/home/kim/projects/felloworks/.claude/check-frontend-secrets.sh",
+            "timeout": 10,
+            "statusMessage": "Scanning frontend for secrets…"
+          }
+        ]
+      }
+    ]
+  }
+}

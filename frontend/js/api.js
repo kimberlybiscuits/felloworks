@@ -2,7 +2,7 @@
 // Thin wrapper around fetch — adds the auth token and base URL automatically.
 // Import this module in any screen that needs to talk to the backend.
 
-const API_BASE = "http://192.168.0.26:3000/api"; // Change to production URL on deploy
+const API_BASE = "https://felloworks-api.onrender.com/api";
 
 // Get the session token from Supabase (stored in localStorage by the Supabase client)
 function getToken() {
