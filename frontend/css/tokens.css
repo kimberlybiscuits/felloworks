@@ -9,6 +9,7 @@
   --ink-soft:    #3A4E60;   /* Body text */
   --ink-muted:   #7A8C9A;   /* Captions, meta */
   --amber:       #FF6B35;   /* Primary accent, CTAs, logo */
+  --amber-deep:  #D9471A;   /* Primary button hover — pressed, confident */
   --amber-light: #FF8F5E;   /* Accent on dark backgrounds */
   --amber-pale:  #FFF0E8;   /* Warm section backgrounds */
   --rule:        #D8D2C8;   /* Borders, dividers */

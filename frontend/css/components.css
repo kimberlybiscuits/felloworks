@@ -106,7 +106,7 @@
 }
 
 .btn--primary:hover {
-  background-color: var(--amber-light);
+  background-color: var(--amber-deep);
   text-decoration: none;
 }
 
@@ -114,11 +114,29 @@
 .btn--secondary {
   background-color: transparent;
   color: var(--ink);
-  border: 1.5px solid var(--rule);
+  border: 1.5px solid var(--ink);
 }
 
 .btn--secondary:hover {
-  border-color: var(--ink-muted);
+  background-color: var(--ink);
+  color: var(--white);
+  text-decoration: none;
+}
+
+/* Tertiary — plain text link */
+.btn--tertiary {
+  background: transparent;
+  color: var(--ink);
+  border: none;
+  padding-left: var(--space-1);
+  padding-right: var(--space-1);
+  font-weight: var(--weight-medium);
+}
+
+.btn--tertiary:hover {
+  color: var(--amber);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* Full width */
@@ -293,10 +311,12 @@
 }
 
 .member-card__name {
-  font-family: var(--font-serif);
-  font-size: 1.125rem;
+  font-family: var(--font-sans);
+  font-weight: var(--weight-semibold);
+  font-size: 1.0625rem;
   color: var(--ink);
   margin-top: var(--space-2);
+  letter-spacing: -0.005em;
 }
 
 .member-card__role {
