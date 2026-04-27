@@ -34,6 +34,7 @@
           <a href="/messages.html" class="nav__dropdown-item">Messages</a>
           <a href="/needs-new.html" class="nav__dropdown-item">Post a need</a>
           <a href="/shortlist.html" class="nav__dropdown-item">My shortlist</a>
+          <a href="/invite-send.html" class="nav__dropdown-item">Invite someone</a>
           <hr class="nav__dropdown-divider">
           <button id="logout-btn" class="nav__dropdown-item nav__dropdown-item--muted">Log out</button>
         </div>
@@ -167,7 +168,7 @@
   </footer>
 
   <script type="module">
-    import api from "./js/api.js";
+    import api, { renderAvatar } from "./js/api.js";
     import { requireSession } from "./js/supabase-client.js";
 
     await requireSession();
@@ -193,9 +194,7 @@
     async function init() {
       const { member } = await api.get("/members/me");
 
-      // Populate nav avatar with initials
-      const initials = `${member.first_name[0]}${member.last_name[0]}`;
-      document.getElementById("nav-avatar").textContent = initials;
+      renderAvatar(document.getElementById("nav-avatar"), member);
 
       // Date eyebrow
       const now = new Date();

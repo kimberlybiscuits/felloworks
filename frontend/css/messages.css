@@ -260,7 +260,7 @@ body {
 .thread-compose {
   display: flex;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-6);
+  padding: var(--space-5) var(--space-6) var(--space-7);
   background-color: var(--bg-surface);
   border-top: 1.5px solid var(--rule-solid);
   flex-shrink: 0;

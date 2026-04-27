@@ -34,6 +34,7 @@
           <a href="/messages.html" class="nav__dropdown-item">Messages</a>
           <a href="/needs-new.html" class="nav__dropdown-item">Post a need</a>
           <a href="/shortlist.html" class="nav__dropdown-item">My shortlist</a>
+          <a href="/invite-send.html" class="nav__dropdown-item">Invite someone</a>
           <hr class="nav__dropdown-divider">
           <button id="logout-btn" class="nav__dropdown-item nav__dropdown-item--muted">Log out</button>
         </div>
@@ -82,6 +83,7 @@
           <label class="filter-option"><input type="checkbox" name="skill" value="Photography" /> Photography</label>
           <label class="filter-option"><input type="checkbox" name="skill" value="Video production" /> Video production</label>
           <label class="filter-option"><input type="checkbox" name="skill" value="Copywriting" /> Copywriting</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Content writing" /> Content writing</label>
           <label class="filter-option"><input type="checkbox" name="skill" value="Content strategy" /> Content strategy</label>
           <label class="filter-option"><input type="checkbox" name="skill" value="Communications strategy" /> Communications strategy</label>
           <label class="filter-option"><input type="checkbox" name="skill" value="Campaign planning" /> Campaign planning</label>
@@ -162,7 +164,7 @@
   </main>
 
   <script type="module">
-    import api, { avatarHtml } from "./js/api.js";
+    import api, { avatarHtml, renderAvatar } from "./js/api.js";
     import { requireSession } from "./js/supabase-client.js";
 
     await requireSession();
@@ -185,8 +187,7 @@
     // Populate nav avatar
     try {
       const { member } = await api.get("/members/me");
-      document.getElementById("nav-avatar").textContent =
-        `${member.first_name[0]}${member.last_name[0]}`;
+      renderAvatar(document.getElementById("nav-avatar"), member);
     } catch { /* silently skip */ }
 
     // Track the current filter state

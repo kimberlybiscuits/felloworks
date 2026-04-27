@@ -55,6 +55,7 @@
           <button type="button" class="pill pill--skill" data-skill="Photography">Photography</button>
           <button type="button" class="pill pill--skill" data-skill="Video production">Video production</button>
           <button type="button" class="pill pill--skill" data-skill="Copywriting">Copywriting</button>
+          <button type="button" class="pill pill--skill" data-skill="Content writing">Content writing</button>
           <button type="button" class="pill pill--skill" data-skill="Content strategy">Content strategy</button>
           <button type="button" class="pill pill--skill" data-skill="Communications strategy">Communications strategy</button>
           <button type="button" class="pill pill--skill" data-skill="Campaign planning">Campaign planning</button>
@@ -157,6 +158,14 @@
           </label>
         </div>
 
+        <!-- Invite member picker — shown when "By invite" is selected -->
+        <div id="invite-picker" hidden>
+          <p class="form-label" style="margin: var(--space-5) 0 var(--space-3);">Select members to invite</p>
+          <div id="invite-member-list" style="display:flex;flex-direction:column;gap:var(--space-2);max-height:220px;overflow-y:auto;border:1px solid var(--rule-solid);padding:var(--space-3);">
+            <p class="text-muted" id="invite-loading">Loading members…</p>
+          </div>
+        </div>
+
         <!-- Summary review — read-only before submitting -->
         <div class="need-summary" id="need-summary">
           <h2 class="need-summary__heading">Your need</h2>
@@ -190,11 +199,51 @@
 
     await requireSession();
 
-    let currentStep   = 1;
-    const totalSteps  = 5;
-    const selectedSkills = new Set();
+    const editId = new URLSearchParams(window.location.search).get("edit");
 
-    // Skill chip toggles
+    let currentStep      = 1;
+    const totalSteps     = 5;
+    const selectedSkills = new Set();
+    const invitedMembers = new Set(); // member IDs for "By invite" visibility
+
+    // ── Edit mode — pre-populate form from existing need ──────────────────
+
+    if (editId) {
+      try {
+        const { need } = await api.get(`/needs/${editId}`);
+
+        // Step 1: skill
+        document.getElementById("skill-title").value = need.skill_title || "";
+        if (Array.isArray(need.skill_tags)) {
+          need.skill_tags.forEach(tag => {
+            selectedSkills.add(tag);
+            const chip = document.querySelector(`.pill--skill[data-skill="${tag}"]`);
+            if (chip) chip.classList.add("selected");
+          });
+        }
+        // Step 2: description
+        document.getElementById("description").value = need.description || "";
+        // Step 3: timeline
+        if (need.start_date_label) document.getElementById("start-date").value = need.start_date_label;
+        if (need.duration_label)   document.getElementById("duration").value   = need.duration_label;
+        if (need.commitment_label) document.getElementById("commitment").value = need.commitment_label;
+        // Step 4: rate
+        if (need.rate_min) document.getElementById("rate-min").value = need.rate_min;
+        if (need.rate_max) document.getElementById("rate-max").value = need.rate_max;
+        document.getElementById("rate-notes").value = need.rate_notes || "";
+        // Step 5: visibility
+        const visEl = document.querySelector(`input[name=visibility][value="${need.visibility || "all"}"]`);
+        if (visEl) visEl.checked = true;
+
+        document.getElementById("submit-btn").textContent = "Update need";
+        document.title = "Edit need — FelloWorks";
+      } catch {
+        window.location.href = "/needs.html";
+      }
+    }
+
+    // ── Skill chip toggles ─────────────────────────────────────────────────
+
     document.querySelectorAll(".pill--skill").forEach((chip) => {
       chip.addEventListener("click", () => {
         const skill = chip.dataset.skill;
@@ -205,12 +254,50 @@
           selectedSkills.add(skill);
           chip.classList.add("selected");
         }
-        // Mirror into text input if exactly one is selected
         if (selectedSkills.size === 1) {
           document.getElementById("skill-title").value = [...selectedSkills][0];
         }
       });
     });
+
+    // ── Invite picker — show/hide when "By invite" is selected ────────────
+
+    let membersLoaded = false;
+
+    document.querySelectorAll("input[name=visibility]").forEach(radio => {
+      radio.addEventListener("change", async () => {
+        const picker = document.getElementById("invite-picker");
+        picker.hidden = radio.value !== "invite";
+        if (radio.value === "invite" && !membersLoaded) {
+          membersLoaded = true;
+          try {
+            const { members } = await api.get("/members");
+            const list = document.getElementById("invite-member-list");
+            if (!members.length) {
+              list.innerHTML = `<p class="text-muted">No other members yet.</p>`;
+              return;
+            }
+            list.innerHTML = members.map(m => `
+              <label style="display:flex;align-items:center;gap:var(--space-3);cursor:pointer;font-size:0.875rem;">
+                <input type="checkbox" data-member-id="${m.id}"
+                  style="accent-color:var(--accent);width:14px;height:14px;flex-shrink:0;" />
+                <span>${escHtml(`${m.first_name} ${m.last_name}`)}${m.role ? ` — ${escHtml(m.role)}` : ""}</span>
+              </label>
+            `).join("");
+            list.querySelectorAll("input[type=checkbox]").forEach(cb => {
+              cb.addEventListener("change", () => {
+                const id = cb.dataset.memberId;
+                cb.checked ? invitedMembers.add(id) : invitedMembers.delete(id);
+              });
+            });
+          } catch {
+            document.getElementById("invite-loading").textContent = "Could not load members.";
+          }
+        }
+      });
+    });
+
+    // ── Step navigation ────────────────────────────────────────────────────
 
     function updateProgress() {
       document.getElementById("step-counter").textContent = `Step ${currentStep} of ${totalSteps}`;
@@ -233,7 +320,6 @@
     function validate() {
       const err = document.getElementById("error-msg");
       err.hidden = true;
-
       if (currentStep === 1 && !document.getElementById("skill-title").value.trim()) {
         err.textContent = "Enter or select a skill before continuing.";
         err.hidden = false;
@@ -278,35 +364,49 @@
         rateMin && rateMax ? `€${rateMin}–€${rateMax}/day${rateNotes ? ` · ${rateNotes}` : ""}` : rateNotes || "—";
     }
 
+    // ── Submit ─────────────────────────────────────────────────────────────
+
     document.getElementById("submit-btn").addEventListener("click", async () => {
-      const btn        = document.getElementById("submit-btn");
-      btn.disabled     = true;
-      btn.textContent  = "Posting…";
+      const btn = document.getElementById("submit-btn");
+      btn.disabled    = true;
+      btn.textContent = editId ? "Updating…" : "Posting…";
 
       const visibility = document.querySelector("input[name=visibility]:checked")?.value || "all";
 
+      const payload = {
+        skill_title:        document.getElementById("skill-title").value.trim(),
+        skill_tags:         [...selectedSkills],
+        description:        document.getElementById("description").value.trim(),
+        start_date_label:   document.getElementById("start-date").value,
+        duration_label:     document.getElementById("duration").value,
+        commitment_label:   document.getElementById("commitment").value,
+        rate_min:           parseInt(document.getElementById("rate-min").value) || null,
+        rate_max:           parseInt(document.getElementById("rate-max").value) || null,
+        rate_notes:         document.getElementById("rate-notes").value.trim(),
+        visibility,
+        invited_member_ids: visibility === "invite" ? [...invitedMembers] : [],
+      };
+
       try {
-        await api.post("/needs", {
-          skill_title:      document.getElementById("skill-title").value.trim(),
-          skill_tags:       [...selectedSkills],
-          description:      document.getElementById("description").value.trim(),
-          start_date_label: document.getElementById("start-date").value,
-          duration_label:   document.getElementById("duration").value,
-          commitment_label: document.getElementById("commitment").value,
-          rate_min:         parseInt(document.getElementById("rate-min").value) || null,
-          rate_max:         parseInt(document.getElementById("rate-max").value) || null,
-          rate_notes:       document.getElementById("rate-notes").value.trim(),
-          visibility,
-        });
-        window.location.href = "/dashboard.html";
+        if (editId) {
+          const { need } = await api.put(`/needs/${editId}`, payload);
+          window.location.href = `/need.html?id=${need.id}`;
+        } else {
+          await api.post("/needs", payload);
+          window.location.href = "/dashboard.html";
+        }
       } catch (err) {
-        const errEl      = document.getElementById("error-msg");
+        const errEl     = document.getElementById("error-msg");
         errEl.textContent = err.message;
         errEl.hidden      = false;
         btn.disabled      = false;
-        btn.textContent   = "Post this need";
+        btn.textContent   = editId ? "Update need" : "Post this need";
       }
     });
+
+    function escHtml(str) {
+      return (str || "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    }
 
     // Initialise
     showStep(1);

@@ -34,6 +34,7 @@
           <a href="/messages.html" class="nav__dropdown-item">Messages</a>
           <a href="/needs-new.html" class="nav__dropdown-item">Post a need</a>
           <a href="/shortlist.html" class="nav__dropdown-item">My shortlist</a>
+          <a href="/invite-send.html" class="nav__dropdown-item">Invite someone</a>
           <hr class="nav__dropdown-divider">
           <button id="logout-btn" class="nav__dropdown-item nav__dropdown-item--muted">Log out</button>
         </div>
@@ -140,8 +141,7 @@
     // Populate nav avatar
     try {
       const { member: me } = await api.get("/members/me");
-      document.getElementById("nav-avatar").textContent =
-        `${me.first_name[0]}${me.last_name[0]}`;
+      renderAvatar(document.getElementById("nav-avatar"), me);
     } catch { /* silently skip */ }
 
     const params   = new URLSearchParams(window.location.search);
