@@ -428,6 +428,8 @@ body {
   line-height: 1.5;
   color: var(--text-secondary);
   margin: 0;
+  overflow-wrap: break-word;
+  min-width: 0;
 }
 
 .activity-item__text strong {

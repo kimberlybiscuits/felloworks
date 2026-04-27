@@ -34,6 +34,7 @@
           <a href="/messages.html" class="nav__dropdown-item">Messages</a>
           <a href="/needs-new.html" class="nav__dropdown-item">Post a need</a>
           <a href="/shortlist.html" class="nav__dropdown-item">My shortlist</a>
+          <a href="/invite-send.html" class="nav__dropdown-item">Invite someone</a>
           <hr class="nav__dropdown-divider">
           <button id="logout-btn" class="nav__dropdown-item nav__dropdown-item--muted">Log out</button>
         </div>
@@ -166,7 +167,7 @@
   </main>
 
   <script type="module">
-    import api from "./js/api.js";
+    import api, { renderAvatar } from "./js/api.js";
     import { requireSession, getSession } from "./js/supabase-client.js";
 
     await requireSession();
@@ -189,8 +190,7 @@
     // Populate nav avatar
     try {
       const { member } = await api.get("/members/me");
-      document.getElementById("nav-avatar").textContent =
-        `${member.first_name[0]}${member.last_name[0]}`;
+      renderAvatar(document.getElementById("nav-avatar"), member);
     } catch { /* silently skip */ }
 
     // Verify the logged-in user is an admin before loading anything
