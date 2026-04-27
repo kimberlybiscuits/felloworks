@@ -1,11 +1,11 @@
 /* Invite acceptance screen — /invite.html
-   Full viewport, ink background, centred single column.
+   Full viewport, dark background, centred single column.
    The first thing an invited person sees. */
 
 @import './tokens.css';
 
 body.invite-page {
-  background-color: var(--ink);
+  background-color: var(--bg-dark);
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -23,9 +23,9 @@ body.invite-page {
 
 /* Wordmark */
 .invite-wordmark {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.25rem;
-  color: var(--amber);
+  color: var(--accent);
   letter-spacing: -0.01em;
 }
 
@@ -39,19 +39,19 @@ body.invite-page {
 /* "You've been invited" eyebrow */
 .invite-eyebrow {
   font-size: 0.75rem;
-  font-weight: var(--weight-semibold);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--amber);
+  color: var(--accent);
   margin: 0;
 }
 
-/* Main heading — inviter name in white, rest in white */
+/* Main heading */
 .invite-heading {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.75rem, 4vw, 2.25rem);
   font-weight: 400;
-  color: var(--white);
+  color: #fff;
   line-height: 1.2;
   margin: 0;
 }
@@ -60,34 +60,34 @@ body.invite-page {
 .invite-body {
   font-size: 1rem;
   line-height: 1.7;
-  color: var(--ink-muted);
+  color: rgba(245, 240, 232, 0.65);
   margin: 0;
 }
 
 .invite-body a {
-  color: var(--amber-light);
+  color: var(--accent);
 }
 
-/* Inviter card — dark variant for ink background */
+/* Inviter card — dark variant for dark background */
 .invite-container .inviter-card {
   background-color: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .invite-container .inviter-card__label {
-  color: var(--ink-muted);
+  color: rgba(245, 240, 232, 0.5);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
 
 .invite-container .inviter-card strong {
-  color: var(--white);
+  color: #fff;
   font-size: 0.9375rem;
 }
 
 .invite-container .inviter-card .text-muted {
-  color: var(--ink-muted);
+  color: rgba(245, 240, 232, 0.5);
   font-size: 0.875rem;
 }
 
@@ -101,14 +101,14 @@ body.invite-page {
 /* Expiry note below CTA */
 .invite-expiry {
   font-size: 0.8125rem;
-  color: var(--ink-muted);
+  color: rgba(245, 240, 232, 0.5);
   margin: 0;
   text-align: center;
 }
 
 /* Loading state */
 #state-loading .text-muted {
-  color: var(--ink-muted);
+  color: rgba(245, 240, 232, 0.5);
 }
 
 /* Error/invalid states */
@@ -124,10 +124,5 @@ body.invite-page {
   body.invite-page {
     align-items: flex-start;
     padding: var(--space-8) var(--space-5);
-  }
-
-  /* On mobile, dark background forms get a right border per spec */
-  .invite-container .btn--primary {
-    border-right: 1.5px solid rgba(255, 255, 255, 0.15);
   }
 }

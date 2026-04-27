@@ -4,11 +4,15 @@
 @import './tokens.css';
 
 body {
-  background-color: var(--cream);
+  background-color: var(--bg-primary);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .feedback-main {
+  flex: 1;
+  width: 100%;
   padding: var(--space-10) var(--space-6);
 }
 
@@ -30,19 +34,19 @@ body {
 
 .feedback-back {
   font-size: 0.875rem;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   text-decoration: none;
 }
 
 .feedback-back:hover {
-  color: var(--ink);
+  color: var(--text-primary);
 }
 
 .feedback-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: clamp(1.5rem, 3vw, 2rem);
   font-weight: 400;
-  color: var(--ink);
+  color: var(--text-primary);
   margin: 0;
 }
 
@@ -80,7 +84,7 @@ body {
 }
 
 .collab-toggle__option input[type="radio"] {
-  accent-color: var(--amber);
+  accent-color: var(--accent);
   width: 1rem;
   height: 1rem;
   cursor: pointer;
@@ -88,7 +92,7 @@ body {
 
 .collab-toggle__label {
   font-size: 0.9375rem;
-  color: var(--ink);
+  color: var(--text-primary);
 }
 
 /* -----------------------------------------------------------------------
@@ -99,7 +103,7 @@ body {
   display: flex;
   gap: var(--space-3);
   padding-top: var(--space-4);
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--rule-solid);
 }
 
 /* -----------------------------------------------------------------------

@@ -4,8 +4,10 @@
 @import './tokens.css';
 
 body {
-  background-color: var(--cream);
+  background-color: var(--bg-primary);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* -----------------------------------------------------------------------
@@ -14,7 +16,7 @@ body {
 
 .need-loading,
 .need-not-found {
-  max-width: var(--max-width-content);
+  max-width: 1200px;
   margin: var(--space-16) auto;
   padding: 0 var(--space-8);
   display: flex;
@@ -28,7 +30,9 @@ body {
    ----------------------------------------------------------------------- */
 
 .need-main {
-  max-width: var(--max-width-wide);
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
   padding: var(--space-8);
   display: flex;
@@ -39,14 +43,14 @@ body {
 /* Back link */
 .need-back {
   font-size: 0.875rem;
-  color: var(--ink-muted);
-  font-weight: var(--weight-medium);
+  color: var(--text-secondary);
+  font-weight: 500;
   text-decoration: none;
   display: inline-block;
 }
 
 .need-back:hover {
-  color: var(--amber);
+  color: var(--accent);
   text-decoration: none;
 }
 
@@ -63,9 +67,8 @@ body {
    ----------------------------------------------------------------------- */
 
 .need-article {
-  background-color: var(--white);
-  border: 1.5px solid var(--rule);
-  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  border: 1.5px solid var(--rule-solid);
   padding: var(--space-8);
   display: flex;
   flex-direction: column;
@@ -78,7 +81,7 @@ body {
   flex-direction: column;
   gap: var(--space-3);
   padding-bottom: var(--space-6);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule-solid);
 }
 
 .need-header__tags {
@@ -88,10 +91,10 @@ body {
 }
 
 .need-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.75rem;
   font-weight: 400;
-  color: var(--ink);
+  color: var(--text-primary);
   margin: 0;
   line-height: 1.2;
 }
@@ -104,7 +107,7 @@ body {
 /* Description */
 .need-description {
   font-size: 1rem;
-  color: var(--ink-soft);
+  color: var(--text-secondary);
   line-height: 1.7;
 }
 
@@ -117,7 +120,7 @@ body {
   grid-template-columns: 1fr 1fr;
   gap: var(--space-4) var(--space-6);
   padding-top: var(--space-2);
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--rule-solid);
 }
 
 .need-meta-row {
@@ -128,15 +131,15 @@ body {
 
 .need-meta-row__label {
   font-size: 0.75rem;
-  font-weight: var(--weight-semibold);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
 }
 
 .need-meta-row__value {
   font-size: 0.9375rem;
-  color: var(--ink-soft);
+  color: var(--text-secondary);
 }
 
 /* -----------------------------------------------------------------------
@@ -149,9 +152,8 @@ body {
 }
 
 .need-poster-card {
-  background-color: var(--white);
-  border: 1.5px solid var(--rule);
-  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  border: 1.5px solid var(--rule-solid);
   padding: var(--space-6);
   display: flex;
   flex-direction: column;
@@ -160,10 +162,10 @@ body {
 
 .need-poster-card__label {
   font-size: 0.75rem;
-  font-weight: var(--weight-semibold);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -180,15 +182,15 @@ body {
 }
 
 .need-poster-card__name {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.0625rem;
-  color: var(--ink);
+  color: var(--text-primary);
   text-decoration: none;
   font-weight: 400;
 }
 
 .need-poster-card__name:hover {
-  color: var(--amber);
+  color: var(--accent);
   text-decoration: none;
 }
 
@@ -204,21 +206,13 @@ body {
 @media (max-width: 760px) {
   .need-layout {
     grid-template-columns: 1fr;
-  }
-
-  .need-aside {
-    position: static;
-  }
-
-  /* Stack poster card above the article on mobile */
-  .need-layout {
     grid-template-areas:
       "aside"
       "article";
   }
 
   .need-article { grid-area: article; }
-  .need-aside   { grid-area: aside; }
+  .need-aside   { grid-area: aside; position: static; }
 
   .need-meta-grid {
     grid-template-columns: 1fr;

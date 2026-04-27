@@ -1,8 +1,7 @@
 /* FelloWorks base styles
-   Reset, typography defaults, and utility classes.
-   No component-specific rules here. */
+   Reset, typography defaults, type scale, and animations. */
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Karla:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,200..800&family=Manrope:wght@200..800&display=swap');
 @import './tokens.css';
 
 *, *::before, *::after {
@@ -11,7 +10,6 @@
   padding: 0;
 }
 
-/* Ensure the hidden attribute always wins regardless of CSS specificity */
 [hidden] { display: none !important; }
 
 html {
@@ -20,21 +18,21 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
-  font-weight: var(--weight-regular);
-  color: var(--ink-soft);
-  background-color: var(--cream);
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--text-secondary);
+  background-color: var(--bg-primary);
   line-height: 1.6;
 }
 
 h1, h2, h3, h4 {
-  font-family: var(--font-serif);
-  color: var(--ink);
+  font-family: var(--font-display);
+  color: var(--text-primary);
   line-height: 1.2;
 }
 
 a {
-  color: var(--amber);
+  color: var(--accent);
   text-decoration: none;
 }
 
@@ -48,15 +46,117 @@ img {
 }
 
 input, textarea, select {
-  font-family: var(--font-sans);
+  font-family: var(--font-body);
   font-size: 1rem;
 }
+
+/* -----------------------------------------------------------------------
+   Type scale
+   ----------------------------------------------------------------------- */
+
+.text-display {
+  font-family: var(--font-display);
+  font-size: clamp(48px, 6vw, 72px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.text-display em {
+  font-style: italic;
+  font-weight: 200;
+}
+
+.text-headline {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.text-headline em {
+  font-style: italic;
+  font-weight: 300;
+}
+
+.text-headline-md {
+  font-family: var(--font-display);
+  font-size: 32px;
+  font-weight: 400;
+  line-height: 1.3;
+  color: var(--text-primary);
+}
+
+.text-quote {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1.5;
+  font-style: italic;
+  color: var(--text-primary);
+}
+
+.text-body-lg {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.text-body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.text-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* -----------------------------------------------------------------------
+   Animations
+   ----------------------------------------------------------------------- */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.4); }
+}
+
+.reveal {
+  opacity: 0;
+}
+
+.reveal.visible {
+  animation: fadeUp 0.7s ease forwards;
+}
+
+/* -----------------------------------------------------------------------
+   Divider utilities
+   ----------------------------------------------------------------------- */
+
+.rule-top    { border-top:    1px solid var(--rule-solid); }
+.rule-bottom { border-bottom: 1px solid var(--rule-solid); }
+.rule-left   { border-left:   1px solid var(--rule-solid); }
 
 /* -----------------------------------------------------------------------
    Utility classes
    ----------------------------------------------------------------------- */
 
-/* Visually hidden — for screen readers only */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -69,15 +169,10 @@ input, textarea, select {
   border: 0;
 }
 
-/* Muted text */
-.text-muted { color: var(--ink-muted); }
+.text-muted   { color: var(--text-secondary); opacity: 0.6; }
+.text-accent  { color: var(--accent); }
+.text-on-dark { color: var(--text-on-dark); }
 
-/* Amber accent text */
-.text-amber { color: var(--amber); }
-
-/* Italic serif — used for the stylised word in headings */
-.serif-italic {
-  font-family: var(--font-serif);
-  font-style: italic;
-  color: var(--amber);
-}
+/* Legacy aliases */
+.text-amber   { color: var(--accent); }
+.serif-italic { font-family: var(--font-display); font-style: italic; color: var(--accent); }

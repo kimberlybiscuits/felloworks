@@ -1,50 +1,64 @@
-/* Browse needs — /needs.html
-   Two-column: filter sidebar left, need cards list right. */
+/* Browse needs — /needs.html */
 
 @import './tokens.css';
 
 body {
-  background-color: var(--cream);
+  background-color: var(--bg-primary);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* -----------------------------------------------------------------------
-   Layout
+   Main content area
    ----------------------------------------------------------------------- */
 
 .needs-main {
-  max-width: 1100px;
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: var(--space-8);
+  padding: var(--space-10) var(--space-8) var(--space-16);
   display: flex;
   flex-direction: column;
   gap: var(--space-6);
 }
 
 /* -----------------------------------------------------------------------
-   Header
+   Page header
    ----------------------------------------------------------------------- */
 
 .needs-header {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-3);
   padding-bottom: var(--space-6);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule-solid);
+}
+
+.needs-eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
 }
 
 .needs-title {
-  font-family: var(--font-serif);
-  font-size: 2rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
   font-weight: 400;
-  color: var(--ink);
+  color: var(--text-primary);
   margin: 0;
+  line-height: 1.15;
 }
 
 .needs-sub {
   font-size: 0.9375rem;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   margin: 0;
+  line-height: 1.6;
 }
 
 /* -----------------------------------------------------------------------
@@ -53,7 +67,7 @@ body {
 
 .needs-layout {
   display: grid;
-  grid-template-columns: var(--sidebar-width) 1fr;
+  grid-template-columns: 220px 1fr;
   gap: var(--space-8);
   align-items: start;
 }
@@ -65,74 +79,99 @@ body {
 .needs-sidebar {
   position: sticky;
   top: var(--space-8);
+  border: 1px solid var(--rule-solid);
+  background: var(--bg-surface);
 }
 
 .filter-group {
   border: none;
-  padding: 0;
+  border-bottom: 1px solid var(--rule-solid);
+  padding: 0 var(--space-5) var(--space-5);
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-2);
+}
+
+.filter-group:last-child {
+  border-bottom: none;
 }
 
 .filter-group__label {
-  font-size: 0.75rem;
-  font-weight: var(--weight-semibold);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ink-muted);
-  margin-bottom: var(--space-3);
   display: block;
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  padding-top: var(--space-6);
+  margin-bottom: var(--space-3);
 }
 
 .filter-option {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  font-size: 0.9375rem;
-  color: var(--ink-soft);
+  gap: var(--space-3);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
   cursor: pointer;
-  padding: var(--space-1) 0;
-}
-
-.filter-option input[type="checkbox"] {
-  accent-color: var(--amber);
-  width: 15px;
-  height: 15px;
-  flex-shrink: 0;
+  line-height: 1.4;
+  transition: color 0.12s;
 }
 
 .filter-option:hover {
-  color: var(--ink);
+  color: var(--text-primary);
+}
+
+.filter-option input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
 /* -----------------------------------------------------------------------
-   Need cards list
+   Results area
+   ----------------------------------------------------------------------- */
+
+.needs-results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+/* -----------------------------------------------------------------------
+   Need cards
    ----------------------------------------------------------------------- */
 
 .needs-list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
 }
 
 .need-card {
-  background-color: var(--white);
-  border: 1.5px solid var(--rule);
-  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--rule-solid);
+  border-top: none;
   padding: var(--space-5) var(--space-6);
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
   text-decoration: none;
   color: inherit;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s;
+}
+
+.need-card:first-child {
+  border-top: 1px solid var(--rule-solid);
 }
 
 .need-card:hover {
-  border-color: var(--amber);
-  box-shadow: var(--shadow-card-hover);
+  border-color: var(--accent);
+  z-index: 1;
+  position: relative;
   text-decoration: none;
 }
 
@@ -142,21 +181,31 @@ body {
   gap: var(--space-2);
 }
 
+.need-card__tag {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 2px 8px;
+}
+
 .need-card__title {
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  font-weight: 400;
-  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
   margin: 0;
+  letter-spacing: 0.01em;
 }
 
 .need-card__desc {
-  font-size: 0.9375rem;
-  color: var(--ink-soft);
-  line-height: 1.6;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.65;
   margin: 0;
-
-  /* Clamp to 2 lines */
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -168,24 +217,25 @@ body {
   align-items: center;
   gap: var(--space-4);
   flex-wrap: wrap;
-  font-size: 0.875rem;
-  border-top: 1px solid var(--rule);
+  font-size: 0.8125rem;
+  border-top: 1px solid var(--rule-solid);
   padding-top: var(--space-3);
-  margin-top: auto;
+  margin-top: var(--space-1);
 }
 
 .need-card__poster {
-  font-weight: var(--weight-medium);
-  color: var(--ink);
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .need-card__meta {
+  color: var(--text-secondary);
   flex: 1;
 }
 
 .need-card__rate {
-  font-weight: var(--weight-medium);
-  color: var(--ink);
+  font-weight: 600;
+  color: var(--text-primary);
   margin-left: auto;
 }
 
@@ -202,7 +252,7 @@ body {
 }
 
 .needs-empty p {
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   font-size: 0.9375rem;
   margin: 0;
 }
@@ -223,6 +273,6 @@ body {
 
 @media (max-width: 600px) {
   .needs-main {
-    padding: var(--space-6) var(--space-5);
+    padding: var(--space-6) var(--space-5) var(--space-10);
   }
 }

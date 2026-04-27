@@ -4,8 +4,10 @@
 @import './tokens.css';
 
 body {
-  background-color: var(--cream);
+  background-color: var(--bg-primary);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 /* -----------------------------------------------------------------------
@@ -13,6 +15,8 @@ body {
    ----------------------------------------------------------------------- */
 
 .admin-main {
+  flex: 1;
+  width: 100%;
   max-width: 1100px;
   margin: 0 auto;
   padding: var(--space-10) var(--space-8);
@@ -30,20 +34,20 @@ body {
   flex-direction: column;
   gap: var(--space-2);
   padding-bottom: var(--space-6);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule-solid);
 }
 
 .admin-title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 400;
-  color: var(--ink);
+  color: var(--text-primary);
   margin: 0;
 }
 
 .admin-sub {
   font-size: 0.9375rem;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   margin: 0;
 }
 
@@ -58,25 +62,24 @@ body {
 
 .admin-stat {
   flex: 1;
-  background-color: var(--white);
-  border: 1.5px solid var(--rule);
-  border-radius: var(--radius-md);
-  padding: var(--space-5) var(--space-5);
+  background-color: var(--bg-surface);
+  border: 1.5px solid var(--rule-solid);
+  padding: var(--space-5);
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
 }
 
 .admin-stat__value {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 2rem;
-  color: var(--ink);
+  color: var(--text-primary);
   line-height: 1;
 }
 
 .admin-stat__label {
   font-size: 0.8125rem;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
@@ -103,9 +106,8 @@ body {
    ----------------------------------------------------------------------- */
 
 .admin-panel {
-  background-color: var(--white);
-  border: 1.5px solid var(--rule);
-  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  border: 1.5px solid var(--rule-solid);
   padding: var(--space-6);
   display: flex;
   flex-direction: column;
@@ -113,16 +115,16 @@ body {
 }
 
 .admin-panel__title {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.25rem;
   font-weight: 400;
-  color: var(--ink);
+  color: var(--text-primary);
   margin: 0;
 }
 
 .admin-panel__desc {
   font-size: 0.9375rem;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   margin: 0;
   line-height: 1.6;
 }
@@ -146,12 +148,12 @@ body {
 .admin-table thead th {
   text-align: left;
   font-size: 0.75rem;
-  font-weight: var(--weight-semibold);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   padding: 0 var(--space-3) var(--space-3);
-  border-bottom: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule-solid);
   white-space: nowrap;
 }
 
@@ -159,8 +161,8 @@ body {
 
 .admin-table tbody td {
   padding: var(--space-3);
-  border-bottom: 1px solid var(--rule);
-  color: var(--ink-soft);
+  border-bottom: 1px solid var(--rule-solid);
+  color: var(--text-secondary);
   vertical-align: middle;
 }
 
@@ -169,20 +171,20 @@ body {
 .admin-table tbody tr:last-child td { border-bottom: none; }
 
 .admin-table__empty {
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   font-style: italic;
   text-align: center;
   padding: var(--space-8) 0 !important;
 }
 
 .admin-table__link {
-  color: var(--ink);
+  color: var(--text-primary);
   text-decoration: none;
-  font-weight: var(--weight-medium);
+  font-weight: 500;
 }
 
 .admin-table__link:hover {
-  color: var(--amber);
+  color: var(--accent);
 }
 
 /* -----------------------------------------------------------------------
@@ -192,9 +194,8 @@ body {
 .admin-badge {
   display: inline-block;
   padding: 2px var(--space-2);
-  border-radius: var(--radius-full);
   font-size: 0.75rem;
-  font-weight: var(--weight-medium);
+  font-weight: 500;
   letter-spacing: 0.02em;
 }
 
@@ -209,8 +210,8 @@ body {
 }
 
 .admin-badge--expired {
-  background-color: var(--cream);
-  color: var(--ink-muted);
+  background-color: var(--bg-primary);
+  color: var(--text-secondary);
 }
 
 /* -----------------------------------------------------------------------
@@ -234,7 +235,6 @@ body {
 .admin-feedback {
   font-size: 0.9375rem;
   padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
 }
 
 .admin-feedback--success {

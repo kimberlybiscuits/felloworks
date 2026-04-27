@@ -1,0 +1,164 @@
+/* FelloWorks legal pages — privacy.html, terms.html */
+
+@import './tokens.css';
+
+body {
+  background-color: var(--bg-primary);
+}
+
+/* -----------------------------------------------------------------------
+   Page layout
+   ----------------------------------------------------------------------- */
+
+.legal-hero {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: var(--space-12) var(--space-8) var(--space-8);
+  border-bottom: 1px solid var(--rule-solid);
+}
+
+.legal-hero .text-label {
+  margin-bottom: 20px;
+}
+
+.legal-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.legal-hero__meta {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.legal-content {
+  max-width: var(--max-width-content);
+  margin: 0 auto;
+  padding: 0 var(--space-8) var(--space-16);
+}
+
+/* -----------------------------------------------------------------------
+   Prose
+   ----------------------------------------------------------------------- */
+
+.legal-content section {
+  padding: var(--space-10) 0;
+  border-bottom: 1px solid var(--rule-solid);
+}
+
+.legal-content section:last-of-type {
+  border-bottom: none;
+}
+
+.legal-content h2 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  letter-spacing: -0.01em;
+}
+
+.legal-content h3 {
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 28px 0 10px;
+  letter-spacing: 0.01em;
+}
+
+.legal-content p {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 14px;
+  max-width: 680px;
+}
+
+.legal-content p:last-child {
+  margin-bottom: 0;
+}
+
+.legal-content ul {
+  margin: 12px 0 16px 0;
+  padding-left: 20px;
+  max-width: 680px;
+}
+
+.legal-content li {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.legal-content a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.legal-content a:hover {
+  text-decoration: underline;
+}
+
+.legal-content strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* -----------------------------------------------------------------------
+   Callout
+   ----------------------------------------------------------------------- */
+
+.callout {
+  background: var(--bg-container);
+  border-left: 2px solid var(--accent);
+  padding: 20px 24px;
+  margin: 24px 0;
+  max-width: 680px;
+}
+
+.callout p {
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+/* -----------------------------------------------------------------------
+   Contact block
+   ----------------------------------------------------------------------- */
+
+.contact-block {
+  background: var(--bg-surface);
+  border: 1px solid var(--rule-solid);
+  padding: 24px 28px;
+  max-width: 400px;
+  margin-top: 24px;
+}
+
+.contact-block p {
+  margin-bottom: 6px;
+  font-size: 0.9375rem;
+}
+
+.contact-block p:last-child {
+  margin-bottom: 0;
+}
+
+/* -----------------------------------------------------------------------
+   Responsive
+   ----------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .legal-hero,
+  .legal-content {
+    padding-left: var(--side-padding-mobile);
+    padding-right: var(--side-padding-mobile);
+  }
+}
