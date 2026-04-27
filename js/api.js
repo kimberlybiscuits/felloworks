@@ -62,7 +62,7 @@ export default api;
 export function renderAvatar(el, member) {
   if (member.avatar_url) {
     el.innerHTML = `<img src="${member.avatar_url}" alt=""
-      style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`;
+      style="width:100%;height:100%;object-fit:cover;border-radius:0;" />`;
   } else {
     const initials = `${(member.first_name || "?")[0]}${(member.last_name || "")[0]}`.toUpperCase();
     el.textContent = initials;
@@ -75,7 +75,7 @@ export function avatarHtml(member, extraClass = "") {
   if (member.avatar_url) {
     return `<div class="avatar ${extraClass}" aria-hidden="true">
       <img src="${member.avatar_url}" alt=""
-        style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+        style="width:100%;height:100%;object-fit:cover;border-radius:0;" />
     </div>`;
   }
   return `<div class="avatar ${extraClass}" aria-hidden="true">${initials}</div>`;

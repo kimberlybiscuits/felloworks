@@ -44,6 +44,9 @@
           Find the collaborator<br>
           <em>you'd trust with your client.</em>
         </h1>
+        <div class="hero__ticker" aria-hidden="true">
+          <span class="hero__ticker-word" id="hero-ticker"></span>
+        </div>
         <p class="hero__sub">FelloWorks is a peer-to-peer network built on trust and shared accountability. It's where the right people find each other.</p>
         <div class="hero__cta">
           <a href="#invite" class="btn-primary" style="padding: 20px 48px;">Request an Invite</a>
@@ -251,7 +254,9 @@
             </div>
           </div>
         </div>
-        <div class="beta__img-placeholder reveal" aria-hidden="true"></div>
+        <div class="beta__img-placeholder reveal">
+          <img src="/assets/founding-cohort.svg" alt="The founding cohort" />
+        </div>
       </div>
     </div>
   </section>
@@ -326,6 +331,30 @@
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 20);
     });
+
+    // Role ticker
+    const tickerRoles = [
+      "Brand designers.", "UX specialists.", "Copywriters.",
+      "Art directors.", "Content strategists.", "Motion designers.",
+      "Illustrators.", "Frontend developers.", "Communications leads.",
+      "Editorial designers.", "Research leads.", "Campaign planners.",
+    ];
+    const tickerEl = document.getElementById('hero-ticker');
+    let tickerIndex = 0;
+
+    function nextTick() {
+      tickerEl.classList.add('fade-out');
+      setTimeout(() => {
+        tickerIndex = (tickerIndex + 1) % tickerRoles.length;
+        tickerEl.textContent = tickerRoles[tickerIndex];
+        tickerEl.classList.remove('fade-out');
+        tickerEl.classList.add('fade-in');
+      }, 500);
+    }
+
+    tickerEl.textContent = tickerRoles[0];
+    tickerEl.classList.add('fade-in');
+    setInterval(nextTick, 2800);
   </script>
 
 </body>

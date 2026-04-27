@@ -34,6 +34,7 @@
           <a href="/messages.html" class="nav__dropdown-item nav__dropdown-item--active">Messages</a>
           <a href="/needs-new.html" class="nav__dropdown-item">Post a need</a>
           <a href="/shortlist.html" class="nav__dropdown-item">My shortlist</a>
+          <a href="/invite-send.html" class="nav__dropdown-item">Invite someone</a>
           <hr class="nav__dropdown-divider">
           <button id="logout-btn" class="nav__dropdown-item nav__dropdown-item--muted">Log out</button>
         </div>
@@ -130,8 +131,7 @@
     // Populate nav avatar
     try {
       const { member } = await api.get("/members/me");
-      document.getElementById("nav-avatar").textContent =
-        `${member.first_name[0]}${member.last_name[0]}`;
+      renderAvatar(document.getElementById("nav-avatar"), member);
     } catch { /* silently skip */ }
 
     let activePartnerId = null;
@@ -158,7 +158,7 @@
         >
           <div class="thread-item__avatar avatar avatar--sm">
             ${t.partner.avatar_url
-              ? `<img src="${escAttr(t.partner.avatar_url)}" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />`
+              ? `<img src="${escAttr(t.partner.avatar_url)}" alt="" style="width:100%;height:100%;object-fit:cover;" />`
               : `${t.partner.first_name[0]}${t.partner.last_name[0]}`.toUpperCase()
             }
           </div>

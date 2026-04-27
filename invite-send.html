@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Invite someone — FelloWorks</title>
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <style>
+    body {
+      background-color: var(--bg-primary);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    main {
+      flex: 1;
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: var(--space-12) var(--space-6) var(--space-16);
+    }
+
+    .invite-heading {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 400;
+      color: var(--text-primary);
+      margin: 0 0 var(--space-3);
+      letter-spacing: -0.02em;
+    }
+
+    .invite-sub {
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin: 0 0 var(--space-8);
+    }
+
+    .invite-form {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+
+    .invite-form__submit {
+      align-self: flex-start;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav__left">
+      <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+      <ul class="nav__links">
+        <li><a href="/dashboard.html">Dashboard</a></li>
+        <li><a href="/browse.html">Members</a></li>
+        <li><a href="/needs.html">Needs</a></li>
+      </ul>
+    </div>
+    <div class="nav__end">
+      <form action="/browse.html" method="get">
+        <input class="nav__search-input" type="search" name="q" placeholder="Search members…" autocomplete="off">
+      </form>
+      <div class="nav__profile-wrap" id="profile-wrap">
+        <button class="nav__profile-btn" id="profile-btn" aria-haspopup="true" aria-expanded="false" aria-label="Profile menu">
+          <span class="nav__avatar" id="nav-avatar"></span>
+        </button>
+        <div class="nav__dropdown" id="nav-dropdown" hidden>
+          <a href="/profile.html" class="nav__dropdown-item">My profile</a>
+          <a href="/profile.html#edit" class="nav__dropdown-item">Edit profile</a>
+          <a href="/messages.html" class="nav__dropdown-item">Messages</a>
+          <a href="/needs-new.html" class="nav__dropdown-item">Post a need</a>
+          <a href="/shortlist.html" class="nav__dropdown-item">My shortlist</a>
+          <a href="/invite-send.html" class="nav__dropdown-item nav__dropdown-item--active">Invite someone</a>
+          <hr class="nav__dropdown-divider">
+          <button id="logout-btn" class="nav__dropdown-item nav__dropdown-item--muted">Log out</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <h1 class="invite-heading">Invite someone you trust.</h1>
+    <p class="invite-sub">FelloWorks grows through trusted connections. Invite a colleague or collaborator you'd vouch for — they'll receive an email with a link to join.</p>
+
+    <div id="error" class="alert alert--error" hidden></div>
+    <div id="success" class="alert alert--success" hidden></div>
+
+    <form class="invite-form" id="invite-form">
+      <div class="form-group">
+        <label class="form-label" for="invitee-email">Their email address</label>
+        <input
+          class="form-input"
+          type="email"
+          id="invitee-email"
+          placeholder="colleague@example.com"
+          required
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="personal-note">Personal note <span class="text-muted">(optional)</span></label>
+        <textarea
+          class="form-textarea"
+          id="personal-note"
+          rows="3"
+          placeholder="Let them know why you're inviting them…"
+        ></textarea>
+        <p class="form-helper">Not included in the invite email — just a reminder for yourself.</p>
+      </div>
+
+      <button type="submit" class="btn btn--primary invite-form__submit">Send invite</button>
+    </form>
+  </main>
+
+  <footer class="page-footer">
+    <div>
+      <p class="page-footer__col-label">Explore</p>
+      <ul class="page-footer__links">
+        <li><a href="/browse.html">Members</a></li>
+        <li><a href="/needs.html">Needs</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="page-footer__col-label">Network</p>
+      <ul class="page-footer__links">
+        <li><a href="/needs-new.html">Post a need</a></li>
+        <li><a href="/profile.html">My profile</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="page-footer__col-label">Support</p>
+      <ul class="page-footer__links">
+        <li><a href="mailto:hello@fello.works">Contact</a></li>
+        <li><a href="/privacy.html">Privacy Policy</a></li>
+        <li><a href="/terms.html">Terms of Service</a></li>
+      </ul>
+    </div>
+    <p class="page-footer__copy">© 2026 FelloWorks — Curated Network. All rights reserved.</p>
+  </footer>
+
+  <script type="module">
+    import api, { renderAvatar } from "./js/api.js";
+    import { requireSession } from "./js/supabase-client.js";
+
+    await requireSession();
+
+    // Profile dropdown
+    const profileBtn = document.getElementById("profile-btn");
+    const dropdown   = document.getElementById("nav-dropdown");
+    profileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = !dropdown.hidden;
+      dropdown.hidden = open;
+      profileBtn.setAttribute("aria-expanded", String(!open));
+    });
+    document.addEventListener("click", () => {
+      dropdown.hidden = true;
+      profileBtn.setAttribute("aria-expanded", "false");
+    });
+    dropdown.addEventListener("click", (e) => e.stopPropagation());
+
+    try {
+      const { member } = await api.get("/members/me");
+      renderAvatar(document.getElementById("nav-avatar"), member);
+    } catch { /* silently skip */ }
+
+    // Send invite
+    document.getElementById("invite-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const errEl  = document.getElementById("error");
+      const succEl = document.getElementById("success");
+      const btn    = e.target.querySelector("button[type=submit]");
+      const email  = document.getElementById("invitee-email").value.trim();
+
+      btn.disabled    = true;
+      errEl.hidden    = true;
+      succEl.hidden   = true;
+
+      try {
+        await api.post("/invites", { invitee_email: email });
+        succEl.textContent = `Invite sent to ${email}. They'll receive an email shortly.`;
+        succEl.hidden = false;
+        e.target.reset();
+      } catch (err) {
+        errEl.textContent = err.message || "Could not send invite. Try again.";
+        errEl.hidden = false;
+      } finally {
+        btn.disabled = false;
+      }
+    });
+  </script>
+
+  <script type="module" src="js/nav.js"></script>
+</body>
+</html>
