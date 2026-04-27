@@ -12,15 +12,33 @@
 <body>
 
   <nav class="nav">
-    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
-    <ul class="nav__links">
-      <li><a href="/browse.html">Browse members</a></li>
-      <li><a href="/needs.html">Browse needs</a></li>
-      <li><a href="/messages.html">Messages</a></li>
-      <li><a href="/profile.html">My profile</a></li>
-      <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
-      <li><button id="logout-btn" class="nav__logout">Log out</button></li>
-    </ul>
+    <div class="nav__left">
+      <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+      <ul class="nav__links">
+        <li><a href="/dashboard.html">Dashboard</a></li>
+        <li><a href="/browse.html">Members</a></li>
+        <li><a href="/needs.html">Needs</a></li>
+      </ul>
+    </div>
+    <div class="nav__end">
+      <form action="/browse.html" method="get">
+        <input class="nav__search-input" type="search" name="q" placeholder="Search members…" autocomplete="off">
+      </form>
+      <div class="nav__profile-wrap" id="profile-wrap">
+        <button class="nav__profile-btn" id="profile-btn" aria-haspopup="true" aria-expanded="false" aria-label="Profile menu">
+          <span class="nav__avatar" id="nav-avatar"></span>
+        </button>
+        <div class="nav__dropdown" id="nav-dropdown" hidden>
+          <a href="/profile.html" class="nav__dropdown-item">My profile</a>
+          <a href="/profile.html#edit" class="nav__dropdown-item">Edit profile</a>
+          <a href="/messages.html" class="nav__dropdown-item">Messages</a>
+          <a href="/needs-new.html" class="nav__dropdown-item">Post a need</a>
+          <a href="/shortlist.html" class="nav__dropdown-item">My shortlist</a>
+          <hr class="nav__dropdown-divider">
+          <button id="logout-btn" class="nav__dropdown-item nav__dropdown-item--muted">Log out</button>
+        </div>
+      </div>
+    </div>
   </nav>
 
   <main class="shortlist-main">
@@ -48,6 +66,28 @@
     import { requireSession } from "./js/supabase-client.js";
 
     await requireSession();
+
+    // Profile dropdown
+    const profileBtn = document.getElementById("profile-btn");
+    const dropdown   = document.getElementById("nav-dropdown");
+    profileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = !dropdown.hidden;
+      dropdown.hidden = open;
+      profileBtn.setAttribute("aria-expanded", String(!open));
+    });
+    document.addEventListener("click", () => {
+      dropdown.hidden = true;
+      profileBtn.setAttribute("aria-expanded", "false");
+    });
+    dropdown.addEventListener("click", (e) => e.stopPropagation());
+
+    // Populate nav avatar
+    try {
+      const { member } = await api.get("/members/me");
+      document.getElementById("nav-avatar").textContent =
+        `${member.first_name[0]}${member.last_name[0]}`;
+    } catch { /* silently skip */ }
 
     async function loadShortlist() {
       const { shortlist } = await api.get("/shortlist");
@@ -139,12 +179,30 @@
     loadShortlist();
   </script>
 
-  <footer class="site-footer">
-    <span>© 2026 FelloWorks</span>
-    <span class="site-footer__links">
-      <a href="/terms.html">Terms</a>
-      <a href="/privacy.html">Privacy</a>
-    </span>
+  <footer class="page-footer">
+    <div>
+      <p class="page-footer__col-label">Explore</p>
+      <ul class="page-footer__links">
+        <li><a href="/browse.html">Members</a></li>
+        <li><a href="/needs.html">Needs</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="page-footer__col-label">Network</p>
+      <ul class="page-footer__links">
+        <li><a href="/needs-new.html">Post a need</a></li>
+        <li><a href="/profile.html">My profile</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="page-footer__col-label">Support</p>
+      <ul class="page-footer__links">
+        <li><a href="mailto:hello@fello.works">Contact</a></li>
+        <li><a href="/privacy.html">Privacy Policy</a></li>
+        <li><a href="/terms.html">Terms of Service</a></li>
+      </ul>
+    </div>
+    <p class="page-footer__copy">© 2026 FelloWorks — Curated Network. All rights reserved.</p>
   </footer>
 
   <script type="module" src="js/nav.js"></script>

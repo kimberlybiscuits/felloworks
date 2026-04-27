@@ -18,6 +18,21 @@ export async function signIn(email, password) {
   return data;
 }
 
+// Send a password reset email; redirectTo must match the allow-list in Supabase dashboard
+export async function sendPasswordReset(email) {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: "https://fello.works/reset-password.html",
+  });
+  if (error) throw error;
+}
+
+// Set a new password — call this after the user lands on the reset page and
+// Supabase fires the PASSWORD_RECOVERY event (which establishes a temp session)
+export async function updatePassword(newPassword) {
+  const { error } = await supabase.auth.updateUser({ password: newPassword });
+  if (error) throw error;
+}
+
 // Sign out and redirect to the invite/login page
 export async function signOut() {
   await supabase.auth.signOut();

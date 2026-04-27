@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Browse needs — FelloWorks</title>
+  <title>Needs — FelloWorks</title>
   <link rel="stylesheet" href="css/base.css" />
   <link rel="stylesheet" href="css/components.css" />
   <link rel="stylesheet" href="css/needs.css" />
@@ -12,22 +12,41 @@
 <body>
 
   <nav class="nav">
-    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
-    <ul class="nav__links">
-      <li><a href="/browse.html">Browse members</a></li>
-      <li><a href="/needs.html">Browse needs</a></li>
-      <li><a href="/messages.html">Messages</a></li>
-      <li><a href="/profile.html">My profile</a></li>
-      <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
-      <li><button id="logout-btn" class="nav__logout">Log out</button></li>
-    </ul>
+    <div class="nav__left">
+      <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+      <ul class="nav__links">
+        <li><a href="/dashboard.html">Dashboard</a></li>
+        <li><a href="/browse.html">Members</a></li>
+        <li><a href="/needs.html" class="nav__link--active">Needs</a></li>
+      </ul>
+    </div>
+    <div class="nav__end">
+      <form action="/browse.html" method="get">
+        <input class="nav__search-input" type="search" name="q" placeholder="Search members…" autocomplete="off">
+      </form>
+      <div class="nav__profile-wrap" id="profile-wrap">
+        <button class="nav__profile-btn" id="profile-btn" aria-haspopup="true" aria-expanded="false" aria-label="Profile menu">
+          <span class="nav__avatar" id="nav-avatar"></span>
+        </button>
+        <div class="nav__dropdown" id="nav-dropdown" hidden>
+          <a href="/profile.html" class="nav__dropdown-item">My profile</a>
+          <a href="/profile.html#edit" class="nav__dropdown-item">Edit profile</a>
+          <a href="/messages.html" class="nav__dropdown-item">Messages</a>
+          <a href="/needs-new.html" class="nav__dropdown-item">Post a need</a>
+          <a href="/shortlist.html" class="nav__dropdown-item">My shortlist</a>
+          <hr class="nav__dropdown-divider">
+          <button id="logout-btn" class="nav__dropdown-item nav__dropdown-item--muted">Log out</button>
+        </div>
+      </div>
+    </div>
   </nav>
 
   <main class="needs-main">
 
     <header class="needs-header">
-      <h1 class="needs-title">Needs</h1>
-      <p class="needs-sub">Active briefs posted by members. Find work that fits your skills.</p>
+      <p class="needs-eyebrow">Network</p>
+      <h1 class="needs-title">Active needs.</h1>
+      <p class="needs-sub">Briefs posted by members. Find work that fits your skills.</p>
     </header>
 
     <div class="needs-layout">
@@ -35,7 +54,7 @@
       <!-- Filter sidebar -->
       <aside class="needs-sidebar">
         <fieldset class="filter-group">
-          <legend class="filter-group__label">Filter by skill</legend>
+          <legend class="filter-group__label">Skill</legend>
           <label class="filter-option"><input type="checkbox" name="skill" value="Brand design" /> Brand design</label>
           <label class="filter-option"><input type="checkbox" name="skill" value="UX / product design" /> UX / product design</label>
           <label class="filter-option"><input type="checkbox" name="skill" value="Illustration" /> Illustration</label>
@@ -50,20 +69,18 @@
           <label class="filter-option"><input type="checkbox" name="skill" value="Web development" /> Web development</label>
           <label class="filter-option"><input type="checkbox" name="skill" value="App development" /> App development</label>
           <label class="filter-option"><input type="checkbox" name="skill" value="No-code / low-code" /> No-code / low-code</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Data & analytics" /> Data & analytics</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Data & analytics" /> Data &amp; analytics</label>
           <label class="filter-option"><input type="checkbox" name="skill" value="AI / machine learning" /> AI / machine learning</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Strategy & consulting" /> Strategy & consulting</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Strategy & consulting" /> Strategy &amp; consulting</label>
           <label class="filter-option"><input type="checkbox" name="skill" value="Project management" /> Project management</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="PR & communications" /> PR & communications</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Community & events" /> Community & events</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="PR & communications" /> PR &amp; communications</label>
+          <label class="filter-option"><input type="checkbox" name="skill" value="Community & events" /> Community &amp; events</label>
         </fieldset>
       </aside>
 
       <!-- Results -->
       <div class="needs-results">
-        <div id="needs-list" class="needs-list">
-          <!-- Populated by JS -->
-        </div>
+        <div id="needs-list" class="needs-list"></div>
         <div id="needs-empty" class="needs-empty" hidden>
           <p>No needs posted yet. Be the first.</p>
           <a href="/needs-new.html" class="btn btn--primary">Post a need</a>
@@ -74,21 +91,72 @@
 
   </main>
 
+  <footer class="page-footer">
+    <div>
+      <p class="page-footer__col-label">Explore</p>
+      <ul class="page-footer__links">
+        <li><a href="/browse.html">Members</a></li>
+        <li><a href="/needs.html">Needs</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="page-footer__col-label">Network</p>
+      <ul class="page-footer__links">
+        <li><a href="/needs-new.html">Post a need</a></li>
+        <li><a href="/profile.html">My profile</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="page-footer__col-label">Support</p>
+      <ul class="page-footer__links">
+        <li><a href="mailto:hello@fello.works">Contact</a></li>
+        <li><a href="/privacy.html">Privacy Policy</a></li>
+        <li><a href="/terms.html">Terms of Service</a></li>
+      </ul>
+    </div>
+    <p class="page-footer__copy">© 2026 FelloWorks — Curated Network. All rights reserved.</p>
+  </footer>
+
   <script type="module">
     import api from "./js/api.js";
     import { requireSession } from "./js/supabase-client.js";
 
     await requireSession();
 
+    // Profile dropdown
+    const profileBtn = document.getElementById("profile-btn");
+    const dropdown   = document.getElementById("nav-dropdown");
+    profileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = !dropdown.hidden;
+      dropdown.hidden = open;
+      profileBtn.setAttribute("aria-expanded", String(!open));
+    });
+    document.addEventListener("click", () => {
+      dropdown.hidden = true;
+      profileBtn.setAttribute("aria-expanded", "false");
+    });
+    dropdown.addEventListener("click", (e) => e.stopPropagation());
+
+    // Populate nav avatar
+    try {
+      const { member } = await api.get("/members/me");
+      document.getElementById("nav-avatar").textContent =
+        `${member.first_name[0]}${member.last_name[0]}`;
+    } catch { /* silently skip */ }
+
     let allNeeds = [];
     let selectedSkills = new Set();
 
     async function init() {
-      const { needs } = await api.get("/needs?all=true");
-      allNeeds = needs;
-      render();
+      try {
+        const { needs } = await api.get("/needs?all=true");
+        allNeeds = needs;
+        render();
+      } catch {
+        document.getElementById("needs-empty").hidden = false;
+      }
 
-      // Wire up skill filter checkboxes
       document.querySelectorAll("input[name=skill]").forEach((cb) => {
         cb.addEventListener("change", () => {
           if (cb.checked) selectedSkills.add(cb.value);
@@ -122,7 +190,7 @@
         });
 
         const tags = (n.skill_tags || [])
-          .map((t) => `<span class="pill pill--skill">${escHtml(t)}</span>`)
+          .map((t) => `<span class="need-card__tag">${escHtml(t)}</span>`)
           .join("");
 
         const meta = [
@@ -143,12 +211,12 @@
 
         return `
           <a href="/need.html?id=${encodeURIComponent(n.id)}" class="need-card">
-            <div class="need-card__tags">${tags}</div>
+            ${tags ? `<div class="need-card__tags">${tags}</div>` : ""}
             <h2 class="need-card__title">${escHtml(n.skill_title)}</h2>
             ${n.description ? `<p class="need-card__desc">${escHtml(n.description)}</p>` : ""}
             <div class="need-card__footer">
-              <span class="need-card__poster">${poster}</span>
-              <span class="need-card__meta text-muted">${meta || posted}</span>
+              ${poster ? `<span class="need-card__poster">${poster}</span>` : ""}
+              <span class="need-card__meta">${meta || posted}</span>
               ${rate ? `<span class="need-card__rate">${rate}</span>` : ""}
             </div>
           </a>
@@ -164,14 +232,6 @@
 
     init();
   </script>
-
-  <footer class="site-footer">
-    <span>© 2026 FelloWorks</span>
-    <span class="site-footer__links">
-      <a href="/terms.html">Terms</a>
-      <a href="/privacy.html">Privacy</a>
-    </span>
-  </footer>
 
   <script type="module" src="js/nav.js"></script>
 </body>
