@@ -1,15 +1,152 @@
 /* FelloWorks component styles
-   Reusable UI elements: nav, buttons, forms, cards, pills, avatars.
-   Edit copy in the HTML files, not here. Edit colours in tokens.css. */
+   Public-page components first, then internal-page components. */
 
 @import './tokens.css';
 
+/* =======================================================================
+   PUBLIC PAGE COMPONENTS (index.html)
+   ======================================================================= */
+
 /* -----------------------------------------------------------------------
-   Navigation
+   Buttons — public
+   ----------------------------------------------------------------------- */
+
+.btn-primary {
+  display: inline-block;
+  padding: 16px 32px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 0;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 32px var(--accent-shadow);
+  text-decoration: none;
+  color: #fff;
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.btn-ghost:hover {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* -----------------------------------------------------------------------
+   Cards — public
+   ----------------------------------------------------------------------- */
+
+.card {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--rule-solid);
+  padding: 32px;
+}
+
+.card-dark {
+  border: 1px solid var(--rule-dark);
+  padding: 32px;
+}
+
+/* -----------------------------------------------------------------------
+   Pills — public
+   ----------------------------------------------------------------------- */
+
+.pill {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 1px solid var(--rule-solid);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.pill-accent {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* -----------------------------------------------------------------------
+   Forms — public (invite section)
+   ----------------------------------------------------------------------- */
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  max-width: 480px;
+  margin: 0 auto 16px;
+  text-align: left;
+}
+
+.form-input {
+  width: 100%;
+  padding: 16px 20px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  background: var(--bg-surface);
+  border: 1.5px solid var(--rule-solid);
+  border-radius: 0;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.form-input:focus {
+  border-color: var(--accent);
+}
+
+.form-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.form-helper {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+
+/* =======================================================================
+   INTERNAL PAGE COMPONENTS (dashboard, browse, member, etc.)
+   ======================================================================= */
+
+/* -----------------------------------------------------------------------
+   Navigation — internal
    ----------------------------------------------------------------------- */
 
 .nav {
-  background-color: var(--ink);
+  background-color: var(--bg-dark);
   padding: var(--space-4) var(--space-8);
   display: flex;
   align-items: center;
@@ -17,9 +154,9 @@
 }
 
 .nav__logo {
-  font-family: var(--font-serif);
+  font-family: var(--font-display);
   font-size: 1.25rem;
-  color: var(--amber);
+  color: var(--text-on-dark);
   letter-spacing: -0.01em;
 }
 
@@ -31,10 +168,10 @@
 }
 
 .nav__links a {
-  color: var(--white);
+  color: var(--text-on-dark);
   font-size: 0.9375rem;
-  font-weight: var(--weight-medium);
-  opacity: 0.85;
+  font-weight: 500;
+  opacity: 0.75;
   transition: opacity 0.15s;
 }
 
@@ -43,30 +180,28 @@
   text-decoration: none;
 }
 
-/* "Post a need" is an amber pill in the nav */
 .nav__links .nav__cta {
-  background-color: var(--amber);
-  color: var(--white);
+  background-color: var(--accent);
+  color: #fff;
   padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   opacity: 1;
-  font-weight: var(--weight-semibold);
+  font-weight: 700;
 }
 
 .nav__links .nav__cta:hover {
-  background-color: var(--amber-light);
+  opacity: 0.9;
 }
 
-/* Log out — plain text button in the nav */
 .nav__logout {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--white);
-  font-family: var(--font-sans);
+  color: var(--text-on-dark);
+  font-family: var(--font-body);
   font-size: 0.9375rem;
-  font-weight: var(--weight-medium);
-  opacity: 0.5;
+  font-weight: 500;
+  opacity: 0.4;
   padding: 0;
   line-height: 1;
   display: inline-flex;
@@ -75,12 +210,11 @@
 }
 
 .nav__logout:hover {
-  opacity: 0.85;
+  opacity: 0.75;
 }
 
-
 /* -----------------------------------------------------------------------
-   Buttons
+   Buttons — internal
    ----------------------------------------------------------------------- */
 
 .btn {
@@ -88,63 +222,63 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  font-weight: var(--weight-semibold);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 600;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   cursor: pointer;
   padding: var(--space-3) var(--space-6);
   transition: background-color 0.15s, opacity 0.15s;
   text-decoration: none;
 }
 
-/* Primary — amber */
 .btn--primary {
-  background-color: var(--amber);
-  color: var(--white);
+  background-color: var(--accent);
+  color: #fff;
 }
 
 .btn--primary:hover {
-  background-color: var(--amber-deep);
+  background-color: #c01f3d;
   text-decoration: none;
 }
 
-/* Secondary — ghost */
 .btn--secondary {
   background-color: transparent;
-  color: var(--ink);
-  border: 1.5px solid var(--ink);
+  color: var(--text-primary);
+  border: 1.5px solid var(--text-primary);
 }
 
 .btn--secondary:hover {
-  background-color: var(--ink);
-  color: var(--white);
+  background-color: var(--text-primary);
+  color: var(--bg-surface);
   text-decoration: none;
 }
 
-/* Tertiary — plain text link */
 .btn--tertiary {
   background: transparent;
-  color: var(--ink);
+  color: var(--text-primary);
   border: none;
   padding-left: var(--space-1);
   padding-right: var(--space-1);
-  font-weight: var(--weight-medium);
+  font-weight: 500;
 }
 
 .btn--tertiary:hover {
-  color: var(--amber);
+  color: var(--accent);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-/* Full width */
 .btn--full { width: 100%; }
 
+.btn--sm {
+  font-size: 0.8125rem;
+  padding: var(--space-2) var(--space-4);
+}
 
 /* -----------------------------------------------------------------------
-   Forms
+   Forms — internal
    ----------------------------------------------------------------------- */
 
 .form-group {
@@ -155,33 +289,34 @@
 
 .form-label {
   font-size: 0.875rem;
-  font-weight: var(--weight-medium);
-  color: var(--ink);
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
-.form-input,
 .form-textarea,
 .form-select {
   width: 100%;
   padding: var(--space-3) var(--space-4);
-  border: 1.5px solid var(--rule);
-  border-radius: var(--radius-sm);
-  background-color: var(--white);
-  color: var(--ink);
+  border: 1.5px solid var(--rule-solid);
+  border-radius: 0;
+  background-color: var(--bg-surface);
+  color: var(--text-primary);
   font-size: 1rem;
+  font-family: var(--font-body);
   transition: border-color 0.15s;
 }
 
-.form-input:focus,
+/* Note: .form-input is defined above in public section and shared */
+
 .form-textarea:focus,
 .form-select:focus {
   outline: none;
-  border-color: var(--amber);
+  border-color: var(--accent);
 }
 
-.form-input::placeholder,
 .form-textarea::placeholder {
-  color: var(--ink-muted);
+  color: var(--text-secondary);
+  opacity: 0.6;
 }
 
 .form-textarea {
@@ -189,13 +324,12 @@
   min-height: 120px;
 }
 
-/* Hint text beneath an input */
 .form-hint {
   font-size: 0.8125rem;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
+  opacity: 0.7;
 }
 
-/* Two-column form row */
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -205,7 +339,6 @@
 @media (max-width: 540px) {
   .form-row { grid-template-columns: 1fr; }
 }
-
 
 /* -----------------------------------------------------------------------
    Avatar — initials circle
@@ -218,9 +351,9 @@
   width: 48px;
   height: 48px;
   border-radius: var(--radius-full);
-  background-color: var(--amber);
-  color: var(--white);
-  font-family: var(--font-serif);
+  background-color: var(--bg-dark);
+  color: var(--text-on-dark);
+  font-family: var(--font-display);
   font-size: 1.125rem;
   flex-shrink: 0;
 }
@@ -237,69 +370,75 @@
   font-size: 0.875rem;
 }
 
-
 /* -----------------------------------------------------------------------
-   Pills — availability status, languages
+   Pills — internal (availability, languages)
    ----------------------------------------------------------------------- */
 
-.pill {
+.pill-internal {
   display: inline-flex;
   align-items: center;
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-full);
   font-size: 0.8125rem;
-  font-weight: var(--weight-medium);
-  border: 1.5px solid var(--rule);
-  color: var(--ink-soft);
+  font-weight: 500;
+  border: 1.5px solid var(--rule-solid);
+  color: var(--text-secondary);
   background: transparent;
 }
 
-/* Available now — green border */
+/* Keep old .pill class working for internal pages too */
+.pill:not(.pill-accent) {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  border: 1.5px solid var(--rule-solid);
+  color: var(--text-secondary);
+  background: transparent;
+}
+
 .pill--available-now {
   border-color: var(--available-now);
   color: var(--available-now);
 }
 
-/* Available upcoming — amber border */
 .pill--available-soon {
-  border-color: var(--amber);
-  color: var(--amber);
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
-/* Skill tag — used in filters and cards */
 .pill--skill {
-  background-color: var(--cream);
-  border-color: var(--rule);
+  background-color: var(--bg-primary);
+  border-color: var(--rule-solid);
 }
 
-/* Selected skill tag */
 .pill--skill.selected {
-  border-color: var(--amber);
-  color: var(--amber);
+  border-color: var(--accent);
+  color: var(--accent);
   background-color: var(--amber-pale);
 }
 
-
 /* -----------------------------------------------------------------------
-   Member card — used in browse grid
+   Member card
    ----------------------------------------------------------------------- */
 
 .member-card {
-  background-color: var(--white);
-  border: 1.5px solid var(--rule);
-  border-radius: var(--radius-md);
+  background-color: var(--bg-surface);
+  border: 1px solid var(--rule-solid);
+  border-radius: 0;
   padding: var(--space-5);
   position: relative;
   cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color 0.15s;
   text-decoration: none;
   display: block;
   color: inherit;
 }
 
 .member-card:hover {
-  border-color: var(--amber);
-  box-shadow: var(--shadow-card-hover);
+  border-color: var(--accent);
   text-decoration: none;
 }
 
@@ -311,18 +450,18 @@
 }
 
 .member-card__name {
-  font-family: var(--font-sans);
-  font-weight: var(--weight-semibold);
+  font-family: var(--font-body);
+  font-weight: 600;
   font-size: 1.0625rem;
-  color: var(--ink);
+  color: var(--text-primary);
   margin-top: var(--space-2);
   letter-spacing: -0.005em;
 }
 
 .member-card__role {
   font-size: 0.9375rem;
-  font-weight: var(--weight-light);
-  color: var(--ink-soft);
+  font-weight: 300;
+  color: var(--text-secondary);
   margin-bottom: var(--space-3);
 }
 
@@ -338,18 +477,17 @@
   justify-content: space-between;
   align-items: center;
   font-size: 0.8125rem;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   border-top: 1px solid var(--rule);
   padding-top: var(--space-3);
   margin-top: var(--space-3);
 }
 
-/* Shortlist heart toggle */
 .shortlist-toggle {
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   font-size: 1.125rem;
   padding: var(--space-1);
   transition: color 0.15s;
@@ -358,12 +496,11 @@
 
 .shortlist-toggle.saved,
 .shortlist-toggle:hover {
-  color: var(--amber);
+  color: var(--accent);
 }
 
-
 /* -----------------------------------------------------------------------
-   Inviter card — shown on welcome and invite acceptance screens
+   Inviter card
    ----------------------------------------------------------------------- */
 
 .inviter-card {
@@ -371,9 +508,8 @@
   align-items: center;
   gap: var(--space-3);
   padding: var(--space-4);
-  border-radius: var(--radius-md);
   background-color: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--rule-dark);
 }
 
 .inviter-card__meta {
@@ -384,20 +520,19 @@
 
 .inviter-card__label {
   font-size: 0.75rem;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .inviter-card--light {
-  background-color: var(--amber-pale);
-  border-color: var(--rule);
+  background-color: var(--bg-container);
+  border-color: var(--rule-solid);
 }
 
 .inviter-card--light .inviter-card__label {
-  color: var(--ink-muted);
+  color: var(--text-secondary);
 }
-
 
 /* -----------------------------------------------------------------------
    Alert / info box
@@ -405,7 +540,6 @@
 
 .alert {
   padding: var(--space-4);
-  border-radius: var(--radius-sm);
   font-size: 0.9375rem;
 }
 
@@ -416,14 +550,13 @@
 }
 
 .alert--info {
-  background-color: var(--amber-pale);
-  color: var(--ink);
-  border: 1px solid var(--rule);
+  background-color: var(--bg-container);
+  color: var(--text-primary);
+  border: 1px solid var(--rule-solid);
 }
 
-
 /* -----------------------------------------------------------------------
-   Progress bar — for the multi-step need form
+   Progress bar
    ----------------------------------------------------------------------- */
 
 .progress-bar {
@@ -435,15 +568,39 @@
 .progress-bar__step {
   flex: 1;
   height: 4px;
-  border-radius: var(--radius-full);
-  background-color: var(--rule);
+  background-color: var(--rule-solid);
 }
 
-.progress-bar__step--done     { background-color: var(--amber); }
-.progress-bar__step--current  { background-color: var(--amber-light); }
+.progress-bar__step--done    { background-color: var(--accent); }
+.progress-bar__step--current { background-color: rgba(255, 45, 85, 0.4); }
 
 /* -----------------------------------------------------------------------
-   Site footer — legal links, shown on all authenticated pages
+   Section label — amber line + uppercase (wireframe pattern)
+   ----------------------------------------------------------------------- */
+
+.section-label {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.section-label::before {
+  content: '';
+  display: block;
+  width: 14px;
+  height: 1.5px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* -----------------------------------------------------------------------
+   Site footer — internal pages
    ----------------------------------------------------------------------- */
 
 .site-footer {
@@ -451,9 +608,9 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--space-4) var(--space-8);
-  background-color: var(--ink);
+  background-color: var(--bg-dark);
   font-size: 0.8125rem;
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-muted-dark);
 }
 
 .site-footer__links {
@@ -462,10 +619,10 @@
 }
 
 .site-footer__links a {
-  color: rgba(255, 255, 255, 0.35);
+  color: var(--text-muted-dark);
   text-decoration: none;
 }
 
 .site-footer__links a:hover {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-on-dark);
 }

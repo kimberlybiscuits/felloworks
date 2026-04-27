@@ -1,34 +1,55 @@
 /* FelloWorks design tokens
-   All colours, fonts, spacing, and radii live here.
-   Edit this file to make global style changes — never put hex values in component styles. */
+   New design system (April 2026 redesign).
+   Internal pages use the legacy aliases at the bottom of this file. */
 
 :root {
-  /* Colours */
-  --cream:       #F5F2EE;   /* Primary background */
-  --ink:         #0D1B2A;   /* Primary text, dark sections */
-  --ink-soft:    #3A4E60;   /* Body text */
-  --ink-muted:   #7A8C9A;   /* Captions, meta */
-  --amber:       #FF6B35;   /* Primary accent, CTAs, logo */
-  --amber-deep:  #D9471A;   /* Primary button hover — pressed, confident */
-  --amber-light: #FF8F5E;   /* Accent on dark backgrounds */
-  --amber-pale:  #FFF0E8;   /* Warm section backgrounds */
-  --rule:        #D8D2C8;   /* Borders, dividers */
-  --white:       #FFFFFF;   /* Cards, inputs */
+  /* -----------------------------------------------------------------------
+     Backgrounds
+     ----------------------------------------------------------------------- */
+  --bg-primary:    #F5F0E8;
+  --bg-surface:    #FCFAF7;
+  --bg-dark:       #2A3825;
+  --bg-container:  #F0EDE8;
 
-  /* Availability status colours */
-  --available-now:      #22C55E;   /* Green — available now pill border */
-  --available-upcoming: var(--amber); /* Amber — upcoming availability pill border */
+  /* -----------------------------------------------------------------------
+     Text
+     ----------------------------------------------------------------------- */
+  --text-primary:   #152211;
+  --text-secondary: #57624F;
+  --text-on-dark:   #F5F0E8;
+  --text-muted-dark: rgba(245, 240, 232, 0.5);
 
-  /* Typography */
-  --font-serif: 'DM Serif Display', Georgia, serif;
-  --font-sans:  'Karla', system-ui, sans-serif;
+  /* -----------------------------------------------------------------------
+     Accent
+     ----------------------------------------------------------------------- */
+  --accent:        #FF2D55;
+  --accent-shadow: rgba(255, 45, 85, 0.25);
 
-  --weight-light:    300;
-  --weight-regular:  400;
-  --weight-medium:   500;
-  --weight-semibold: 600;
+  /* -----------------------------------------------------------------------
+     Borders
+     ----------------------------------------------------------------------- */
+  --rule:       rgba(42, 56, 37, 0.1);
+  --rule-solid: rgba(42, 56, 37, 0.15);
+  --rule-dark:  rgba(252, 250, 247, 0.1);
 
-  /* Spacing scale */
+  /* -----------------------------------------------------------------------
+     Typography
+     ----------------------------------------------------------------------- */
+  --font-display: 'Newsreader', Georgia, serif;
+  --font-body:    'Manrope', system-ui, sans-serif;
+
+  /* -----------------------------------------------------------------------
+     Spacing
+     ----------------------------------------------------------------------- */
+  --space-xs:  8px;
+  --space-s:   16px;
+  --space-m:   24px;
+  --space-l:   48px;
+  --space-xl:  64px;
+  --space-2xl: 80px;
+  --space-3xl: 120px;
+
+  /* Fine-grained spacing (used by internal pages) */
   --space-1:  4px;
   --space-2:  8px;
   --space-3:  12px;
@@ -40,19 +61,54 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* Border radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-full: 9999px;
+  /* -----------------------------------------------------------------------
+     Layout
+     ----------------------------------------------------------------------- */
+  --max-width:          1440px;
+  --side-padding:       64px;
+  --side-padding-mobile: 24px;
 
-  /* Shadows */
-  --shadow-card: 0 1px 3px rgba(13, 27, 42, 0.08), 0 1px 2px rgba(13, 27, 42, 0.06);
-  --shadow-card-hover: 0 4px 12px rgba(13, 27, 42, 0.12);
-
-  /* Layout */
+  /* Internal page layout */
   --max-width-content: 860px;
   --max-width-form:    600px;
   --max-width-wide:    1000px;
   --sidebar-width:     220px;
+
+  /* -----------------------------------------------------------------------
+     Radius (internal pages only — public pages use 0)
+     ----------------------------------------------------------------------- */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-full: 9999px;
+
+  /* -----------------------------------------------------------------------
+     Shadows (internal pages only)
+     ----------------------------------------------------------------------- */
+  --shadow-card:       0 1px 3px rgba(21, 34, 17, 0.08), 0 1px 2px rgba(21, 34, 17, 0.06);
+  --shadow-card-hover: 0 4px 12px rgba(21, 34, 17, 0.12);
+
+  /* -----------------------------------------------------------------------
+     Legacy aliases — keep internal pages working while we migrate
+     ----------------------------------------------------------------------- */
+  --cream:       var(--bg-primary);
+  --white:       var(--bg-surface);
+  --ink:         var(--text-primary);
+  --ink-soft:    var(--text-secondary);
+  --ink-muted:   #7A8C9A;
+  --amber:       var(--accent);
+  --amber-deep:  #c01f3d;
+  --amber-light: #ff5577;
+  --amber-pale:  rgba(255, 45, 85, 0.06);
+
+  --font-serif:  var(--font-display);
+  --font-sans:   var(--font-body);
+
+  --weight-light:    300;
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+
+  --available-now:      #22C55E;
+  --available-upcoming: var(--accent);
 }

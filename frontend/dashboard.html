@@ -12,111 +12,158 @@
 <body>
 
   <nav class="nav">
-    <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
-    <ul class="nav__links">
-      <li><a href="/browse.html">Browse members</a></li>
-      <li><a href="/needs.html">Browse needs</a></li>
-      <li><a href="/messages.html">Messages</a></li>
-      <li><a href="/profile.html">My profile</a></li>
-      <li><a href="/needs-new.html" class="nav__cta">+ Post a need</a></li>
-      <li><button id="logout-btn" class="nav__logout">Log out</button></li>
-    </ul>
+    <div class="nav__left">
+      <a href="/dashboard.html" class="nav__logo">FelloWorks</a>
+      <ul class="nav__links">
+        <li><a href="/dashboard.html" class="nav__link--active">Dashboard</a></li>
+        <li><a href="/browse.html">Members</a></li>
+        <li><a href="/needs.html">Needs</a></li>
+      </ul>
+    </div>
+    <div class="nav__end">
+      <form class="nav__search" action="/browse.html" method="get">
+        <input class="nav__search-input" type="search" name="q" placeholder="Search members…" autocomplete="off">
+      </form>
+      <div class="nav__profile-wrap" id="profile-wrap">
+        <button class="nav__profile-btn" id="profile-btn" aria-haspopup="true" aria-expanded="false" aria-label="Profile menu">
+          <span class="nav__avatar" id="nav-avatar"></span>
+        </button>
+        <div class="nav__dropdown" id="nav-dropdown" hidden>
+          <a href="/profile.html" class="nav__dropdown-item">My profile</a>
+          <a href="/profile.html#edit" class="nav__dropdown-item">Edit profile</a>
+          <a href="/needs-new.html" class="nav__dropdown-item">Post a need</a>
+          <a href="/shortlist.html" class="nav__dropdown-item">My shortlist</a>
+          <hr class="nav__dropdown-divider">
+          <button id="logout-btn" class="nav__dropdown-item nav__dropdown-item--muted">Log out</button>
+        </div>
+      </div>
+    </div>
   </nav>
 
   <main class="dashboard-main">
 
-    <!-- Header -->
-    <header class="dashboard-header">
-      <h1 id="greeting" class="dashboard-greeting">Good morning.</h1>
-      <p id="member-since" class="text-muted"></p>
-    </header>
-
     <!-- Profile completion prompt — shown when profile is under 80% complete -->
     <div id="completion-prompt" class="completion-prompt" hidden>
-      <p class="completion-prompt__heading">Your profile isn't complete yet.</p>
-      <p id="completion-missing" class="completion-prompt__body"></p>
+      <div>
+        <p class="completion-prompt__heading">Your profile isn't complete yet.</p>
+        <p id="completion-missing" class="completion-prompt__body"></p>
+      </div>
       <a href="/profile.html" class="btn btn--primary">Fill in my profile</a>
     </div>
 
+    <!-- Header -->
+    <header class="dashboard-header">
+      <p id="dashboard-date" class="dashboard-date"></p>
+      <h1 id="greeting" class="dashboard-greeting">Welcome back.</h1>
+      <p id="dashboard-summary" class="dashboard-summary"></p>
+    </header>
+
     <div class="dashboard-grid">
 
-      <!-- Primary panel — role-aware: shows either posted needs or matched needs -->
+      <!-- Left column: Messages + Shortlist -->
+      <div class="dashboard-left">
+
+        <section class="dashboard-panel">
+          <div class="panel-header">
+            <h2 class="dashboard-section-title">Messages</h2>
+            <a href="/messages.html" class="panel-header-link">View all</a>
+          </div>
+          <div id="messages-list"></div>
+          <div id="messages-empty" class="dashboard-empty" hidden>
+            <p>No messages yet.</p>
+          </div>
+        </section>
+
+        <section class="dashboard-panel">
+          <div class="panel-header">
+            <h2 class="dashboard-section-title">Shortlist</h2>
+            <a href="/shortlist.html" class="panel-header-link">Edit</a>
+          </div>
+          <div id="shortlist-list"></div>
+          <div id="shortlist-empty" class="dashboard-empty" hidden>
+            <p>Browse members to build your shortlist.</p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Centre panel: Active needs or matched needs -->
       <section class="dashboard-panel dashboard-panel--primary">
 
-        <!-- Lead view: has posted needs -->
+        <!-- Lead view: member has posted needs -->
         <div id="view-lead" hidden>
           <h2 class="dashboard-section-title">Your active needs</h2>
-          <div id="my-needs-list">
-            <!-- Populated by JS -->
-          </div>
-          <!-- Empty state -->
+          <div id="my-needs-list"></div>
           <div id="my-needs-empty" class="dashboard-empty" hidden>
             <p>You haven't posted any needs yet.</p>
-            <a href="/needs-new.html" class="btn btn--primary">Post your first need</a>
           </div>
+          <a href="/needs-new.html" class="btn--post-need">Post a new need</a>
         </div>
 
-        <!-- Specialist view: no posted needs — shows matching needs from others -->
-        <div id="view-specialist" hidden>
+        <!-- Specialist view: default visible — JS switches to lead if member has needs -->
+        <div id="view-specialist">
           <h2 class="dashboard-section-title">Needs that match your skills</h2>
-          <div id="matched-needs-list">
-            <!-- Populated by JS -->
-          </div>
-          <!-- Empty state -->
-          <div id="matched-needs-empty" class="dashboard-empty" hidden>
+          <div id="matched-needs-list"></div>
+          <div id="matched-needs-empty" class="dashboard-empty">
             <p>Check back soon — or update your skill tags.</p>
-            <a href="/profile.html" class="btn btn--secondary">Edit my skills</a>
+            <a href="/profile.html" class="btn btn--secondary btn--sm">Edit my skills</a>
           </div>
+          <a href="/needs-new.html" class="btn--post-need">Post a new need</a>
         </div>
 
       </section>
 
-      <!-- Secondary panels -->
-      <aside class="dashboard-aside">
+      <!-- Right column: Activity feed + pending feedback -->
+      <div class="dashboard-right">
 
-        <!-- Recent messages -->
         <section class="dashboard-panel">
-          <h2 class="dashboard-section-title">Messages</h2>
-          <div id="messages-list">
-            <!-- Populated by JS -->
+          <div class="panel-header">
+            <h2 class="dashboard-section-title">Recent activity</h2>
           </div>
-          <div id="messages-empty" class="dashboard-empty" hidden>
-            <p>No messages yet.</p>
+          <div id="activity-list"></div>
+          <div id="activity-empty" class="dashboard-empty" hidden>
+            <p>Activity will appear here as the network moves.</p>
           </div>
-          <a href="/messages.html" class="dashboard-panel__link">All messages</a>
         </section>
 
-        <!-- Feedback awaiting approval -->
         <section class="dashboard-panel" id="feedback-panel" hidden>
-          <h2 class="dashboard-section-title">Feedback to review</h2>
-          <div id="feedback-pending-list">
-            <!-- Populated by JS -->
+          <div class="panel-header">
+            <h2 class="dashboard-section-title">Feedback to review</h2>
           </div>
+          <div id="feedback-pending-list"></div>
         </section>
 
-        <!-- Shortlist preview -->
-        <section class="dashboard-panel">
-          <h2 class="dashboard-section-title">Shortlist</h2>
-          <div id="shortlist-list">
-            <!-- Populated by JS -->
-          </div>
-          <div id="shortlist-empty" class="dashboard-empty" hidden>
-            <p>Browse members to build your shortlist.</p>
-          </div>
-          <a href="/shortlist.html" class="dashboard-panel__link">See full shortlist</a>
-        </section>
+      </div>
 
-      </aside>
     </div>
 
-    <!-- Quick actions bar -->
-    <nav class="quick-actions" aria-label="Quick actions">
-      <a href="/browse.html" class="quick-actions__item">Browse members</a>
-      <a href="/needs-new.html" class="quick-actions__item">Post a need</a>
-      <a href="/profile.html" class="quick-actions__item">Edit my profile</a>
-    </nav>
-
   </main>
+
+  <footer class="dashboard-footer">
+    <div>
+      <p class="dashboard-footer__col-label">Explore</p>
+      <ul class="dashboard-footer__links">
+        <li><a href="/browse.html">Members</a></li>
+        <li><a href="/needs.html">Needs</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="dashboard-footer__col-label">Network</p>
+      <ul class="dashboard-footer__links">
+        <li><a href="/needs-new.html">Post a need</a></li>
+        <li><a href="/profile.html">My profile</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="dashboard-footer__col-label">Support</p>
+      <ul class="dashboard-footer__links">
+        <li><a href="mailto:hello@fello.works">Contact</a></li>
+        <li><a href="/privacy.html">Privacy Policy</a></li>
+        <li><a href="/terms.html">Terms of Service</a></li>
+      </ul>
+    </div>
+    <p class="dashboard-footer__copy">© 2026 FelloWorks — Curated Network. All rights reserved.</p>
+  </footer>
 
   <script type="module">
     import api from "./js/api.js";
@@ -124,71 +171,107 @@
 
     await requireSession();
 
-    // Load member data and populate the dashboard
+    // Profile dropdown toggle
+    const profileBtn = document.getElementById("profile-btn");
+    const dropdown   = document.getElementById("nav-dropdown");
+
+    profileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const open = !dropdown.hidden;
+      dropdown.hidden = open;
+      profileBtn.setAttribute("aria-expanded", String(!open));
+    });
+
+    document.addEventListener("click", () => {
+      dropdown.hidden = true;
+      profileBtn.setAttribute("aria-expanded", "false");
+    });
+
+    dropdown.addEventListener("click", (e) => e.stopPropagation());
+
     async function init() {
       const { member } = await api.get("/members/me");
 
-      // Greeting — uses first name and time of day
-      const hour = new Date().getHours();
+      // Populate nav avatar with initials
+      const initials = `${member.first_name[0]}${member.last_name[0]}`;
+      document.getElementById("nav-avatar").textContent = initials;
+
+      // Date eyebrow
+      const now = new Date();
+      const dateLabel = now.toLocaleDateString("en-GB", {
+        weekday: "long", month: "long", day: "numeric",
+      }).toUpperCase();
+      document.getElementById("dashboard-date").textContent = dateLabel;
+
+      // Greeting — time-aware
+      const hour = now.getHours();
       const period = hour < 12 ? "morning" : hour < 17 ? "afternoon" : "evening";
       document.getElementById("greeting").textContent =
         `Good ${period}, ${member.first_name}.`;
 
-      // Member since date
-      if (member.member_since) {
-        const since = new Date(member.member_since).toLocaleDateString("en-GB", {
-          month: "long", year: "numeric",
-        });
-        document.getElementById("member-since").textContent = `Member since ${since}`;
-      }
-
-      // Profile completion check
+      // Profile completion
       checkProfileCompletion(member);
 
-      // Load primary panel based on whether the member has posted needs
-      const { needs: myNeeds } = await api.get("/needs?mine=true");
+      // Primary panel: lead vs specialist
+      try {
+        const { needs: myNeeds } = await api.get("/needs?mine=true");
 
-      if (myNeeds.length > 0) {
-        // Lead view
-        document.getElementById("view-lead").hidden = false;
-        renderMyNeeds(myNeeds);
-      } else {
-        // Specialist view — show matched needs
-        document.getElementById("view-specialist").hidden = false;
-        const { needs: matched } = await api.get("/needs");
-        renderMatchedNeeds(matched);
+        if (myNeeds.length > 0) {
+          // Switch to lead view
+          document.getElementById("view-specialist").hidden = true;
+          document.getElementById("view-lead").hidden = false;
+          renderMyNeeds(myNeeds);
+
+          const active = myNeeds.filter(n => n.status === "open" || n.status === "active").length;
+          document.getElementById("dashboard-summary").innerHTML =
+            `You have <em>${active} active need${active !== 1 ? "s" : ""}</em> posted.`;
+        } else {
+          // Stay on specialist view — hide empty state while we load matches
+          document.getElementById("matched-needs-empty").hidden = true;
+          const { needs: matched } = await api.get("/needs");
+          renderMatchedNeeds(matched);
+
+          document.getElementById("dashboard-summary").innerHTML = matched.length > 0
+            ? `<em>${matched.length} need${matched.length !== 1 ? "s" : ""}</em> in the network match your skills.`
+            : "Your profile is live. Browse members or post your first need.";
+        }
+      } catch {
+        // No backend / API error — specialist view with empty state stays visible
+        document.getElementById("dashboard-summary").textContent =
+          "Browse members or post your first need.";
       }
 
-      // Load messages preview (last 3 threads)
+      // Messages
       try {
         const { threads } = await api.get("/messages");
-        renderMessages(threads.slice(0, 3));
-      } catch { /* silently skip if none */ }
+        renderMessages(threads.slice(0, 4));
+      } catch { /* silently skip */ }
 
-      // Load shortlist preview (last 3)
+      // Shortlist
       try {
         const { shortlist } = await api.get("/shortlist");
         renderShortlist(shortlist.slice(0, 3));
-      } catch { /* silently skip if none */ }
+      } catch { /* silently skip */ }
 
-      // Load pending feedback awaiting approval
+      // Pending feedback
       try {
         const { pending } = await api.get("/feedback/pending");
         if (pending.length > 0) renderPendingFeedback(pending);
       } catch { /* silently skip */ }
+
+      // Activity — no endpoint yet
+      document.getElementById("activity-empty").hidden = false;
     }
 
-    // Profile completion: check which key fields are missing
     function checkProfileCompletion(member) {
       const required = {
-        role:       "Your role",
-        bio:        "A short bio",
-        location:   "Your location",
-        skills:     "At least one skill",
-        rate_min:   "Your day rate",
+        role:                "Your role",
+        bio:                 "A short bio",
+        location:            "Your location",
+        skills:              "At least one skill",
+        rate_min:            "Your day rate",
         availability_status: "Your availability",
       };
-
       const missing = Object.entries(required)
         .filter(([key]) => {
           const val = member[key];
@@ -196,7 +279,6 @@
         })
         .map(([, label]) => label);
 
-      // Show the prompt only if more than 20% is missing (i.e. < 80% complete)
       const pct = (Object.keys(required).length - missing.length) / Object.keys(required).length;
       if (pct < 0.8) {
         document.getElementById("completion-missing").textContent =
@@ -206,67 +288,98 @@
     }
 
     function renderMyNeeds(needs) {
-      const list = document.getElementById("my-needs-list");
-      if (needs.length === 0) {
-        document.getElementById("my-needs-empty").hidden = false;
-        return;
-      }
+      const list  = document.getElementById("my-needs-list");
+      const empty = document.getElementById("my-needs-empty");
+      if (needs.length === 0) { empty.hidden = false; return; }
+
       list.innerHTML = needs.map((n) => `
-        <a href="/need.html?id=${encodeURIComponent(n.id)}" class="need-row">
-          <div class="need-row__title">${escHtml(n.skill_title)}</div>
-          <div class="need-row__meta text-muted">
-            ${n.status} · ${n.collaboration_type || ""} ·
-            Posted ${new Date(n.created_at).toLocaleDateString("en-GB")}
+        <div class="need-card">
+          <div class="need-card__header">
+            <h3 class="need-card__title">${escHtml(n.skill_title)}</h3>
+            ${n.match_count > 0
+              ? `<span class="need-card__badge">${n.match_count} match${n.match_count !== 1 ? "es" : ""}</span>`
+              : `<span class="need-card__badge">${escHtml(n.status || "Open")}</span>`
+            }
           </div>
-        </a>
+          ${n.collaboration_type
+            ? `<p class="need-card__meta">${escHtml(n.collaboration_type)}</p>`
+            : ""}
+          ${n.description
+            ? `<p class="need-card__body">${escHtml(n.description)}</p>`
+            : ""}
+          <a href="/need.html?id=${encodeURIComponent(n.id)}" class="need-card__action">
+            ${n.match_count > 0 ? "Review applications" : "Manage posting"} →
+          </a>
+        </div>
       `).join("");
     }
 
     function renderMatchedNeeds(needs) {
-      const list = document.getElementById("matched-needs-list");
-      if (needs.length === 0) {
-        document.getElementById("matched-needs-empty").hidden = false;
-        return;
-      }
-      list.innerHTML = needs.map((n) => `
-        <a href="/need.html?id=${encodeURIComponent(n.id)}" class="need-row">
-          <div class="need-row__title">${escHtml(n.skill_title)}</div>
-          <div class="need-row__meta text-muted">
-            ${n.poster ? escHtml(`${n.poster.first_name} ${n.poster.last_name}`) : ""}
-            · ${n.start_date_label || ""} · ${n.commitment_label || ""}
+      const list  = document.getElementById("matched-needs-list");
+      const empty = document.getElementById("matched-needs-empty");
+      if (needs.length === 0) { empty.hidden = false; return; }
+
+      list.innerHTML = needs.slice(0, 5).map((n) => `
+        <div class="need-card">
+          <div class="need-card__header">
+            <h3 class="need-card__title">${escHtml(n.skill_title)}</h3>
+            ${n.start_date_label
+              ? `<span class="need-card__badge">${escHtml(n.start_date_label)}</span>`
+              : ""}
           </div>
-        </a>
+          ${n.poster
+            ? `<p class="need-card__meta">${escHtml(`${n.poster.first_name} ${n.poster.last_name}`)}</p>`
+            : ""}
+          ${n.description
+            ? `<p class="need-card__body">${escHtml(n.description)}</p>`
+            : ""}
+          <a href="/need.html?id=${encodeURIComponent(n.id)}" class="need-card__action">View need →</a>
+        </div>
       `).join("");
     }
 
     function renderMessages(threads) {
       const list  = document.getElementById("messages-list");
       const empty = document.getElementById("messages-empty");
-      if (threads.length === 0) { empty.hidden = false; return; }
+      if (!threads || threads.length === 0) { empty.hidden = false; return; }
+
       list.innerHTML = threads.map((t) => `
-        <div class="message-row">
-          <span class="message-row__name">
-            ${escHtml(`${t.partner.first_name} ${t.partner.last_name}`)}
-          </span>
-          ${t.unread > 0
-            ? `<span class="message-row__badge">${t.unread}</span>`
-            : ""}
-        </div>
+        <a href="/messages.html?thread=${encodeURIComponent(t.id || "")}" class="message-row">
+          <div class="message-row__top">
+            <span class="message-row__name">
+              ${escHtml(`${t.partner.first_name} ${t.partner.last_name}`)}
+            </span>
+            <span class="message-row__time">${relativeTime(t.updated_at)}</span>
+          </div>
+          <p class="message-row__preview">
+            ${escHtml(t.preview || t.last_message || "")}
+          </p>
+          ${t.unread > 0 ? `<span class="message-row__badge">${t.unread}</span>` : ""}
+        </a>
       `).join("");
     }
 
     function renderShortlist(items) {
       const list  = document.getElementById("shortlist-list");
       const empty = document.getElementById("shortlist-empty");
-      if (items.length === 0) { empty.hidden = false; return; }
-      list.innerHTML = items.map((item) => `
-        <a href="/members/${item.saved_member.username}.html" class="shortlist-row">
-          <div class="avatar avatar--sm">
-            ${item.saved_member.first_name[0]}${item.saved_member.last_name[0]}
-          </div>
-          <span>${escHtml(`${item.saved_member.first_name} ${item.saved_member.last_name}`)}</span>
-        </a>
-      `).join("");
+      if (!items || items.length === 0) { empty.hidden = false; return; }
+
+      list.innerHTML = items.map((item) => {
+        const m = item.saved_member;
+        return `
+          <a href="/members/${escHtml(m.username)}.html" class="shortlist-row">
+            <div class="avatar avatar--sm">${m.first_name[0]}${m.last_name[0]}</div>
+            <div class="shortlist-row__meta">
+              <span class="shortlist-row__name">
+                ${escHtml(`${m.first_name} ${m.last_name}`)}
+              </span>
+              ${m.role
+                ? `<span class="shortlist-row__role">${escHtml(m.role)}</span>`
+                : ""}
+            </div>
+          </a>
+        `;
+      }).join("");
     }
 
     function renderPendingFeedback(items) {
@@ -281,12 +394,8 @@
           </div>
           <p class="feedback-pending-item__body">${escHtml(f.body)}</p>
           <div class="feedback-pending-item__actions">
-            <button class="btn btn--primary btn--sm" data-id="${f.id}" data-action="approve">
-              Approve
-            </button>
-            <button class="btn btn--secondary btn--sm" data-id="${f.id}" data-action="decline">
-              Decline
-            </button>
+            <button class="btn btn--primary btn--sm" data-id="${f.id}" data-action="approve">Approve</button>
+            <button class="btn btn--secondary btn--sm" data-id="${f.id}" data-action="decline">Decline</button>
           </div>
         </div>
       `).join("");
@@ -296,14 +405,11 @@
       list.addEventListener("click", async (e) => {
         const btn = e.target.closest("[data-action]");
         if (!btn) return;
-
         const { id, action } = btn.dataset;
         btn.disabled = true;
-
         try {
           await api.put(`/feedback/${id}/${action}`);
-          const item = document.getElementById(`feedback-item-${id}`);
-          item.remove();
+          document.getElementById(`feedback-item-${id}`).remove();
           if (!list.querySelector(".feedback-pending-item")) panel.hidden = true;
         } catch (err) {
           console.error("Feedback action failed:", err.message);
@@ -312,9 +418,20 @@
       });
     }
 
-    // Escape HTML to prevent XSS when rendering user-supplied strings
+    function relativeTime(iso) {
+      if (!iso) return "";
+      const diff = Date.now() - new Date(iso).getTime();
+      const m = Math.floor(diff / 60000);
+      if (m < 1)  return "now";
+      if (m < 60) return `${m}m ago`;
+      const h = Math.floor(m / 60);
+      if (h < 24) return `${h}h ago`;
+      return `${Math.floor(h / 24)}d ago`;
+    }
+
     function escHtml(str) {
-      return str
+      if (!str) return "";
+      return String(str)
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
@@ -323,14 +440,6 @@
 
     init();
   </script>
-
-  <footer class="site-footer">
-    <span>© 2026 FelloWorks</span>
-    <span class="site-footer__links">
-      <a href="/terms.html">Terms</a>
-      <a href="/privacy.html">Privacy</a>
-    </span>
-  </footer>
 
   <script type="module" src="js/nav.js"></script>
 </body>
