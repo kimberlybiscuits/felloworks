@@ -16,7 +16,7 @@ router.get("/", requireAuth, async (req, res) => {
   let query = supabaseAdmin
     .from("members")
     .select(
-      "id, username, first_name, last_name, role, location, languages, skills, rate_min, rate_max, availability_status, availability_date"
+      "id, username, first_name, last_name, role, location, languages, skills, rate_min, rate_max, availability_status, availability_date, avatar_url"
     );
 
   // Keyword search across name and role

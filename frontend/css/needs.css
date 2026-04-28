@@ -206,12 +206,12 @@ body {
 .needs-list {
   display: flex;
   flex-direction: column;
+  gap: var(--space-3);
 }
 
 .need-card {
   background-color: var(--bg-surface);
   border: 1px solid var(--rule-solid);
-  border-top: none;
   padding: var(--space-5) var(--space-6);
   display: flex;
   flex-direction: column;
@@ -219,10 +219,6 @@ body {
   text-decoration: none;
   color: inherit;
   transition: border-color 0.15s;
-}
-
-.need-card:first-child {
-  border-top: 1px solid var(--rule-solid);
 }
 
 .need-card:hover {
