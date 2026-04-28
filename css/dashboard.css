@@ -134,6 +134,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  min-width: 0;
 }
 
 /* Message rows */
@@ -161,12 +162,17 @@ body {
   align-items: baseline;
   justify-content: space-between;
   gap: var(--space-2);
+  min-width: 0;
 }
 
 .message-row__name {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .message-row__time {
@@ -225,6 +231,9 @@ body {
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--text-primary);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .shortlist-row__role {
@@ -390,13 +399,14 @@ body {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  min-width: 0;
 }
 
 .activity-item {
   display: flex;
   align-items: flex-start;
   gap: var(--space-3);
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-4);
   border-bottom: 1px solid var(--rule-solid);
 }
 
