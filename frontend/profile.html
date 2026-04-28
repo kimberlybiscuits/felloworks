@@ -186,6 +186,18 @@
           <button type="button" class="pill pill--skill" data-skill="Frontend development">Frontend development</button>
           <button type="button" class="pill pill--skill" data-skill="No-code / Webflow">No-code / Webflow</button>
           <button type="button" class="pill pill--skill" data-skill="Web development">Web development</button>
+          <!-- Custom skills added by JS appear here -->
+          <div class="skill-add-row" id="skill-add-row">
+            <input
+              type="text"
+              id="skill-other-input"
+              class="form-input skill-other-input"
+              placeholder="Add your own skill…"
+              autocomplete="off"
+              maxlength="60"
+            />
+            <button type="button" class="btn btn--sm btn--secondary" id="skill-other-add">Add</button>
+          </div>
         </div>
       </section>
 
@@ -203,6 +215,18 @@
           <label class="filter-option"><input type="checkbox" name="language" value="Portuguese" /> Portuguese</label>
           <label class="filter-option"><input type="checkbox" name="language" value="Swedish" /> Swedish</label>
         </div>
+        <div class="skill-add-row" id="lang-add-row" style="margin-top:var(--space-4);">
+          <input
+            type="text"
+            id="lang-other-input"
+            class="form-input skill-other-input"
+            placeholder="Add another language…"
+            autocomplete="off"
+            maxlength="40"
+          />
+          <button type="button" class="btn btn--sm btn--secondary" id="lang-other-add">Add</button>
+        </div>
+        <div id="custom-language-chips" class="skill-chips" style="margin-top:var(--space-3);"></div>
       </section>
 
       <!-- ── Availability ───────────────────────────────────────────── -->
@@ -506,9 +530,81 @@
     // ── Skill chips ────────────────────────────────────────────────
 
     document.querySelectorAll(".pill--skill").forEach((chip) => {
+      chip.addEventListener("click", () => chip.classList.toggle("selected"));
+    });
+
+    // Add custom skill
+    function addCustomSkill(value) {
+      const val = value.trim();
+      if (!val) return;
+      // Don't duplicate
+      const exists = [...document.querySelectorAll(".pill--skill")]
+        .some((c) => c.dataset.skill.toLowerCase() === val.toLowerCase());
+      if (exists) {
+        // Just select existing
+        const existing = [...document.querySelectorAll(".pill--skill")]
+          .find((c) => c.dataset.skill.toLowerCase() === val.toLowerCase());
+        existing?.classList.add("selected");
+        return;
+      }
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "pill pill--skill selected";
+      chip.dataset.skill = val;
+      chip.textContent = val;
+      chip.addEventListener("click", () => chip.classList.toggle("selected"));
+      // Insert before the add-row
+      document.getElementById("skill-add-row").insertAdjacentElement("beforebegin", chip);
+    }
+
+    document.getElementById("skill-other-add").addEventListener("click", () => {
+      const input = document.getElementById("skill-other-input");
+      addCustomSkill(input.value);
+      input.value = "";
+    });
+
+    document.getElementById("skill-other-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addCustomSkill(e.target.value);
+        e.target.value = "";
+      }
+    });
+
+    // Add custom language
+    const customLangs = new Set();
+
+    function addCustomLanguage(value) {
+      const val = value.trim();
+      if (!val || customLangs.has(val.toLowerCase())) return;
+      // Check if it already exists as a checkbox
+      const existing = document.querySelector(`input[name="language"][value="${val}"]`);
+      if (existing) { existing.checked = true; return; }
+      customLangs.add(val.toLowerCase());
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "pill pill--skill selected";
+      chip.dataset.lang = val;
+      chip.textContent = `${val} ×`;
       chip.addEventListener("click", () => {
-        chip.classList.toggle("selected");
+        customLangs.delete(val.toLowerCase());
+        chip.remove();
       });
+      document.getElementById("custom-language-chips").appendChild(chip);
+    }
+
+    document.getElementById("lang-other-add").addEventListener("click", () => {
+      const input = document.getElementById("lang-other-input");
+      addCustomLanguage(input.value);
+      input.value = "";
+    });
+
+    document.getElementById("lang-other-input").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addCustomLanguage(e.target.value);
+        e.target.value = "";
+      }
     });
 
     // ── Portfolio blocks ───────────────────────────────────────────
@@ -596,9 +692,11 @@
       const skills = [...document.querySelectorAll(".pill--skill.selected")]
         .map((c) => c.dataset.skill);
 
-      // Gather selected languages
-      const languages = [...document.querySelectorAll("input[name='language']:checked")]
-        .map((c) => c.value);
+      // Gather selected languages (checkboxes + custom chips)
+      const languages = [
+        ...[...document.querySelectorAll("input[name='language']:checked")].map((c) => c.value),
+        ...[...document.querySelectorAll("#custom-language-chips .pill--skill")].map((c) => c.dataset.lang),
+      ];
 
       // Availability
       const availStatus = document.querySelector("input[name='availability_status']:checked")?.value;

@@ -53,9 +53,10 @@ router.get("/", requireAuth, async (req, res) => {
       .single();
 
     const skills = member?.skills || [];
-    if (skills.length > 0) {
-      query = query.overlaps("skill_tags", skills);
+    if (skills.length === 0) {
+      return res.json({ needs: [] });
     }
+    query = query.overlaps("skill_tags", skills);
   }
 
   const { data, error } = await query;

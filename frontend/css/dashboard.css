@@ -88,6 +88,8 @@ body {
   border: 1px solid var(--rule-solid);
   display: flex;
   flex-direction: column;
+  min-width: 0; /* prevent grid blowout */
+  overflow: hidden;
 }
 
 .panel-header {
