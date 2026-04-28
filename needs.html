@@ -54,35 +54,64 @@
 
       <!-- Filter sidebar -->
       <aside class="needs-sidebar">
-        <fieldset class="filter-group">
-          <legend class="filter-group__label">Skill</legend>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Brand design" /> Brand design</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="UX / product design" /> UX / product design</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Illustration" /> Illustration</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Motion design" /> Motion design</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="3D / CGI" /> 3D / CGI</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Photography" /> Photography</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Video production" /> Video production</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Copywriting" /> Copywriting</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Content writing" /> Content writing</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Content strategy" /> Content strategy</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Social media" /> Social media</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="SEO" /> SEO</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Web development" /> Web development</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="App development" /> App development</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="No-code / low-code" /> No-code / low-code</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Data & analytics" /> Data &amp; analytics</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="AI / machine learning" /> AI / machine learning</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Strategy & consulting" /> Strategy &amp; consulting</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Project management" /> Project management</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="PR & communications" /> PR &amp; communications</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Community & events" /> Community &amp; events</label>
-        </fieldset>
+
+        <div class="filter-header">
+          <span class="filter-group__label" style="padding: var(--space-5) var(--space-5) 0; display:block;">Skills</span>
+          <button class="filter-toggle" id="filter-toggle" aria-expanded="false" aria-controls="filter-body">
+            <span>Filter</span>
+            <svg class="filter-toggle__chevron" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="square"/>
+            </svg>
+          </button>
+        </div>
+
+        <div class="filter-body" id="filter-body">
+          <div class="filter-search">
+            <input
+              type="search"
+              id="skill-search"
+              class="filter-search__input"
+              placeholder="Search skills…"
+              autocomplete="off"
+            />
+          </div>
+          <div id="skill-checkboxes" class="filter-checkboxes">
+            <label class="filter-option"><input type="checkbox" name="skill" value="Brand design" /> Brand design</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="UX / product design" /> UX / product design</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Illustration" /> Illustration</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Motion design" /> Motion design</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="3D / CGI" /> 3D / CGI</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Photography" /> Photography</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Video production" /> Video production</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Copywriting" /> Copywriting</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Content writing" /> Content writing</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Content strategy" /> Content strategy</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Social media" /> Social media</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="SEO" /> SEO</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Web development" /> Web development</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="App development" /> App development</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="No-code / low-code" /> No-code / low-code</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Data & analytics" /> Data &amp; analytics</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="AI / machine learning" /> AI / machine learning</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Strategy & consulting" /> Strategy &amp; consulting</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Project management" /> Project management</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="PR & communications" /> PR &amp; communications</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Community & events" /> Community &amp; events</label>
+          </div>
+          <div class="filter-no-results" id="filter-no-results" hidden>No matching skills.</div>
+          <button class="filter-clear" id="filter-clear" hidden>Clear filters</button>
+        </div>
+
       </aside>
 
       <!-- Results -->
       <div class="needs-results">
-        <div id="needs-list" class="needs-list"></div>
+        <div id="needs-loading" class="needs-skeleton">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
+        <div id="needs-list" class="needs-list" hidden></div>
         <div id="needs-empty" class="needs-empty" hidden>
           <p>No needs posted yet. Be the first.</p>
           <a href="/needs-new.html" class="btn btn--primary">Post a need</a>
@@ -146,15 +175,51 @@
       renderAvatar(document.getElementById("nav-avatar"), member);
     } catch { /* silently skip */ }
 
+    // Mobile filter toggle (button hidden on desktop via CSS; class controls visibility)
+    const filterToggle = document.getElementById("filter-toggle");
+    const filterBody   = document.getElementById("filter-body");
+    filterToggle.addEventListener("click", () => {
+      const nowOpen = filterBody.classList.toggle("is-open");
+      filterToggle.setAttribute("aria-expanded", String(nowOpen));
+    });
+
+    // Skill search — filters the checkbox list in real time
+    const skillSearch   = document.getElementById("skill-search");
+    const noResults     = document.getElementById("filter-no-results");
+    skillSearch.addEventListener("input", () => {
+      const q = skillSearch.value.toLowerCase();
+      let visible = 0;
+      document.querySelectorAll("#skill-checkboxes .filter-option").forEach((label) => {
+        const text    = label.textContent.toLowerCase();
+        const matches = !q || text.includes(q);
+        label.hidden  = !matches;
+        if (matches) visible++;
+      });
+      noResults.hidden = visible > 0;
+    });
+
     let allNeeds = [];
     let selectedSkills = new Set();
+
+    // Clear filters button
+    document.getElementById("filter-clear").addEventListener("click", () => {
+      selectedSkills.clear();
+      document.querySelectorAll("input[name=skill]").forEach((cb) => cb.checked = false);
+      skillSearch.value = "";
+      skillSearch.dispatchEvent(new Event("input"));
+      document.getElementById("filter-clear").hidden = true;
+      render();
+    });
 
     async function init() {
       try {
         const { needs } = await api.get("/needs?all=true");
         allNeeds = needs;
+        document.getElementById("needs-loading").hidden = true;
+        document.getElementById("needs-list").hidden = false;
         render();
       } catch {
+        document.getElementById("needs-loading").hidden = true;
         document.getElementById("needs-empty").hidden = false;
       }
 
@@ -162,6 +227,7 @@
         cb.addEventListener("change", () => {
           if (cb.checked) selectedSkills.add(cb.value);
           else selectedSkills.delete(cb.value);
+          document.getElementById("filter-clear").hidden = selectedSkills.size === 0;
           render();
         });
       });

@@ -83,18 +83,10 @@ body {
   background: var(--bg-surface);
 }
 
-.filter-group {
-  border: none;
-  border-bottom: 1px solid var(--rule-solid);
-  padding: 0 var(--space-5) var(--space-5);
-  margin: 0;
+.filter-header {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-}
-
-.filter-group:last-child {
-  border-bottom: none;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .filter-group__label {
@@ -105,8 +97,72 @@ body {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
-  padding-top: var(--space-6);
-  margin-bottom: var(--space-3);
+}
+
+.filter-body {
+  border-top: 1px solid var(--rule-solid);
+}
+
+.filter-search {
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--rule-solid);
+}
+
+.filter-search__input {
+  width: 100%;
+  background: var(--bg-primary);
+  border: 1px solid var(--rule-solid);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.filter-search__input:focus {
+  border-color: var(--accent);
+}
+
+.filter-search__input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.filter-checkboxes {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-height: 360px;
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-5);
+}
+
+.filter-no-results {
+  padding: var(--space-3) var(--space-5);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.filter-clear {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--rule-solid);
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--accent);
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.15s;
+}
+
+.filter-clear:hover {
+  opacity: 0.7;
 }
 
 .filter-option {
@@ -118,6 +174,7 @@ body {
   cursor: pointer;
   line-height: 1.4;
   transition: color 0.12s;
+  padding: var(--space-2) 0;
 }
 
 .filter-option:hover {
@@ -240,6 +297,41 @@ body {
 }
 
 /* -----------------------------------------------------------------------
+   Loading skeleton
+   ----------------------------------------------------------------------- */
+
+.needs-skeleton {
+  display: flex;
+  flex-direction: column;
+}
+
+.skeleton-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--rule-solid);
+  border-top: none;
+  height: 110px;
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-card:first-child {
+  border-top: 1px solid var(--rule-solid);
+}
+
+.skeleton-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.04) 50%, transparent 100%);
+  animation: skeleton-sweep 1.4s ease-in-out infinite;
+}
+
+@keyframes skeleton-sweep {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* -----------------------------------------------------------------------
    Empty state
    ----------------------------------------------------------------------- */
 
@@ -258,6 +350,14 @@ body {
 }
 
 /* -----------------------------------------------------------------------
+   Filter toggle — hidden on desktop, shown on mobile
+   ----------------------------------------------------------------------- */
+
+.filter-toggle {
+  display: none;
+}
+
+/* -----------------------------------------------------------------------
    Mobile
    ----------------------------------------------------------------------- */
 
@@ -268,6 +368,42 @@ body {
 
   .needs-sidebar {
     position: static;
+  }
+
+  .filter-toggle {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    background: none;
+    border: none;
+    padding: var(--space-4) var(--space-5);
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    cursor: pointer;
+    margin-left: auto;
+  }
+
+  .filter-toggle__chevron {
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+    color: var(--text-secondary);
+  }
+
+  .filter-toggle[aria-expanded="true"] .filter-toggle__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* On mobile, filter body is hidden until toggled */
+  .filter-body {
+    display: none;
+  }
+
+  .filter-body.is-open {
+    display: block;
   }
 }
 
