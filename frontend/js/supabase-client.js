@@ -51,10 +51,19 @@ export async function redirectIfLoggedIn() {
   if (session) window.location.href = "/dashboard.html";
 }
 
-// Redirect to login if not logged in — call on protected pages
+// Redirect to login if not logged in — call on protected pages.
+// Tries a token refresh before giving up, so a briefly-expired access token
+// doesn't cause a spurious logout while the refresh token is still valid.
 export async function requireSession() {
-  const session = await getSession();
-  if (!session) window.location.href = "/invite.html";
+  let session = await getSession();
+
+  if (!session) {
+    // Access token may be stale — attempt a silent refresh before redirecting
+    const { data } = await supabase.auth.refreshSession();
+    session = data.session;
+  }
+
+  if (!session) window.location.href = "/login.html";
   return session;
 }
 
