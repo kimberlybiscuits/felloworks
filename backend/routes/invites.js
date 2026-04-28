@@ -85,7 +85,7 @@ router.post("/", requireAuth, async (req, res) => {
     : "A FelloWorks member";
 
   try {
-    await sendInviteEmail({ inviterName, inviteeEmail, token });
+    await sendInviteEmail({ inviterName, inviteeEmail: invitee_email, token });
   } catch (emailErr) {
     // Log the failure but don't block the response — the invite record exists
     // and the link can be shared manually if needed
