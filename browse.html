@@ -71,30 +71,45 @@
       <!-- Filter sidebar -->
       <aside class="browse-sidebar">
 
-        <fieldset class="filter-group">
-          <legend class="filter-group__label">Skill</legend>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Brand design" /> Brand design</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="UX / product design" /> UX / product design</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Content design" /> Content design</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Editorial design" /> Editorial design</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Motion design" /> Motion design</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Illustration" /> Illustration</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Art direction" /> Art direction</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Photography" /> Photography</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Video production" /> Video production</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Copywriting" /> Copywriting</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Content writing" /> Content writing</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Content strategy" /> Content strategy</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Communications strategy" /> Communications strategy</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Campaign planning" /> Campaign planning</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Social media" /> Social media</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="PR & media relations" /> PR & media relations</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Research & insights" /> Research & insights</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Translation & localisation" /> Translation & localisation</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Frontend development" /> Frontend development</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="No-code / Webflow" /> No-code / Webflow</label>
-          <label class="filter-option"><input type="checkbox" name="skill" value="Web development" /> Web development</label>
-        </fieldset>
+        <!-- Skill filter — searchable -->
+        <div class="filter-group filter-group--skill">
+          <div class="filter-header-row">
+            <span class="filter-group__label">Skill</span>
+          </div>
+          <div class="filter-search">
+            <input
+              type="search"
+              id="browse-skill-search"
+              class="filter-search__input"
+              placeholder="Search skills…"
+              autocomplete="off"
+            />
+          </div>
+          <div id="browse-skill-checkboxes" class="filter-checkboxes">
+            <label class="filter-option"><input type="checkbox" name="skill" value="Brand design" /> Brand design</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="UX / product design" /> UX / product design</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Content design" /> Content design</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Editorial design" /> Editorial design</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Motion design" /> Motion design</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Illustration" /> Illustration</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Art direction" /> Art direction</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Photography" /> Photography</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Video production" /> Video production</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Copywriting" /> Copywriting</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Content writing" /> Content writing</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Content strategy" /> Content strategy</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Communications strategy" /> Communications strategy</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Campaign planning" /> Campaign planning</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Social media" /> Social media</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="PR & media relations" /> PR &amp; media relations</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Research & insights" /> Research &amp; insights</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Translation & localisation" /> Translation &amp; localisation</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Frontend development" /> Frontend development</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="No-code / Webflow" /> No-code / Webflow</label>
+            <label class="filter-option"><input type="checkbox" name="skill" value="Web development" /> Web development</label>
+          </div>
+          <div class="filter-no-results" id="browse-skill-no-results" hidden>No matching skills.</div>
+        </div>
 
         <fieldset class="filter-group">
           <legend class="filter-group__label">Availability</legend>
@@ -189,6 +204,20 @@
       const { member } = await api.get("/members/me");
       renderAvatar(document.getElementById("nav-avatar"), member);
     } catch { /* silently skip */ }
+
+    // Skill search — filter the checkbox list in real time
+    const browseSkillSearch = document.getElementById("browse-skill-search");
+    const browseSkillNoResults = document.getElementById("browse-skill-no-results");
+    browseSkillSearch.addEventListener("input", () => {
+      const q = browseSkillSearch.value.toLowerCase();
+      let visible = 0;
+      document.querySelectorAll("#browse-skill-checkboxes .filter-option").forEach((label) => {
+        const matches = !q || label.textContent.toLowerCase().includes(q);
+        label.hidden  = !matches;
+        if (matches) visible++;
+      });
+      browseSkillNoResults.hidden = visible > 0;
+    });
 
     // Track the current filter state
     const filters = { q: "", skill: [], availability: [], rate_max: 2000, language: [], sort: "" };

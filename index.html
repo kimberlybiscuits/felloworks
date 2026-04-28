@@ -44,9 +44,6 @@
           Find the collaborator<br>
           <em>you'd trust with your client.</em>
         </h1>
-        <div class="hero__ticker" aria-hidden="true">
-          <span class="hero__ticker-word" id="hero-ticker"></span>
-        </div>
         <p class="hero__sub">FelloWorks is a peer-to-peer network built on trust and shared accountability. It's where the right people find each other.</p>
         <div class="hero__cta">
           <a href="#invite" class="btn-primary" style="padding: 20px 48px;">Request an Invite</a>
@@ -87,7 +84,7 @@
         <div class="network__left reveal">
           <p class="text-label">Connecting Networks</p>
           <h2 class="text-headline">Trust through connection.</h2>
-          <p class="network__body">We all have a circle of people we trust implicitly. FelloWorks is the place that connects these trusted networks together. When your circle meets mine, the collaboration potential expands exponentially.</p>
+          <p class="network__body">We all have a circle of people we trust implicitly. FelloWorks is the place that connects these trusted networks together. When your circle meets mine, the collaboration potential expands exponentially. We are more than the sum of our parts.</p>
         </div>
         <div class="dot-grid reveal">
           <!-- Row 1 -->
@@ -269,7 +266,7 @@
       <h2 class="text-display invite__heading">Ready to find your next <em>fello?</em></h2>
       <p class="text-body-lg invite__body">Request to join the beta. We'll review your application and be in touch.</p>
 
-      <form action="https://works.us4.list-manage.com/subscribe/post?u=3573c23d86dbe9584c22ce999&id=37451aeee2&f_id=00824ee3f0" method="post" target="_blank">
+      <form id="invite-form" action="https://works.us4.list-manage.com/subscribe/post?u=3573c23d86dbe9584c22ce999&id=37451aeee2&f_id=00824ee3f0" method="post">
 
         <!-- Mailchimp honeypot — do not remove -->
         <div aria-hidden="true" style="position:absolute;left:-5000px;">
@@ -281,8 +278,8 @@
         </div>
 
         <div class="form-field">
-          <input class="form-input" type="url" name="WEBSITE" placeholder="Your website or portfolio URL">
-          <span class="form-helper">Helps us understand your work</span>
+          <input class="form-input" type="text" id="website-url" name="WEBSITE" placeholder="Your website or portfolio URL" autocomplete="url">
+          <span class="form-helper">Helps us understand your work. e.g. kimgillick.com</span>
         </div>
 
         <button type="submit" class="btn-primary" style="padding: 20px 48px;">Request an Invite</button>
@@ -314,6 +311,19 @@
        JS
        =================================================================== -->
   <script>
+    // Invite form — normalise URL and redirect to /thankyou after submit
+    const inviteForm = document.getElementById('invite-form');
+    const websiteInput = document.getElementById('website-url');
+
+    inviteForm.addEventListener('submit', function() {
+      const val = websiteInput.value.trim();
+      if (val && !/^https?:\/\//i.test(val)) {
+        websiteInput.value = 'https://' + val;
+      }
+      // Let the form submit to Mailchimp normally; Mailchimp will redirect
+      // to the URL configured in Audience → Settings → Form settings → Confirmation page
+    });
+
     // Scroll-triggered reveal
     const reveals = document.querySelectorAll('.reveal');
     const observer = new IntersectionObserver((entries) => {
@@ -332,29 +342,6 @@
       nav.classList.toggle('scrolled', window.scrollY > 20);
     });
 
-    // Role ticker
-    const tickerRoles = [
-      "Brand designers.", "UX specialists.", "Copywriters.",
-      "Art directors.", "Content strategists.", "Motion designers.",
-      "Illustrators.", "Frontend developers.", "Communications leads.",
-      "Editorial designers.", "Research leads.", "Campaign planners.",
-    ];
-    const tickerEl = document.getElementById('hero-ticker');
-    let tickerIndex = 0;
-
-    function nextTick() {
-      tickerEl.classList.add('fade-out');
-      setTimeout(() => {
-        tickerIndex = (tickerIndex + 1) % tickerRoles.length;
-        tickerEl.textContent = tickerRoles[tickerIndex];
-        tickerEl.classList.remove('fade-out');
-        tickerEl.classList.add('fade-in');
-      }, 500);
-    }
-
-    tickerEl.textContent = tickerRoles[0];
-    tickerEl.classList.add('fade-in');
-    setInterval(nextTick, 2800);
   </script>
 
 </body>

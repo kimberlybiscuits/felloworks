@@ -308,6 +308,71 @@ body {
 }
 
 /* -----------------------------------------------------------------------
+   Skill search filter (shared classes from needs.css also used here)
+   ----------------------------------------------------------------------- */
+
+.filter-group--skill {
+  border: none;
+  border-bottom: 1px solid var(--rule-solid);
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group--skill:last-child {
+  border-bottom: none;
+}
+
+.filter-header-row {
+  display: flex;
+  align-items: center;
+  padding: var(--space-5) var(--space-5) 0;
+}
+
+.filter-checkboxes {
+  max-height: 280px;
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-5);
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-no-results {
+  padding: var(--space-2) var(--space-5) var(--space-3);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  opacity: 0.7;
+}
+
+.filter-search {
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--rule-solid);
+}
+
+.filter-search__input {
+  width: 100%;
+  background: var(--bg-primary);
+  border: 1px solid var(--rule-solid);
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.filter-search__input:focus {
+  border-color: var(--accent);
+}
+
+.filter-search__input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+/* -----------------------------------------------------------------------
    Mobile
    ----------------------------------------------------------------------- */
 

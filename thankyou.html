@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <title>Request received — FelloWorks</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/components.css">
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-primary);
+    }
+
+    .thankyou-nav {
+      padding: var(--space-6) var(--space-8);
+      border-bottom: 1px solid var(--rule-solid);
+    }
+
+    .thankyou-nav__wordmark {
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      color: var(--text-primary);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .thankyou-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-16) var(--space-6);
+    }
+
+    .thankyou-card {
+      max-width: 520px;
+      width: 100%;
+    }
+
+    .thankyou-eyebrow {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 0 0 var(--space-4);
+    }
+
+    .thankyou-heading {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 400;
+      color: var(--text-primary);
+      line-height: 1.15;
+      margin: 0 0 var(--space-6);
+      letter-spacing: -0.02em;
+    }
+
+    .thankyou-heading em {
+      font-style: italic;
+    }
+
+    .thankyou-body {
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      margin: 0 0 var(--space-8);
+    }
+
+    .thankyou-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      border: 1px solid var(--rule-solid);
+      margin-bottom: var(--space-8);
+    }
+
+    .thankyou-step {
+      display: flex;
+      gap: var(--space-5);
+      padding: var(--space-5) var(--space-6);
+      border-bottom: 1px solid var(--rule-solid);
+    }
+
+    .thankyou-step:last-child {
+      border-bottom: none;
+    }
+
+    .thankyou-step__num {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: var(--accent);
+      flex-shrink: 0;
+      width: 28px;
+      margin-top: 2px;
+    }
+
+    .thankyou-step__body {
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .thankyou-step__body strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .thankyou-back {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-bottom: 1px solid var(--rule-solid);
+      padding-bottom: 2px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .thankyou-back:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      text-decoration: none;
+    }
+
+    .public-footer {
+      border-top: 1px solid var(--rule-solid);
+      padding: var(--space-6) var(--space-8);
+    }
+
+    .public-footer__inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-4) var(--space-8);
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .public-footer__wordmark {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .public-footer__links {
+      display: flex;
+      gap: var(--space-5);
+      list-style: none;
+    }
+
+    .public-footer__links a {
+      font-size: 0.8125rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .public-footer__links a:hover {
+      color: var(--accent);
+    }
+
+    .public-footer__copy {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      opacity: 0.5;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="thankyou-nav">
+    <a href="/" class="thankyou-nav__wordmark">FelloWorks</a>
+  </nav>
+
+  <main class="thankyou-main">
+    <div class="thankyou-card">
+
+      <p class="thankyou-eyebrow">Request received</p>
+      <h1 class="thankyou-heading">You're on the list.<br><em>We'll be in touch.</em></h1>
+      <p class="thankyou-body">
+        FelloWorks is growing carefully. We review every request before sending an invite — here's what happens next.
+      </p>
+
+      <div class="thankyou-steps">
+        <div class="thankyou-step">
+          <span class="thankyou-step__num">01</span>
+          <p class="thankyou-step__body"><strong>We review your request.</strong> We look at your work and make sure the fit is right. This usually takes a few days.</p>
+        </div>
+        <div class="thankyou-step">
+          <span class="thankyou-step__num">02</span>
+          <p class="thankyou-step__body"><strong>You'll receive an invite by email.</strong> Once approved, we send a personalised invite link directly to the address you used to register.</p>
+        </div>
+        <div class="thankyou-step">
+          <span class="thankyou-step__num">03</span>
+          <p class="thankyou-step__body"><strong>Set up your profile.</strong> Your invite link takes you straight to the signup flow. The whole thing takes about five minutes.</p>
+        </div>
+      </div>
+
+      <a href="/" class="thankyou-back">← Back to fello.works</a>
+
+    </div>
+  </main>
+
+  <footer class="public-footer">
+    <div class="public-footer__inner">
+      <a href="/" class="public-footer__wordmark">FelloWorks</a>
+      <ul class="public-footer__links">
+        <li><a href="/privacy.html">Privacy Policy</a></li>
+        <li><a href="/terms.html">Terms of Service</a></li>
+      </ul>
+      <p class="public-footer__copy">© 2026 FelloWorks. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

@@ -8,6 +8,8 @@ body {
   background-color: var(--bg-primary);
   height: 100vh;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* -----------------------------------------------------------------------
@@ -15,8 +17,14 @@ body {
    ----------------------------------------------------------------------- */
 
 .messages-main {
-  height: calc(100vh - 57px); /* 57px = nav height */
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
+}
+
+.page-footer {
+  flex-shrink: 0;
+  overflow: auto;
 }
 
 .messages-layout {
@@ -260,11 +268,11 @@ body {
 .thread-compose {
   display: flex;
   gap: var(--space-3);
-  padding: var(--space-5) var(--space-6) var(--space-7);
+  padding: var(--space-5) var(--space-6) var(--space-8);
   background-color: var(--bg-surface);
   border-top: 1.5px solid var(--rule-solid);
   flex-shrink: 0;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .thread-compose__input {
@@ -272,12 +280,12 @@ body {
   min-height: 52px;
   max-height: 160px;
   resize: none;
-  font-size: 0.9375rem;
+  font-size: 1rem; /* must be ≥16px to prevent iOS auto-zoom */
 }
 
 .thread-compose__send {
   flex-shrink: 0;
-  align-self: flex-end;
+  align-self: center;
 }
 
 /* -----------------------------------------------------------------------
@@ -285,23 +293,38 @@ body {
    ----------------------------------------------------------------------- */
 
 @media (max-width: 640px) {
-  body { overflow: auto; }
+  body {
+    overflow: hidden;
+    height: 100dvh; /* use dvh on mobile to account for browser chrome */
+  }
 
-  .messages-main { height: auto; overflow: visible; }
+  .messages-main {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
 
   .messages-layout {
     grid-template-columns: 1fr;
-    height: auto;
+    grid-template-rows: auto 1fr;
+    height: 100%;
   }
 
   .thread-list {
     border-right: none;
     border-bottom: 1.5px solid var(--rule-solid);
-    overflow: visible;
-    max-height: 40vh;
+    overflow-y: auto;
+    max-height: 35vh;
+    flex-shrink: 0;
   }
 
   .thread-view {
-    height: 60vh;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  /* On mobile footer scrolls with page if viewport is tall enough */
+  .page-footer {
+    display: none;
   }
 }
