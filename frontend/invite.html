@@ -31,7 +31,8 @@
       </h1>
 
       <p class="invite-body">
-        FelloWorks is invite-only. Every member has been vouched for by someone already inside.
+        FelloWorks is an invite-only collaboration network for freelancers, consultants and fractional leaders.
+        Every member is vouched for by someone already inside.
         <span id="inviter-name-repeat"></span> thought you'd be a good fit.
       </p>
 
@@ -62,12 +63,23 @@
       </p>
     </div>
 
-    <!-- Shown when the invite is invalid or expired -->
+    <!-- Shown when the invite has expired -->
+    <div id="state-expired" class="invite-content" hidden>
+      <h1 class="invite-heading">This invitation has expired.</h1>
+      <p class="invite-body">
+        Invite links are valid for 7 days. You can request a new one below — we'll review it and send a fresh invite if everything looks good.
+      </p>
+      <a href="/#invite" class="btn btn--primary btn--full">Request a new invite</a>
+      <p class="invite-body" style="margin-top: var(--space-5); font-size: 0.875rem;">
+        Or ask the person who invited you to send a new link from their account.
+      </p>
+    </div>
+
+    <!-- Shown when the invite is invalid (bad/missing token) -->
     <div id="state-invalid" class="invite-content" hidden>
       <h1 class="invite-heading">This invitation isn't valid.</h1>
       <p class="invite-body">
-        It may have expired or the link may be incomplete.
-        Get in touch at <a href="mailto:hello@fello.works">hello@fello.works</a> and we'll sort it out.
+        The link may be incomplete or already used. Get in touch at <a href="mailto:hello@fello.works">hello@fello.works</a> and we'll sort it out.
       </p>
     </div>
 
@@ -84,6 +96,7 @@
       loading: document.getElementById("state-loading"),
       valid:   document.getElementById("state-valid"),
       used:    document.getElementById("state-used"),
+      expired: document.getElementById("state-expired"),
       invalid: document.getElementById("state-invalid"),
     };
 
@@ -131,6 +144,8 @@
       } catch (err) {
         if (err.message.includes("already been accepted")) {
           show("used");
+        } else if (err.message.includes("expired")) {
+          show("expired");
         } else {
           show("invalid");
         }

@@ -57,7 +57,7 @@ async function sendInviteEmail({ inviterName, inviteeEmail, token }) {
           ${inviterName} invited you to join FelloWorks.
         </h1>
         <p style="margin:0;font-size:15px;line-height:1.6;color:#6B6259;">
-          FelloWorks is an invite-only network for European freelancers and consultants.
+          FelloWorks is an invite-only collaboration network for freelancers, consultants and fractional leaders.
           Every member is vouched for by someone already inside.
           ${inviterName} thought you'd be a good fit.
         </p>
