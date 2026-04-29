@@ -28,6 +28,81 @@ body {
    Page header
    ----------------------------------------------------------------------- */
 
+/* -----------------------------------------------------------------------
+   Need context banner
+   ----------------------------------------------------------------------- */
+
+.need-context-banner {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding: var(--space-4) var(--space-6);
+  background: var(--bg-surface);
+  border: 1px solid var(--rule-solid);
+  border-left: 3px solid var(--accent);
+}
+
+.need-context-banner__label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.need-context-banner__title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  flex: 1;
+}
+
+.need-context-banner__back {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.need-context-banner__back:hover {
+  color: var(--accent);
+}
+
+/* -----------------------------------------------------------------------
+   Member card reach-out CTA (need context mode)
+   ----------------------------------------------------------------------- */
+
+.member-card__reach-out {
+  display: block;
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  margin-top: var(--space-3);
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.member-card__reach-out:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* -----------------------------------------------------------------------
+   Page header
+   ----------------------------------------------------------------------- */
+
 .browse-header {
   display: flex;
   flex-direction: column;

@@ -59,7 +59,7 @@
         </div>
       </div>
       <div class="profile-header__actions">
-        <button class="btn btn--primary" id="message-btn">Message this person</button>
+        <button class="btn btn--primary" id="message-btn" hidden>Message about a need</button>
         <button class="shortlist-toggle" id="shortlist-btn" aria-label="Add to shortlist">♡ Add to shortlist</button>
       </div>
     </header>
@@ -71,6 +71,18 @@
         <h2 class="profile-section__title">About</h2>
         <p id="profile-bio"></p>
         <div id="profile-links" class="profile-links"></div>
+      </section>
+
+      <!-- Skills -->
+      <section class="profile-section" id="skills-section" hidden>
+        <h2 class="profile-section__title">Skills</h2>
+        <div class="profile-pills" id="profile-skills"></div>
+      </section>
+
+      <!-- Languages -->
+      <section class="profile-section" id="languages-section" hidden>
+        <h2 class="profile-section__title">Languages</h2>
+        <div class="profile-pills" id="profile-languages"></div>
       </section>
 
       <!-- Invited by — visible to all members -->
@@ -102,17 +114,14 @@
 
   </main>
 
-  <!-- Message modal -->
-  <div id="message-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-heading">
+  <!-- Need-picker modal — opens when reaching out about a need -->
+  <div id="need-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="need-modal-heading">
     <div class="modal__backdrop"></div>
     <div class="modal__box">
-      <h2 id="modal-heading" class="modal__heading">Send a message</h2>
-      <div id="message-error" class="alert alert--error" hidden></div>
-      <textarea id="message-body" class="form-textarea" rows="5"
-                placeholder="Introduce yourself and explain what you're working on…"></textarea>
+      <h2 id="need-modal-heading" class="modal__heading">Which need are you reaching out about?</h2>
+      <div id="need-modal-list" class="need-modal-list"></div>
       <div class="modal__actions">
-        <button class="btn btn--primary" id="send-btn">Send</button>
-        <button class="btn btn--secondary" id="cancel-btn">Cancel</button>
+        <button class="btn btn--secondary" id="need-modal-cancel">Cancel</button>
       </div>
     </div>
   </div>
@@ -138,11 +147,16 @@
     });
     dropdown.addEventListener("click", (e) => e.stopPropagation());
 
-    // Populate nav avatar
-    try {
-      const { member: me } = await api.get("/members/me");
-      renderAvatar(document.getElementById("nav-avatar"), me);
-    } catch { /* silently skip */ }
+    // Populate nav avatar and load viewer's own active needs in parallel
+    let myNeeds = [];
+    await Promise.allSettled([
+      api.get("/members/me").then(({ member: me }) =>
+        renderAvatar(document.getElementById("nav-avatar"), me)
+      ),
+      api.get("/needs?mine=true").then(({ needs }) => {
+        myNeeds = (needs || []).filter(n => n.status === "open");
+      }),
+    ]);
 
     const params   = new URLSearchParams(window.location.search);
     const username = params.get("username");
@@ -163,7 +177,7 @@
       document.getElementById("profile-role").textContent     = member.role || "";
       document.getElementById("profile-bio").textContent      = member.bio || "";
 
-      // Availability + language pills
+      // Availability pill — stays in header
       const pillsEl = document.getElementById("profile-pills");
       if (member.availability_status === "now") {
         pillsEl.innerHTML += `<span class="pill pill--available-now">Available now</span>`;
@@ -171,12 +185,26 @@
         const date = new Date(member.availability_date).toLocaleDateString("en-GB", { day: "numeric", month: "long" });
         pillsEl.innerHTML += `<span class="pill pill--available-soon">Available from ${date}</span>`;
       }
-      (member.languages || []).forEach((l) => {
-        pillsEl.innerHTML += `<span class="pill">${escHtml(l)}</span>`;
-      });
-      (member.skills || []).forEach((s) => {
-        pillsEl.innerHTML += `<span class="pill pill--skill">${escHtml(s)}</span>`;
-      });
+
+      // Skills — dedicated section
+      const skills = (member.skills || []).filter(Boolean);
+      if (skills.length > 0) {
+        const skillsEl = document.getElementById("profile-skills");
+        skills.forEach((s) => {
+          skillsEl.innerHTML += `<span class="pill pill--skill">${escHtml(s)}</span>`;
+        });
+        document.getElementById("skills-section").hidden = false;
+      }
+
+      // Languages — dedicated section
+      const languages = (member.languages || []).filter(Boolean);
+      if (languages.length > 0) {
+        const langsEl = document.getElementById("profile-languages");
+        languages.forEach((l) => {
+          langsEl.innerHTML += `<span class="pill">${escHtml(l)}</span>`;
+        });
+        document.getElementById("languages-section").hidden = false;
+      }
 
       // Rate
       if (member.rate_min || member.rate_max) {
@@ -225,14 +253,17 @@
       }
 
       // Feedback — text only, no star ratings
+      const isOwnProfile = member.id === session.user.id;
+
       if (feedback.length === 0) {
         const firstName = member.first_name;
         document.getElementById("feedback-empty-body").textContent =
           `Feedback builds after completed projects. ${firstName} is a new member — their profile, portfolio, and the person who invited them are the place to start.`;
         document.getElementById("feedback-empty").hidden = false;
       } else {
-        document.getElementById("feedback-list").innerHTML = feedback.map((f) => `
-          <div class="feedback-entry">
+        const listEl = document.getElementById("feedback-list");
+        listEl.innerHTML = feedback.map((f) => `
+          <div class="feedback-entry" data-feedback-id="${f.id}">
             <div class="feedback-entry__header">
               <a href="/member.html?username=${encodeURIComponent(f.reviewer.username)}" class="feedback-entry__reviewer">
                 ${escHtml(`${f.reviewer.first_name} ${f.reviewer.last_name}`)}
@@ -241,6 +272,7 @@
               <span class="text-muted feedback-entry__date">
                 ${new Date(f.created_at).toLocaleDateString("en-GB", { month: "long", year: "numeric" })}
               </span>
+              ${isOwnProfile ? `<button class="feedback-remove-btn text-muted" data-id="${f.id}" aria-label="Remove feedback">Remove</button>` : ""}
             </div>
             <p class="feedback-entry__body">${escHtml(f.body)}</p>
             ${f.would_collaborate_again
@@ -249,50 +281,57 @@
             }
           </div>
         `).join("");
+
+        if (isOwnProfile) {
+          listEl.querySelectorAll(".feedback-remove-btn").forEach((btn) => {
+            btn.addEventListener("click", async () => {
+              if (!confirm("Remove this feedback from your profile?")) return;
+              try {
+                await api.delete(`/feedback/${btn.dataset.id}`);
+                btn.closest(".feedback-entry").remove();
+                if (!listEl.querySelector(".feedback-entry")) {
+                  document.getElementById("feedback-empty").hidden = false;
+                }
+              } catch (err) {
+                alert("Could not remove feedback. Please try again.");
+              }
+            });
+          });
+        }
       }
 
-      // Hide message button if viewing own profile
-      if (member.id === session.user.id) {
+      // Own profile: hide both actions. Others: show message btn only if viewer has active needs.
+      if (isOwnProfile) {
         document.getElementById("message-btn").hidden   = true;
         document.getElementById("shortlist-btn").hidden = true;
+      } else if (myNeeds.length > 0) {
+        document.getElementById("message-btn").hidden = false;
       }
     }
 
-    // Message modal
+    // Need-picker modal
     document.getElementById("message-btn").addEventListener("click", () => {
-      document.getElementById("message-modal").hidden = false;
+      const listEl = document.getElementById("need-modal-list");
+      listEl.innerHTML = myNeeds.map(n => `
+        <button class="need-modal-item" data-need-id="${n.id}">
+          <div class="need-modal-item__title">${escHtml(n.skill_title)}</div>
+          ${n.skill_tags?.length
+            ? `<div class="need-modal-item__tags">${n.skill_tags.slice(0, 4).map(t => escHtml(t)).join(' · ')}</div>`
+            : ""}
+        </button>
+      `).join("");
+      listEl.querySelectorAll(".need-modal-item").forEach(btn => {
+        btn.addEventListener("click", () => {
+          window.location.href = `/messages.html?with=${memberId}&need=${btn.dataset.needId}`;
+        });
+      });
+      document.getElementById("need-modal").hidden = false;
     });
-    document.getElementById("cancel-btn").addEventListener("click", () => {
-      document.getElementById("message-modal").hidden = true;
+    document.getElementById("need-modal-cancel").addEventListener("click", () => {
+      document.getElementById("need-modal").hidden = true;
     });
-    document.querySelector(".modal__backdrop").addEventListener("click", () => {
-      document.getElementById("message-modal").hidden = true;
-    });
-
-    document.getElementById("send-btn").addEventListener("click", async () => {
-      const body    = document.getElementById("message-body").value.trim();
-      const errEl   = document.getElementById("message-error");
-      const sendBtn = document.getElementById("send-btn");
-
-      if (!body) {
-        errEl.textContent = "Write something before sending.";
-        errEl.hidden = false;
-        return;
-      }
-
-      sendBtn.disabled    = true;
-      sendBtn.textContent = "Sending…";
-
-      try {
-        await api.post("/messages", { recipient_id: memberId, body });
-        document.getElementById("message-modal").hidden = true;
-        document.getElementById("message-body").value = "";
-      } catch (err) {
-        errEl.textContent = err.message;
-        errEl.hidden      = false;
-        sendBtn.disabled    = false;
-        sendBtn.textContent = "Send";
-      }
+    document.querySelector("#need-modal .modal__backdrop").addEventListener("click", () => {
+      document.getElementById("need-modal").hidden = true;
     });
 
     // Shortlist toggle
