@@ -143,4 +143,30 @@ async function sendFeedbackNotificationEmail({ reviewerName, recipientFirstName,
   return data;
 }
 
-module.exports = { sendInviteEmail, sendFeedbackNotificationEmail };
+// Notify founder of a new in-app feedback report
+async function sendFeedbackReportEmail({ memberName, type, message, page }) {
+  const body = `
+    <tr>
+      <td style="padding:32px 48px 16px;">
+        <p style="margin:0 0 8px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.15em;color:#9A8F84;">${type}</p>
+        <h1 style="margin:0 0 16px;font-size:24px;font-weight:400;color:#1A1A1A;line-height:1.2;">
+          New feedback from ${memberName}
+        </h1>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#6B6259;">${message.replace(/\n/g, "<br>")}</p>
+        <p style="margin:0;font-size:12px;color:#9A8F84;">Page: ${page}</p>
+      </td>
+    </tr>
+  `;
+
+  const { data, error } = await resend.emails.send({
+    from:    FROM,
+    to:      process.env.ADMIN_EMAIL || "hello@fello.works",
+    subject: `[${type}] Feedback from ${memberName}`,
+    html:    emailShell(body),
+  });
+
+  if (error) throw new Error(`Email send failed: ${error.message}`);
+  return data;
+}
+
+module.exports = { sendInviteEmail, sendFeedbackNotificationEmail, sendFeedbackReportEmail };
