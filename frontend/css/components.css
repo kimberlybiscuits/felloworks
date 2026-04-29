@@ -947,3 +947,136 @@
   padding-top: var(--space-6);
   border-top: 1px solid var(--rule-solid);
 }
+
+/* -----------------------------------------------------------------------
+   Feedback widget
+   ----------------------------------------------------------------------- */
+
+.fw-widget-trigger {
+  position: fixed;
+  bottom: var(--space-6);
+  right: var(--space-6);
+  z-index: 90;
+  background: var(--color-dark);
+  color: var(--text-on-dark);
+  border: none;
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+
+.fw-widget-trigger:hover {
+  opacity: 1;
+}
+
+.fw-widget-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: var(--space-6);
+  pointer-events: none;
+}
+
+.fw-widget-modal:not([hidden]) {
+  pointer-events: all;
+}
+
+.fw-widget-backdrop {
+  position: absolute;
+  inset: 0;
+}
+
+.fw-widget-box {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--rule-solid);
+  padding: var(--space-7);
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+.fw-widget-heading {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.fw-widget-sub {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.fw-widget-types {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.fw-widget-type {
+  background: transparent;
+  border: 1px solid var(--rule-solid);
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.fw-widget-type:hover,
+.fw-widget-type--active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.fw-widget-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--rule-solid);
+  background: var(--bg-primary);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.fw-widget-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.fw-widget-error {
+  font-size: 0.8125rem;
+  color: var(--accent);
+  margin: 0;
+}
+
+.fw-widget-success {
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.fw-widget-actions {
+  display: flex;
+  gap: var(--space-3);
+}
