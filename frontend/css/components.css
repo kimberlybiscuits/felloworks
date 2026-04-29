@@ -957,7 +957,7 @@
   bottom: var(--space-6);
   right: var(--space-6);
   z-index: 90;
-  background: var(--color-dark);
+  background: var(--bg-dark);
   color: var(--text-on-dark);
   border: none;
   padding: var(--space-3) var(--space-5);
@@ -999,7 +999,7 @@
   position: relative;
   background: var(--bg-surface);
   border: 1px solid var(--rule-solid);
-  padding: var(--space-7);
+  padding: var(--space-6);
   width: 100%;
   max-width: 380px;
   display: flex;

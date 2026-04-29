@@ -750,14 +750,15 @@
         const title = block.querySelector(".portfolio-title-input").value.trim();
         if (!title) continue; // skip empty blocks
 
-        const previewImg = block.querySelector(".portfolio-preview-img");
+        const previewContainer = block.querySelector(".portfolio-item-block__preview");
+        const previewImg       = block.querySelector(".portfolio-preview-img");
         const payload = {
           title,
           project_url:  block.querySelector(".portfolio-url-input").value.trim(),
           type:         block.querySelector(".portfolio-type-input").value.trim(),
           year:         parseInt(block.querySelector(".portfolio-year-input").value) || null,
           description:  block.querySelector(".portfolio-desc-input").value.trim(),
-          image_url:    previewImg?.src || null,
+          image_url:    (!previewContainer.hidden && previewImg.src) ? previewImg.src : null,
         };
 
         const itemId = block.dataset.itemId;
