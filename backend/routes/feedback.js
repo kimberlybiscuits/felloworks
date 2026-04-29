@@ -164,4 +164,33 @@ router.put("/:id/decline", requireAuth, async (req, res) => {
   res.json({ success: true });
 });
 
+// ── Remove approved feedback from profile ─────────────────────────────────
+// Only the reviewed person can remove feedback from their own profile.
+// Sets status back to "declined" so it no longer appears publicly.
+
+router.delete("/:id", requireAuth, async (req, res) => {
+  const { data: feedback } = await supabaseAdmin
+    .from("feedback")
+    .select("reviewed_id, status")
+    .eq("id", req.params.id)
+    .single();
+
+  if (!feedback || feedback.reviewed_id !== req.user.id) {
+    return res.status(403).json({ error: "Not authorised." });
+  }
+
+  if (feedback.status !== "approved") {
+    return res.status(400).json({ error: "Only approved feedback can be removed." });
+  }
+
+  const { error } = await supabaseAdmin
+    .from("feedback")
+    .update({ status: "declined" })
+    .eq("id", req.params.id);
+
+  if (error) return res.status(500).json({ error: "Could not remove feedback." });
+
+  res.json({ success: true });
+});
+
 module.exports = router;

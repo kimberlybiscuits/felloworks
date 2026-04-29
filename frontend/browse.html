@@ -44,6 +44,13 @@
 
   <main class="browse-main">
 
+    <!-- Need context banner — shown when arriving from a need page -->
+    <div id="need-context-banner" class="need-context-banner" hidden>
+      <p class="need-context-banner__label">Reaching out about</p>
+      <p id="need-context-title" class="need-context-banner__title"></p>
+      <a href="#" id="need-context-back" class="need-context-banner__back">← Back to need</a>
+    </div>
+
     <header class="browse-header">
       <p class="browse-eyebrow">Network</p>
       <h1 class="browse-title">Browse members.</h1>
@@ -205,6 +212,20 @@
       renderAvatar(document.getElementById("nav-avatar"), member);
     } catch { /* silently skip */ }
 
+    // Need context — if arriving from a need page, show banner and enable reach-out CTAs
+    let contextNeed = null;
+    const urlParams = new URLSearchParams(window.location.search);
+    const contextNeedId = urlParams.get("need");
+    if (contextNeedId) {
+      try {
+        const { need } = await api.get(`/needs/${contextNeedId}`);
+        contextNeed = need;
+        document.getElementById("need-context-title").textContent = need.skill_title;
+        document.getElementById("need-context-back").href = `/need.html?id=${contextNeedId}`;
+        document.getElementById("need-context-banner").hidden = false;
+      } catch { /* silently ignore — treat as normal browse */ }
+    }
+
     // Skill search — filter the checkbox list in real time
     const browseSkillSearch = document.getElementById("browse-skill-search");
     const browseSkillNoResults = document.getElementById("browse-skill-no-results");
@@ -295,6 +316,17 @@
       empty.hidden = true;
       grid.innerHTML = members.map((m) => buildCard(m)).join("");
 
+      // Wire up reach-out buttons (need context mode)
+      if (contextNeed) {
+        grid.querySelectorAll(".member-card__reach-out").forEach((btn) => {
+          btn.addEventListener("click", (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = `/messages.html?with=${btn.dataset.memberId}&need=${btn.dataset.needId}`;
+          });
+        });
+      }
+
       // Wire up shortlist toggles
       grid.querySelectorAll(".shortlist-toggle").forEach((btn) => {
         btn.addEventListener("click", async (e) => {
@@ -326,6 +358,12 @@
         ? `€${m.rate_min}–€${m.rate_max}/day`
         : m.rate_min ? `from €${m.rate_min}/day` : "";
 
+      const reachOut = contextNeed
+        ? `<button class="member-card__reach-out" data-member-id="${m.id}" data-need-id="${contextNeed.id}">
+             Message about this need →
+           </button>`
+        : "";
+
       return `
         <a href="/member.html?username=${encodeURIComponent(m.username)}" class="member-card">
           <div class="member-card__header">
@@ -347,6 +385,7 @@
             <span>${rate}</span>
             <span>${escHtml(m.location || "")}</span>
           </div>
+          ${reachOut}
         </a>
       `;
     }

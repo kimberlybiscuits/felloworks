@@ -170,7 +170,7 @@ router.get("/:username", requireAuth, async (req, res) => {
       `
       id, username, first_name, last_name, role, bio, location, languages, skills,
       rate_min, rate_max, rate_notes, website_url, linkedin_url, other_links,
-      availability_status, availability_date, availability_updated_at,
+      availability_status, availability_date, availability_updated_at, avatar_url,
       member_since,
       inviter:invited_by (
         id, first_name, last_name, role, username
