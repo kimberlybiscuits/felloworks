@@ -92,9 +92,12 @@
             </div>
           </div>
 
-          <!-- Own need: edit link; other's need: message button -->
+          <!-- Own need: edit + find members; other's need: message button -->
           <div id="action-own" hidden>
-            <a href="/needs-new.html" id="edit-link" class="btn btn--secondary btn--full">
+            <a id="find-members-link" href="#" class="btn btn--primary btn--full">
+              Find matching members
+            </a>
+            <a href="/needs-new.html" id="edit-link" class="btn btn--secondary btn--full" style="margin-top: var(--space-3)">
               Edit this need
             </a>
           </div>
@@ -237,9 +240,11 @@
       const myId = session?.user?.id;
 
       if (need.member_id === myId) {
-        // Own need — show edit link
+        // Own need — show find members + edit links
         document.getElementById("edit-link").href =
           `/needs-new.html?edit=${encodeURIComponent(need.id)}`;
+        document.getElementById("find-members-link").href =
+          `/browse.html?need=${encodeURIComponent(need.id)}`;
         document.getElementById("action-own").hidden = false;
       } else {
         // Other's need — show message link

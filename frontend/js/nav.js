@@ -1,5 +1,25 @@
 // nav.js — shared nav behaviour loaded on every authenticated page.
-// Wires up logout, and injects a mobile hamburger menu.
+// Wires up logout, injects a mobile hamburger menu, and loads the Featurebase feedback widget.
+
+// ── Featurebase feedback widget ───────────────────────────────────────────────
+(function (win, doc) {
+  if (typeof win.Featurebase !== "function") {
+    win.Featurebase = function () { (win.Featurebase.q = win.Featurebase.q || []).push(arguments); };
+  }
+  if (!doc.getElementById("featurebase-sdk")) {
+    const s = doc.createElement("script");
+    s.id  = "featurebase-sdk";
+    s.src = "https://do.featurebase.app/js/sdk.js";
+    doc.getElementsByTagName("script")[0].parentNode.insertBefore(s, doc.getElementsByTagName("script")[0]);
+  }
+})(window, document);
+
+window.Featurebase("initialize_feedback_widget", {
+  organization: "felloworks",
+  theme: "light",
+  placement: "right",
+  locale: "en",
+});
 
 import { signOut } from "./supabase-client.js";
 
