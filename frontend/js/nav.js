@@ -14,9 +14,8 @@
   }
 })(window, document);
 
-window.Featurebase("initialize_feedback_widget", {
+window.Featurebase("initialize_portal", {
   organization: "felloworks",
-  theme: "light",
   placement: "right",
   locale: "en",
 });
