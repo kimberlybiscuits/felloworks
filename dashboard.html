@@ -46,11 +46,12 @@
 
     <!-- Profile completion prompt — shown when profile is under 80% complete -->
     <div id="completion-prompt" class="completion-prompt" hidden>
-      <div>
-        <p class="completion-prompt__heading">Your profile isn't complete yet.</p>
+      <div class="completion-prompt__content">
+        <p class="completion-prompt__heading">Complete profiles get noticed.</p>
         <p id="completion-missing" class="completion-prompt__body"></p>
+        <a href="/profile.html" class="btn btn--primary">Finish my profile</a>
       </div>
-      <a href="/profile.html" class="btn btn--primary">Fill in my profile</a>
+      <button class="completion-prompt__dismiss" id="completion-dismiss" aria-label="Dismiss">×</button>
     </div>
 
     <!-- Header -->
@@ -264,14 +265,15 @@
     }
 
     function checkProfileCompletion(member) {
+      if (sessionStorage.getItem("completion-dismissed")) return;
+
       const required = {
-        role:                "Your role",
-        bio:                 "A short bio",
-        location:            "Your location",
-        skills:              "At least one skill",
-        rate_min:            "Your day rate",
-        availability_status: "Your availability",
+        role:                "role",
+        bio:                 "bio",
+        skills:              "skills",
+        availability_status: "availability",
       };
+
       const missing = Object.entries(required)
         .filter(([key]) => {
           const val = member[key];
@@ -279,12 +281,18 @@
         })
         .map(([, label]) => label);
 
-      const pct = (Object.keys(required).length - missing.length) / Object.keys(required).length;
-      if (pct < 0.8) {
-        document.getElementById("completion-missing").textContent =
-          `Still needed: ${missing.join(", ")}.`;
+      if (missing.length > 0) {
+        const body = missing.length === 1
+          ? `Add your ${missing[0]} to become searchable and appear in browse.`
+          : `Add your ${missing.slice(0, -1).join(", ")} and ${missing[missing.length - 1]} to become searchable and appear in browse.`;
+        document.getElementById("completion-missing").textContent = body;
         document.getElementById("completion-prompt").hidden = false;
       }
+
+      document.getElementById("completion-dismiss").addEventListener("click", () => {
+        document.getElementById("completion-prompt").hidden = true;
+        sessionStorage.setItem("completion-dismissed", "1");
+      });
     }
 
     function renderMyNeeds(needs) {
