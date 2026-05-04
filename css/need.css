@@ -54,6 +54,25 @@ body {
   text-decoration: none;
 }
 
+.need-remove-btn {
+  display: block;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--text-secondary);
+  text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.need-remove-btn:hover {
+  color: var(--accent);
+}
+
 /* Two-column grid */
 .need-layout {
   display: grid;

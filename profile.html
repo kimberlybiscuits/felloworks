@@ -45,283 +45,344 @@
   <main class="profile-edit-main">
     <div class="profile-edit-container">
 
-      <header class="profile-edit-header">
-        <div class="profile-edit-header__row">
-          <h1 class="profile-edit-title">My profile</h1>
-          <a id="view-profile-link" href="#" class="profile-edit-view-link" hidden>View as others see it →</a>
+      <!-- ── Step progress header ──────────────────────────────── -->
+      <div class="profile-steps-header">
+        <div class="profile-steps-bar" role="list" aria-label="Profile sections">
+          <button class="profile-steps-bar__dot profile-steps-bar__dot--active" id="dot-1" data-step="1" aria-label="Step 1: Who you are"></button>
+          <div class="profile-steps-bar__line"></div>
+          <button class="profile-steps-bar__dot" id="dot-2" data-step="2" aria-label="Step 2: What you do"></button>
+          <div class="profile-steps-bar__line"></div>
+          <button class="profile-steps-bar__dot" id="dot-3" data-step="3" aria-label="Step 3: Availability & rate"></button>
+          <div class="profile-steps-bar__line"></div>
+          <button class="profile-steps-bar__dot" id="dot-4" data-step="4" aria-label="Step 4: Work samples"></button>
         </div>
-        <p class="profile-edit-sub">
-          This is what other members see when they find you. Fill it in at your own pace.
-        </p>
-      </header>
+        <div class="profile-steps-info">
+          <span id="step-counter" class="profile-steps-counter">Step 1 of 4</span>
+          <span class="profile-steps-divider">—</span>
+          <span id="step-title-label" class="profile-steps-title">Who you are</span>
+          <a id="view-profile-link" href="#" class="profile-steps-view" hidden>View profile →</a>
+        </div>
 
-      <div id="save-banner" class="save-banner" hidden>Profile saved.</div>
+        <!-- 3-field completion bar -->
+        <div class="profile-completion" id="profile-completion">
+          <span class="profile-completion__item" id="compl-role" title="Add your role">Role</span>
+          <span class="profile-completion__sep">·</span>
+          <span class="profile-completion__item" id="compl-skills" title="Select at least one skill">Skills</span>
+          <span class="profile-completion__sep">·</span>
+          <span class="profile-completion__item" id="compl-avail" title="Set your availability">Availability</span>
+          <span class="profile-completion__hint" id="compl-hint">→ unlock browsing</span>
+        </div>
+      </div>
+
+      <!-- Banners -->
+      <div id="save-banner" class="save-banner" hidden>Saved.</div>
       <div id="error-banner" class="alert alert--error" hidden></div>
 
-      <!-- ── Photo ──────────────────────────────────────────────────── -->
-      <section class="profile-section-block">
-        <h2 class="profile-section-block__title">Photo</h2>
-        <p class="profile-section-block__desc">
-          Optional. If you'd rather not upload one, your initials are shown instead.
-        </p>
+      <!-- ── STEP 1: Who you are ────────────────────────────────── -->
+      <div class="profile-step" id="step-1">
 
-        <div class="avatar-upload">
-          <!-- Preview — shows photo if uploaded, initials if not -->
-          <div class="avatar avatar--lg" id="avatar-preview"></div>
+        <section class="profile-section-block">
+          <h2 class="profile-section-block__title">
+            Photo <span class="form-optional">(optional)</span>
+          </h2>
+          <p class="profile-section-block__desc">
+            If you'd rather not upload one, your initials are shown instead.
+          </p>
 
-          <div class="avatar-upload__controls">
-            <label class="btn btn--secondary avatar-upload__label" for="avatar-input">
-              Choose photo
+          <div class="avatar-upload">
+            <div class="avatar avatar--lg" id="avatar-preview"></div>
+            <div class="avatar-upload__controls">
+              <label class="btn btn--secondary avatar-upload__label" for="avatar-input">
+                Choose photo
+              </label>
+              <input type="file" id="avatar-input" accept="image/*"
+                     class="avatar-upload__input" aria-label="Upload profile photo" />
+              <button type="button" class="avatar-remove-btn text-muted" id="avatar-remove-btn" hidden>
+                Remove photo
+              </button>
+            </div>
+          </div>
+          <p class="form-hint">JPG or PNG. Will be cropped to a circle. Max 2MB.</p>
+        </section>
+
+        <section class="profile-section-block">
+          <h2 class="profile-section-block__title">The basics</h2>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="first-name">First name</label>
+              <input class="form-input" type="text" id="first-name" autocomplete="given-name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="last-name">Last name</label>
+              <input class="form-input" type="text" id="last-name" autocomplete="family-name" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="role">
+              Role <span class="form-optional">(optional)</span>
             </label>
-            <input type="file" id="avatar-input" accept="image/*"
-                   class="avatar-upload__input" aria-label="Upload profile photo" />
-            <button type="button" class="avatar-remove-btn text-muted" id="avatar-remove-btn" hidden>
-              Remove photo
-            </button>
+            <input class="form-input" type="text" id="role"
+                   placeholder="e.g. Brand designer & art director" />
           </div>
-        </div>
 
-        <p class="form-hint">JPG or PNG. Will be cropped to a circle. Max 2MB.</p>
-      </section>
-
-      <!-- ── Basics ─────────────────────────────────────────────────── -->
-      <section class="profile-section-block">
-        <h2 class="profile-section-block__title">Basics</h2>
-
-        <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="first-name">First name</label>
-            <input class="form-input" type="text" id="first-name" />
+            <label class="form-label" for="bio">
+              Bio <span class="form-optional">(optional)</span>
+            </label>
+            <textarea class="form-textarea" id="bio" rows="5"
+                      placeholder="A few sentences about your work and how you collaborate."></textarea>
           </div>
+
           <div class="form-group">
-            <label class="form-label" for="last-name">Last name</label>
-            <input class="form-input" type="text" id="last-name" />
+            <label class="form-label" for="location">
+              Location <span class="form-optional">(optional)</span>
+            </label>
+            <input class="form-input" type="text" id="location"
+                   placeholder="e.g. Amsterdam, NL"
+                   list="location-suggestions"
+                   autocomplete="off" />
+            <datalist id="location-suggestions">
+              <option value="Amsterdam, NL" />
+              <option value="Athens, GR" />
+              <option value="Barcelona, ES" />
+              <option value="Berlin, DE" />
+              <option value="Brussels, BE" />
+              <option value="Budapest, HU" />
+              <option value="Copenhagen, DK" />
+              <option value="Dublin, IE" />
+              <option value="Edinburgh, UK" />
+              <option value="Frankfurt, DE" />
+              <option value="Geneva, CH" />
+              <option value="Hamburg, DE" />
+              <option value="Helsinki, FI" />
+              <option value="Lisbon, PT" />
+              <option value="Ljubljana, SI" />
+              <option value="London, UK" />
+              <option value="Luxembourg, LU" />
+              <option value="Lyon, FR" />
+              <option value="Madrid, ES" />
+              <option value="Marseille, FR" />
+              <option value="Milan, IT" />
+              <option value="Munich, DE" />
+              <option value="Oslo, NO" />
+              <option value="Paris, FR" />
+              <option value="Prague, CZ" />
+              <option value="Remote" />
+              <option value="Riga, LV" />
+              <option value="Rome, IT" />
+              <option value="Rotterdam, NL" />
+              <option value="Stockholm, SE" />
+              <option value="Tallinn, EE" />
+              <option value="Vienna, AT" />
+              <option value="Vilnius, LT" />
+              <option value="Warsaw, PL" />
+              <option value="Zurich, CH" />
+            </datalist>
           </div>
+        </section>
+
+      </div>
+
+      <!-- ── STEP 2: What you do ────────────────────────────────── -->
+      <div class="profile-step" id="step-2" hidden>
+
+        <!-- Live preview of current appearance -->
+        <div class="profile-preview-banner" id="profile-preview-banner">
+          <p class="profile-preview-banner__label">This is how you appear right now</p>
+          <div class="profile-preview-card">
+            <div class="avatar" id="preview-avatar"></div>
+            <div class="profile-preview-card__meta">
+              <p class="profile-preview-card__name" id="preview-name"></p>
+              <p class="profile-preview-card__role" id="preview-role"></p>
+            </div>
+          </div>
+          <p class="profile-preview-banner__hint" id="preview-hint"></p>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="role">Role</label>
-          <input class="form-input" type="text" id="role"
-                 placeholder="e.g. Brand designer & art director" />
-        </div>
+        <section class="profile-section-block">
+          <h2 class="profile-section-block__title">
+            Skills <span class="form-optional">(optional)</span>
+          </h2>
+          <p class="profile-section-block__desc">
+            Select everything that applies. This is how members find you in browse.
+          </p>
 
-        <div class="form-group">
-          <label class="form-label" for="bio">Bio</label>
-          <textarea class="form-textarea" id="bio" rows="5"
-                    placeholder="A few sentences about your work and how you collaborate."></textarea>
-        </div>
+          <div class="skill-chips" id="skill-chips">
+            <button type="button" class="pill pill--skill" data-skill="Brand design">Brand design</button>
+            <button type="button" class="pill pill--skill" data-skill="UX / product design">UX / product design</button>
+            <button type="button" class="pill pill--skill" data-skill="Content design">Content design</button>
+            <button type="button" class="pill pill--skill" data-skill="Editorial design">Editorial design</button>
+            <button type="button" class="pill pill--skill" data-skill="Motion design">Motion design</button>
+            <button type="button" class="pill pill--skill" data-skill="Illustration">Illustration</button>
+            <button type="button" class="pill pill--skill" data-skill="Art direction">Art direction</button>
+            <button type="button" class="pill pill--skill" data-skill="Photography">Photography</button>
+            <button type="button" class="pill pill--skill" data-skill="Video production">Video production</button>
+            <button type="button" class="pill pill--skill" data-skill="Copywriting">Copywriting</button>
+            <button type="button" class="pill pill--skill" data-skill="Content writing">Content writing</button>
+            <button type="button" class="pill pill--skill" data-skill="Content strategy">Content strategy</button>
+            <button type="button" class="pill pill--skill" data-skill="Communications strategy">Communications strategy</button>
+            <button type="button" class="pill pill--skill" data-skill="Campaign planning">Campaign planning</button>
+            <button type="button" class="pill pill--skill" data-skill="Social media">Social media</button>
+            <button type="button" class="pill pill--skill" data-skill="PR & media relations">PR & media relations</button>
+            <button type="button" class="pill pill--skill" data-skill="Research & insights">Research & insights</button>
+            <button type="button" class="pill pill--skill" data-skill="Translation & localisation">Translation & localisation</button>
+            <button type="button" class="pill pill--skill" data-skill="Frontend development">Frontend development</button>
+            <button type="button" class="pill pill--skill" data-skill="No-code / Webflow">No-code / Webflow</button>
+            <button type="button" class="pill pill--skill" data-skill="Web development">Web development</button>
+            <!-- Custom skills added by JS appear here -->
+            <div class="skill-add-row" id="skill-add-row">
+              <input
+                type="text"
+                id="skill-other-input"
+                class="form-input skill-other-input"
+                placeholder="Add your own skill…"
+                autocomplete="off"
+                maxlength="60"
+              />
+              <button type="button" class="btn btn--sm btn--secondary" id="skill-other-add">Add</button>
+            </div>
+          </div>
+        </section>
 
-        <div class="form-group">
-          <label class="form-label" for="location">Location</label>
-          <input class="form-input" type="text" id="location"
-                 placeholder="e.g. Amsterdam, NL"
-                 list="location-suggestions"
-                 autocomplete="off" />
-          <datalist id="location-suggestions">
-            <option value="Amsterdam, NL" />
-            <option value="Athens, GR" />
-            <option value="Barcelona, ES" />
-            <option value="Berlin, DE" />
-            <option value="Brussels, BE" />
-            <option value="Budapest, HU" />
-            <option value="Copenhagen, DK" />
-            <option value="Dublin, IE" />
-            <option value="Edinburgh, UK" />
-            <option value="Frankfurt, DE" />
-            <option value="Geneva, CH" />
-            <option value="Hamburg, DE" />
-            <option value="Helsinki, FI" />
-            <option value="Lisbon, PT" />
-            <option value="Ljubljana, SI" />
-            <option value="London, UK" />
-            <option value="Luxembourg, LU" />
-            <option value="Lyon, FR" />
-            <option value="Madrid, ES" />
-            <option value="Marseille, FR" />
-            <option value="Milan, IT" />
-            <option value="Munich, DE" />
-            <option value="Oslo, NO" />
-            <option value="Paris, FR" />
-            <option value="Prague, CZ" />
-            <option value="Remote" />
-            <option value="Riga, LV" />
-            <option value="Rome, IT" />
-            <option value="Rotterdam, NL" />
-            <option value="Stockholm, SE" />
-            <option value="Tallinn, EE" />
-            <option value="Vienna, AT" />
-            <option value="Vilnius, LT" />
-            <option value="Warsaw, PL" />
-            <option value="Zurich, CH" />
-          </datalist>
-        </div>
-      </section>
+        <section class="profile-section-block">
+          <h2 class="profile-section-block__title">
+            Languages <span class="form-optional">(optional)</span>
+          </h2>
 
-      <!-- ── Skills ─────────────────────────────────────────────────── -->
-      <section class="profile-section-block">
-        <h2 class="profile-section-block__title">Skills</h2>
-        <p class="profile-section-block__desc">
-          Select everything that applies. This is how members find you in browse.
-        </p>
-
-        <div class="skill-chips" id="skill-chips">
-          <button type="button" class="pill pill--skill" data-skill="Brand design">Brand design</button>
-          <button type="button" class="pill pill--skill" data-skill="UX / product design">UX / product design</button>
-          <button type="button" class="pill pill--skill" data-skill="Content design">Content design</button>
-          <button type="button" class="pill pill--skill" data-skill="Editorial design">Editorial design</button>
-          <button type="button" class="pill pill--skill" data-skill="Motion design">Motion design</button>
-          <button type="button" class="pill pill--skill" data-skill="Illustration">Illustration</button>
-          <button type="button" class="pill pill--skill" data-skill="Art direction">Art direction</button>
-          <button type="button" class="pill pill--skill" data-skill="Photography">Photography</button>
-          <button type="button" class="pill pill--skill" data-skill="Video production">Video production</button>
-          <button type="button" class="pill pill--skill" data-skill="Copywriting">Copywriting</button>
-          <button type="button" class="pill pill--skill" data-skill="Content writing">Content writing</button>
-          <button type="button" class="pill pill--skill" data-skill="Content strategy">Content strategy</button>
-          <button type="button" class="pill pill--skill" data-skill="Communications strategy">Communications strategy</button>
-          <button type="button" class="pill pill--skill" data-skill="Campaign planning">Campaign planning</button>
-          <button type="button" class="pill pill--skill" data-skill="Social media">Social media</button>
-          <button type="button" class="pill pill--skill" data-skill="PR & media relations">PR & media relations</button>
-          <button type="button" class="pill pill--skill" data-skill="Research & insights">Research & insights</button>
-          <button type="button" class="pill pill--skill" data-skill="Translation & localisation">Translation & localisation</button>
-          <button type="button" class="pill pill--skill" data-skill="Frontend development">Frontend development</button>
-          <button type="button" class="pill pill--skill" data-skill="No-code / Webflow">No-code / Webflow</button>
-          <button type="button" class="pill pill--skill" data-skill="Web development">Web development</button>
-          <!-- Custom skills added by JS appear here -->
-          <div class="skill-add-row" id="skill-add-row">
+          <div class="checkbox-grid">
+            <label class="filter-option"><input type="checkbox" name="language" value="English" /> English</label>
+            <label class="filter-option"><input type="checkbox" name="language" value="French" /> French</label>
+            <label class="filter-option"><input type="checkbox" name="language" value="Spanish" /> Spanish</label>
+            <label class="filter-option"><input type="checkbox" name="language" value="German" /> German</label>
+            <label class="filter-option"><input type="checkbox" name="language" value="Italian" /> Italian</label>
+            <label class="filter-option"><input type="checkbox" name="language" value="Dutch" /> Dutch</label>
+            <label class="filter-option"><input type="checkbox" name="language" value="Portuguese" /> Portuguese</label>
+            <label class="filter-option"><input type="checkbox" name="language" value="Swedish" /> Swedish</label>
+          </div>
+          <div class="skill-add-row" id="lang-add-row">
             <input
               type="text"
-              id="skill-other-input"
+              id="lang-other-input"
               class="form-input skill-other-input"
-              placeholder="Add your own skill…"
+              placeholder="Add another language…"
               autocomplete="off"
-              maxlength="60"
+              maxlength="40"
             />
-            <button type="button" class="btn btn--sm btn--secondary" id="skill-other-add">Add</button>
+            <button type="button" class="btn btn--sm btn--secondary" id="lang-other-add">Add</button>
           </div>
-        </div>
-      </section>
+          <div id="custom-language-chips" class="skill-chips"></div>
+        </section>
 
-      <!-- ── Languages ──────────────────────────────────────────────── -->
-      <section class="profile-section-block">
-        <h2 class="profile-section-block__title">Languages</h2>
+      </div>
 
-        <div class="checkbox-grid">
-          <label class="filter-option"><input type="checkbox" name="language" value="English" /> English</label>
-          <label class="filter-option"><input type="checkbox" name="language" value="French" /> French</label>
-          <label class="filter-option"><input type="checkbox" name="language" value="Spanish" /> Spanish</label>
-          <label class="filter-option"><input type="checkbox" name="language" value="German" /> German</label>
-          <label class="filter-option"><input type="checkbox" name="language" value="Italian" /> Italian</label>
-          <label class="filter-option"><input type="checkbox" name="language" value="Dutch" /> Dutch</label>
-          <label class="filter-option"><input type="checkbox" name="language" value="Portuguese" /> Portuguese</label>
-          <label class="filter-option"><input type="checkbox" name="language" value="Swedish" /> Swedish</label>
-        </div>
-        <div class="skill-add-row" id="lang-add-row" style="margin-top:var(--space-4);">
-          <input
-            type="text"
-            id="lang-other-input"
-            class="form-input skill-other-input"
-            placeholder="Add another language…"
-            autocomplete="off"
-            maxlength="40"
-          />
-          <button type="button" class="btn btn--sm btn--secondary" id="lang-other-add">Add</button>
-        </div>
-        <div id="custom-language-chips" class="skill-chips" style="margin-top:var(--space-3);"></div>
-      </section>
+      <!-- ── STEP 3: Availability & rate ────────────────────────── -->
+      <div class="profile-step" id="step-3" hidden>
 
-      <!-- ── Availability ───────────────────────────────────────────── -->
-      <section class="profile-section-block">
-        <h2 class="profile-section-block__title">Availability</h2>
-        <p class="profile-section-block__desc">
-          Members set a specific date. The browse screen works out which bracket you fall into automatically.
-        </p>
+        <section class="profile-section-block">
+          <h2 class="profile-section-block__title">
+            Availability <span class="form-optional">(optional)</span>
+          </h2>
+          <p class="profile-section-block__desc">
+            Members set a specific date. Browse works out which bracket you fall into automatically.
+          </p>
 
-        <div class="availability-options">
-          <label class="availability-option">
-            <input type="radio" name="availability_status" value="now" />
-            <span>Available now</span>
-          </label>
-          <label class="availability-option">
-            <input type="radio" name="availability_status" value="from_date" />
-            <span>Available from a specific date</span>
-          </label>
-          <label class="availability-option">
-            <input type="radio" name="availability_status" value="unavailable" />
-            <span>Not available right now</span>
-          </label>
-        </div>
+          <div class="availability-options">
+            <label class="availability-option">
+              <input type="radio" name="availability_status" value="now" />
+              <span>Available now</span>
+            </label>
+            <label class="availability-option">
+              <input type="radio" name="availability_status" value="from_date" />
+              <span>Available from a specific date</span>
+            </label>
+            <label class="availability-option">
+              <input type="radio" name="availability_status" value="unavailable" />
+              <span>Not available right now</span>
+            </label>
+          </div>
 
-        <!-- Date picker — shown only when "from a specific date" is selected -->
-        <div id="availability-date-row" class="form-group" hidden>
-          <label class="form-label" for="availability-date">Available from</label>
-          <input class="form-input form-input--date" type="date" id="availability-date" />
-        </div>
+          <div id="availability-date-row" class="form-group" hidden>
+            <label class="form-label" for="availability-date">Available from</label>
+            <input class="form-input form-input--date" type="date" id="availability-date" />
+          </div>
 
-        <p id="availability-updated" class="availability-updated text-muted" hidden></p>
-      </section>
+          <p id="availability-updated" class="availability-updated text-muted" hidden></p>
+        </section>
 
-      <!-- ── Day rate ───────────────────────────────────────────────── -->
-      <section class="profile-section-block">
-        <h2 class="profile-section-block__title">Day rate</h2>
+        <section class="profile-section-block">
+          <h2 class="profile-section-block__title">
+            Day rate <span class="form-optional">(optional)</span>
+          </h2>
 
-        <div class="form-row">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="rate-min">Min (€/day)</label>
+              <input class="form-input" type="number" id="rate-min" placeholder="e.g. 600" min="0" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="rate-max">Max (€/day)</label>
+              <input class="form-input" type="number" id="rate-max" placeholder="e.g. 1000" min="0" />
+            </div>
+          </div>
+
           <div class="form-group">
-            <label class="form-label" for="rate-min">Min (€/day)</label>
-            <input class="form-input" type="number" id="rate-min" placeholder="e.g. 600" min="0" />
+            <label class="form-label" for="rate-notes">
+              Rate notes <span class="form-optional">(optional)</span>
+            </label>
+            <input class="form-input" type="text" id="rate-notes"
+                   placeholder="Fixed fee, open to discussion, project-dependent, etc." />
           </div>
+        </section>
+
+        <section class="profile-section-block">
+          <h2 class="profile-section-block__title">
+            Links <span class="form-optional">(optional)</span>
+          </h2>
+
           <div class="form-group">
-            <label class="form-label" for="rate-max">Max (€/day)</label>
-            <input class="form-input" type="number" id="rate-max" placeholder="e.g. 1000" min="0" />
+            <label class="form-label" for="website-url">Website</label>
+            <input class="form-input" type="url" id="website-url" placeholder="https://" />
           </div>
+
+          <div class="form-group">
+            <label class="form-label" for="linkedin-url">LinkedIn</label>
+            <input class="form-input" type="url" id="linkedin-url"
+                   placeholder="https://linkedin.com/in/yourname" />
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ── STEP 4: Work samples ───────────────────────────────── -->
+      <div class="profile-step" id="step-4" hidden>
+
+        <section class="profile-section-block">
+          <h2 class="profile-section-block__title">
+            Work samples <span class="form-optional">(optional)</span>
+          </h2>
+          <p class="profile-section-block__desc">
+            Paste a URL and we'll pull in the title, description, and preview image automatically.
+            You can edit any field before saving.
+          </p>
+
+          <div id="portfolio-items"></div>
+
+          <button type="button" class="btn btn--secondary" id="add-portfolio-btn">
+            + Add a work sample
+          </button>
+        </section>
+
+      </div>
+
+      <!-- ── Step navigation ──────────────────────────────────────── -->
+      <div class="profile-step-nav">
+        <button class="btn btn--secondary" id="step-back-btn" hidden>← Back</button>
+        <div class="profile-step-nav__actions">
+          <button class="btn btn--ghost" id="save-only-btn">Save progress</button>
+          <button class="btn btn--primary" id="step-next-btn">Save & continue →</button>
         </div>
-
-        <div class="form-group">
-          <label class="form-label" for="rate-notes">
-            Rate notes <span class="text-muted">(optional)</span>
-          </label>
-          <input class="form-input" type="text" id="rate-notes"
-                 placeholder="Fixed fee, open to discussion, project-dependent, etc." />
-        </div>
-      </section>
-
-      <!-- ── Links ──────────────────────────────────────────────────── -->
-      <section class="profile-section-block">
-        <h2 class="profile-section-block__title">Links</h2>
-
-        <div class="form-group">
-          <label class="form-label" for="website-url">Website</label>
-          <input class="form-input" type="url" id="website-url" placeholder="https://" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="linkedin-url">LinkedIn</label>
-          <input class="form-input" type="url" id="linkedin-url"
-                 placeholder="https://linkedin.com/in/yourname" />
-        </div>
-      </section>
-
-      <!-- ── Portfolio ──────────────────────────────────────────────── -->
-      <section class="profile-section-block">
-        <h2 class="profile-section-block__title">Work samples</h2>
-        <p class="profile-section-block__desc">
-          Paste a URL and we'll pull in the title, description, and preview image automatically.
-          You can edit any field before saving.
-        </p>
-
-        <div id="portfolio-items">
-          <!-- Populated by JS with existing items -->
-        </div>
-
-        <button type="button" class="btn btn--secondary" id="add-portfolio-btn">
-          + Add a work sample
-        </button>
-      </section>
-
-      <!-- ── Save ───────────────────────────────────────────────────── -->
-      <div class="profile-save-bar">
-        <button type="button" class="btn btn--primary" id="save-btn">Save profile</button>
-        <a href="/dashboard.html" class="btn btn--secondary">Back to dashboard</a>
-        <a id="view-profile-btn" href="#" class="btn btn--secondary" hidden>View live profile →</a>
       </div>
 
     </div>
@@ -332,7 +393,7 @@
     <div class="portfolio-item-block">
       <div class="portfolio-item-block__url-row">
         <div class="form-group" style="flex:1">
-          <label class="form-label">Project URL</label>
+          <label class="form-label">Project URL <span class="form-optional">(optional)</span></label>
           <input class="form-input portfolio-url-input" type="url" placeholder="https://…" />
         </div>
         <button type="button" class="btn btn--secondary portfolio-fetch-btn">Fetch</button>
@@ -346,18 +407,18 @@
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Type</label>
+            <label class="form-label">Type <span class="form-optional">(optional)</span></label>
             <input class="form-input portfolio-type-input" type="text"
                    placeholder="e.g. Case study, Campaign" />
           </div>
           <div class="form-group">
-            <label class="form-label">Year</label>
+            <label class="form-label">Year <span class="form-optional">(optional)</span></label>
             <input class="form-input portfolio-year-input" type="number"
                    placeholder="e.g. 2024" min="1990" max="2030" />
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Description <span class="text-muted">(optional)</span></label>
+          <label class="form-label">Description <span class="form-optional">(optional)</span></label>
           <textarea class="form-textarea portfolio-desc-input" rows="3"
                     placeholder="Brief description of the project."></textarea>
         </div>
@@ -390,22 +451,117 @@
     dropdown.addEventListener("click", (e) => e.stopPropagation());
 
     let portfolioItems = [];
-    let pendingAvatarFile = null; // holds a selected file before save
+    let pendingAvatarFile = null;
+    let currentStep = 1;
 
-    // ── Avatar preview and file selection ──────────────────────────
+    const STEP_TITLES = ["Who you are", "What you do", "Availability & rate", "Work samples"];
+
+    // ── Step management ────────────────────────────────────────────
+
+    function showStep(n) {
+      currentStep = n;
+
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById(`step-${i}`).hidden = i !== n;
+        const dot = document.getElementById(`dot-${i}`);
+        dot.classList.toggle("profile-steps-bar__dot--active", i === n);
+        dot.classList.toggle("profile-steps-bar__dot--done", i < n);
+      }
+
+      document.getElementById("step-counter").textContent = `Step ${n} of 4`;
+      document.getElementById("step-title-label").textContent = STEP_TITLES[n - 1];
+      document.getElementById("step-back-btn").hidden = n === 1;
+
+      const nextBtn = document.getElementById("step-next-btn");
+      nextBtn.textContent = n === 4 ? "Save & finish" : "Save & continue →";
+
+      if (n === 2) updatePreview();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // Allow clicking step dots to jump to any step
+    document.querySelectorAll(".profile-steps-bar__dot").forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const target = parseInt(dot.dataset.step);
+        if (target !== currentStep) showStep(target);
+      });
+    });
+
+    // ── Completion indicator ───────────────────────────────────────
+
+    function updateCompletion() {
+      const hasRole  = !!document.getElementById("role").value.trim();
+      const hasSkill = document.querySelectorAll(".pill--skill.selected").length > 0;
+      const hasAvail = !!document.querySelector("input[name='availability_status']:checked");
+
+      const tick = (id, done) => {
+        document.getElementById(id).classList.toggle("profile-completion__item--done", done);
+      };
+      tick("compl-role", hasRole);
+      tick("compl-skills", hasSkill);
+      tick("compl-avail", hasAvail);
+
+      const hintEl = document.getElementById("compl-hint");
+      if (hasRole && hasSkill && hasAvail) {
+        hintEl.textContent = "✓ You're findable in browse";
+        hintEl.classList.add("profile-completion__hint--done");
+      } else {
+        hintEl.textContent = "→ unlock browsing";
+        hintEl.classList.remove("profile-completion__hint--done");
+      }
+    }
+
+    // Update completion whenever relevant inputs change
+    document.getElementById("role").addEventListener("input", updateCompletion);
+    document.querySelectorAll("input[name='availability_status']").forEach((r) => {
+      r.addEventListener("change", updateCompletion);
+    });
+
+    // ── Live preview (shown in step 2 header) ──────────────────────
+
+    function updatePreview() {
+      const firstName = document.getElementById("first-name").value.trim();
+      const lastName  = document.getElementById("last-name").value.trim();
+      const role      = document.getElementById("role").value.trim();
+
+      document.getElementById("preview-name").textContent =
+        `${firstName} ${lastName}`.trim() || "Your name";
+      document.getElementById("preview-role").textContent =
+        role || "";
+
+      const initials = `${(firstName[0] || "?").toUpperCase()}${(lastName[0] || "").toUpperCase()}`;
+      const avatarEl = document.getElementById("preview-avatar");
+      const existingImg = avatarEl.querySelector("img");
+      if (!existingImg) {
+        avatarEl.textContent = initials;
+      }
+
+      const hint = document.getElementById("preview-hint");
+      if (!role) {
+        hint.textContent = "Add your role above, then select skills to become searchable.";
+      } else {
+        hint.textContent = "Add your skills below to become searchable in browse.";
+      }
+    }
+
+    // ── Avatar ─────────────────────────────────────────────────────
 
     function renderAvatarPreview(member, objectUrl) {
-      const preview = document.getElementById("avatar-preview");
+      const preview   = document.getElementById("avatar-preview");
       const removeBtn = document.getElementById("avatar-remove-btn");
       const src = objectUrl || member?.avatar_url;
 
       if (src) {
-        // Show photo — wrap in an img inside the avatar circle
         preview.innerHTML = `<img src="${src}" alt="Profile photo"
           style="width:100%;height:100%;object-fit:cover;" />`;
         removeBtn.hidden = false;
+
+        // Mirror into the step-2 preview avatar
+        const previewAv = document.getElementById("preview-avatar");
+        previewAv.innerHTML = `<img src="${src}" alt=""
+          style="width:100%;height:100%;object-fit:cover;" />`;
       } else {
-        // Show initials fallback
         const initials = `${(member?.first_name || "?")[0]}${(member?.last_name || "")[0]}`.toUpperCase();
         preview.textContent = initials;
         removeBtn.hidden = true;
@@ -421,50 +577,44 @@
         return;
       }
       pendingAvatarFile = file;
-      // Show a local preview immediately — no upload yet
       renderAvatarPreview(null, URL.createObjectURL(file));
     });
 
     document.getElementById("avatar-remove-btn").addEventListener("click", async () => {
-      // Clear pending selection or mark existing URL for removal
       pendingAvatarFile = null;
       document.getElementById("avatar-input").value = "";
       await api.put("/members/me", { avatar_url: null });
       renderAvatarPreview(null, null);
     });
 
-    // ── Load existing profile data ──────────────────────────────────
+    // ── Load existing profile ──────────────────────────────────────
 
     async function loadProfile() {
       const { member } = await api.get("/members/me");
 
       renderAvatar(document.getElementById("nav-avatar"), member);
 
-      // Wire up "View as others see it" link and save-bar button
       const profileUrl = `/member.html?username=${encodeURIComponent(member.username)}`;
       const viewLink = document.getElementById("view-profile-link");
       viewLink.href = profileUrl;
       viewLink.hidden = false;
-      const viewBtn = document.getElementById("view-profile-btn");
-      viewBtn.href = profileUrl;
-      viewBtn.hidden = false;
 
       renderAvatarPreview(member);
 
-      document.getElementById("first-name").value  = member.first_name || "";
-      document.getElementById("last-name").value   = member.last_name  || "";
-      document.getElementById("role").value        = member.role       || "";
-      document.getElementById("bio").value         = member.bio        || "";
-      document.getElementById("location").value    = member.location   || "";
-      document.getElementById("rate-min").value    = member.rate_min   || "";
-      document.getElementById("rate-max").value    = member.rate_max   || "";
-      document.getElementById("rate-notes").value  = member.rate_notes || "";
+      document.getElementById("first-name").value  = member.first_name  || "";
+      document.getElementById("last-name").value   = member.last_name   || "";
+      document.getElementById("role").value        = member.role        || "";
+      document.getElementById("bio").value         = member.bio         || "";
+      document.getElementById("location").value    = member.location    || "";
+      document.getElementById("rate-min").value    = member.rate_min    || "";
+      document.getElementById("rate-max").value    = member.rate_max    || "";
+      document.getElementById("rate-notes").value  = member.rate_notes  || "";
       document.getElementById("website-url").value = member.website_url  || "";
       document.getElementById("linkedin-url").value = member.linkedin_url || "";
 
       // Skills
       (member.skills || []).forEach((skill) => {
-        const chip = document.querySelector(`[data-skill="${skill}"]`);
+        const chip = document.querySelector(`[data-skill="${CSS.escape(skill)}"]`);
         if (chip) chip.classList.add("selected");
       });
 
@@ -475,15 +625,16 @@
       });
 
       // Availability
-      const status = member.availability_status || "unavailable";
-      const radio  = document.querySelector(`input[name="availability_status"][value="${status}"]`);
-      if (radio) radio.checked = true;
-      if (status === "from_date") {
-        document.getElementById("availability-date-row").hidden = false;
-        document.getElementById("availability-date").value = member.availability_date || "";
+      const status = member.availability_status || "";
+      if (status) {
+        const radio = document.querySelector(`input[name="availability_status"][value="${status}"]`);
+        if (radio) radio.checked = true;
+        if (status === "from_date") {
+          document.getElementById("availability-date-row").hidden = false;
+          document.getElementById("availability-date").value = member.availability_date || "";
+        }
       }
 
-      // Show when availability was last updated
       if (member.availability_updated_at) {
         const days = Math.floor(
           (Date.now() - new Date(member.availability_updated_at)) / 86400000
@@ -493,32 +644,21 @@
         el.hidden = false;
       }
 
-      // Portfolio items
+      updateCompletion();
+
       await loadPortfolio();
     }
 
     async function loadPortfolio() {
-      // Fetch the member's full portfolio (not capped to 3 like the profile view)
-      const { member } = await api.get("/members/me");
-      const { data: items } = await fetchPortfolioItems(member.id);
-      portfolioItems = items || [];
-      portfolioItems.forEach((item) => addPortfolioBlock(item));
-    }
-
-    // Fetch all portfolio items for this member via supabase directly
-    // (The members route only returns 3; for editing we need all)
-    async function fetchPortfolioItems(memberId) {
-      // Use the backend portfolio route — add one if needed, or piggyback on member route
-      // For now, return the 3 from the profile route as a starting point
       try {
-        const { portfolio } = await api.get(`/members/me/portfolio`);
-        return { data: portfolio };
+        const { portfolio } = await api.get("/members/me/portfolio");
+        (portfolio || []).forEach((item) => addPortfolioBlock(item));
       } catch {
-        return { data: [] };
+        // silent — portfolio stays empty
       }
     }
 
-    // ── Availability radio toggle ───────────────────────────────────
+    // ── Availability toggle ────────────────────────────────────────
 
     document.querySelectorAll("input[name='availability_status']").forEach((radio) => {
       radio.addEventListener("change", () => {
@@ -530,31 +670,32 @@
     // ── Skill chips ────────────────────────────────────────────────
 
     document.querySelectorAll(".pill--skill").forEach((chip) => {
-      chip.addEventListener("click", () => chip.classList.toggle("selected"));
+      chip.addEventListener("click", () => {
+        chip.classList.toggle("selected");
+        updateCompletion();
+      });
     });
 
-    // Add custom skill
     function addCustomSkill(value) {
       const val = value.trim();
       if (!val) return;
-      // Don't duplicate
-      const exists = [...document.querySelectorAll(".pill--skill")]
-        .some((c) => c.dataset.skill.toLowerCase() === val.toLowerCase());
-      if (exists) {
-        // Just select existing
-        const existing = [...document.querySelectorAll(".pill--skill")]
-          .find((c) => c.dataset.skill.toLowerCase() === val.toLowerCase());
-        existing?.classList.add("selected");
+      const existing = [...document.querySelectorAll(".pill--skill")]
+        .find((c) => c.dataset.skill?.toLowerCase() === val.toLowerCase());
+      if (existing) {
+        existing.classList.add("selected");
         return;
       }
       const chip = document.createElement("button");
-      chip.type = "button";
+      chip.type      = "button";
       chip.className = "pill pill--skill selected";
       chip.dataset.skill = val;
-      chip.textContent = val;
-      chip.addEventListener("click", () => chip.classList.toggle("selected"));
-      // Insert before the add-row
+      chip.textContent   = val;
+      chip.addEventListener("click", () => {
+        chip.classList.toggle("selected");
+        updateCompletion();
+      });
       document.getElementById("skill-add-row").insertAdjacentElement("beforebegin", chip);
+      updateCompletion();
     }
 
     document.getElementById("skill-other-add").addEventListener("click", () => {
@@ -571,21 +712,21 @@
       }
     });
 
-    // Add custom language
+    // ── Custom language chips ──────────────────────────────────────
+
     const customLangs = new Set();
 
     function addCustomLanguage(value) {
       const val = value.trim();
       if (!val || customLangs.has(val.toLowerCase())) return;
-      // Check if it already exists as a checkbox
       const existing = document.querySelector(`input[name="language"][value="${val}"]`);
       if (existing) { existing.checked = true; return; }
       customLangs.add(val.toLowerCase());
       const chip = document.createElement("button");
-      chip.type = "button";
+      chip.type      = "button";
       chip.className = "pill pill--skill selected";
       chip.dataset.lang = val;
-      chip.textContent = `${val} ×`;
+      chip.textContent  = `${val} ×`;
       chip.addEventListener("click", () => {
         customLangs.delete(val.toLowerCase());
         chip.remove();
@@ -632,18 +773,14 @@
         }
       }
 
-      // OG fetch button
       block.querySelector(".portfolio-fetch-btn").addEventListener("click", async (e) => {
         const btn = e.currentTarget;
         const url = block.querySelector(".portfolio-url-input").value.trim();
         if (!url) return;
-
         btn.disabled    = true;
         btn.textContent = "Fetching…";
-
         try {
           const og = await api.post("/og", { url });
-
           if (og.title)       block.querySelector(".portfolio-title-input").value = og.title;
           if (og.description) block.querySelector(".portfolio-desc-input").value  = og.description;
           if (og.image) {
@@ -652,14 +789,12 @@
             preview.hidden = false;
           }
         } catch {
-          // Silent fail — fields stay empty for manual entry
+          // silent — manual entry still works
         }
-
         btn.disabled    = false;
         btn.textContent = "Fetch";
       });
 
-      // Remove button — deletes from the database if already saved, then removes from DOM
       block.querySelector(".portfolio-remove-btn").addEventListener("click", async () => {
         const itemId = block.dataset.itemId;
         if (itemId) {
@@ -667,7 +802,7 @@
             await api.delete(`/portfolio/${itemId}`);
           } catch (err) {
             console.error("Could not delete portfolio item:", err.message);
-            return; // Don't remove from DOM if the delete failed
+            return;
           }
         }
         block.remove();
@@ -676,79 +811,56 @@
       document.getElementById("portfolio-items").appendChild(block);
     }
 
-    // ── Save ───────────────────────────────────────────────────────
+    // ── Core save ─────────────────────────────────────────────────
 
-    document.getElementById("save-btn").addEventListener("click", async () => {
-      const btn       = document.getElementById("save-btn");
-      const errorEl   = document.getElementById("error-banner");
-      const successEl = document.getElementById("save-banner");
-
-      btn.disabled    = true;
-      btn.textContent = "Saving…";
-      errorEl.hidden  = true;
-      successEl.hidden = true;
-
-      // Gather selected skills
+    async function saveProfile() {
       const skills = [...document.querySelectorAll(".pill--skill.selected")]
         .map((c) => c.dataset.skill);
 
-      // Gather selected languages (checkboxes + custom chips)
       const languages = [
         ...[...document.querySelectorAll("input[name='language']:checked")].map((c) => c.value),
         ...[...document.querySelectorAll("#custom-language-chips .pill--skill")].map((c) => c.dataset.lang),
       ];
 
-      // Availability
       const availStatus = document.querySelector("input[name='availability_status']:checked")?.value;
       const availDate   = document.getElementById("availability-date").value || null;
 
-      try {
-        // Upload avatar first if one was selected
-        let avatarUrl;
-        if (pendingAvatarFile) {
-          avatarUrl = await uploadAvatar(pendingAvatarFile);
-          pendingAvatarFile = null;
-        }
-
-        await api.put("/members/me", {
-          ...(avatarUrl !== undefined ? { avatar_url: avatarUrl } : {}),
-          first_name:          document.getElementById("first-name").value.trim(),
-          last_name:           document.getElementById("last-name").value.trim(),
-          role:                document.getElementById("role").value.trim(),
-          bio:                 document.getElementById("bio").value.trim(),
-          location:            document.getElementById("location").value.trim(),
-          skills,
-          languages,
-          availability_status: availStatus,
-          availability_date:   availStatus === "from_date" ? availDate : null,
-          rate_min:            parseInt(document.getElementById("rate-min").value) || null,
-          rate_max:            parseInt(document.getElementById("rate-max").value) || null,
-          rate_notes:          document.getElementById("rate-notes").value.trim(),
-          website_url:         document.getElementById("website-url").value.trim(),
-          linkedin_url:        document.getElementById("linkedin-url").value.trim(),
-        });
-
-        // Save portfolio items
-        await savePortfolioItems();
-
-        successEl.hidden = false;
-        successEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
-
-      } catch (err) {
-        errorEl.textContent = err.message;
-        errorEl.hidden      = false;
+      let avatarUrl;
+      if (pendingAvatarFile) {
+        avatarUrl = await uploadAvatar(pendingAvatarFile);
+        pendingAvatarFile = null;
       }
 
-      btn.disabled    = false;
-      btn.textContent = "Save profile";
-    });
+      await api.put("/members/me", {
+        ...(avatarUrl !== undefined ? { avatar_url: avatarUrl } : {}),
+        first_name:          document.getElementById("first-name").value.trim(),
+        last_name:           document.getElementById("last-name").value.trim(),
+        role:                document.getElementById("role").value.trim(),
+        bio:                 document.getElementById("bio").value.trim(),
+        location:            document.getElementById("location").value.trim(),
+        skills,
+        languages,
+        availability_status: availStatus || null,
+        availability_date:   availStatus === "from_date" ? availDate : null,
+        rate_min:            parseInt(document.getElementById("rate-min").value) || null,
+        rate_max:            parseInt(document.getElementById("rate-max").value) || null,
+        rate_notes:          document.getElementById("rate-notes").value.trim(),
+        website_url:         document.getElementById("website-url").value.trim(),
+        linkedin_url:        document.getElementById("linkedin-url").value.trim(),
+      });
+
+      if (currentStep === 4) {
+        await savePortfolioItems();
+      }
+
+      updateCompletion();
+    }
 
     async function savePortfolioItems() {
       const blocks = document.querySelectorAll(".portfolio-item-block");
-
       for (const block of blocks) {
         const title = block.querySelector(".portfolio-title-input").value.trim();
-        if (!title) continue; // skip empty blocks
+        if (!title) continue;
 
         const previewContainer = block.querySelector(".portfolio-item-block__preview");
         const previewImg       = block.querySelector(".portfolio-preview-img");
@@ -762,18 +874,70 @@
         };
 
         const itemId = block.dataset.itemId;
-
         if (itemId) {
-          // Update existing item
           await api.put(`/portfolio/${itemId}`, payload);
         } else {
-          // Create new item — write the returned ID back onto the block
-          // so a second save updates rather than duplicates
           const { item } = await api.post("/portfolio", payload);
           block.dataset.itemId = item.id;
         }
       }
     }
+
+    // ── Navigation handlers ────────────────────────────────────────
+
+    async function handleSave({ advance }) {
+      const btn      = advance
+        ? document.getElementById("step-next-btn")
+        : document.getElementById("save-only-btn");
+      const errorEl  = document.getElementById("error-banner");
+      const successEl = document.getElementById("save-banner");
+
+      if (currentStep === 1) {
+        const firstName = document.getElementById("first-name").value.trim();
+        const lastName  = document.getElementById("last-name").value.trim();
+        if (!firstName || !lastName) {
+          errorEl.textContent = "Please enter your first and last name.";
+          errorEl.hidden = false;
+          return;
+        }
+      }
+
+      btn.disabled    = true;
+      const origText  = btn.textContent;
+      btn.textContent = "Saving…";
+      errorEl.hidden  = true;
+      successEl.hidden = true;
+
+      try {
+        await saveProfile();
+        if (advance && currentStep < 4) {
+          showStep(currentStep + 1);
+        } else if (advance && currentStep === 4) {
+          const { member } = await api.get("/members/me");
+          window.location.href = `/member.html?username=${member.username}`;
+        } else {
+          successEl.hidden = false;
+        }
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.hidden      = false;
+      }
+
+      btn.disabled    = false;
+      btn.textContent = origText;
+    }
+
+    document.getElementById("step-next-btn").addEventListener("click", () =>
+      handleSave({ advance: true })
+    );
+
+    document.getElementById("save-only-btn").addEventListener("click", () =>
+      handleSave({ advance: false })
+    );
+
+    document.getElementById("step-back-btn").addEventListener("click", () => {
+      showStep(currentStep - 1);
+    });
 
     loadProfile();
   </script>

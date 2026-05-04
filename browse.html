@@ -42,7 +42,20 @@
     </div>
   </nav>
 
-  <main class="browse-main">
+  <!-- Browse gate — shown when profile is incomplete -->
+  <div id="browse-gate" class="browse-gate" hidden>
+    <div class="browse-gate__box">
+      <p class="browse-gate__eyebrow">Members only</p>
+      <h2 class="browse-gate__heading">Browsing is for active members.</h2>
+      <p class="browse-gate__body">
+        To browse and be found, add your role, at least one skill, and your availability.
+        It takes two minutes.
+      </p>
+      <a href="/profile.html" class="btn btn--primary">Complete your profile →</a>
+    </div>
+  </div>
+
+  <main class="browse-main" id="browse-main">
 
     <!-- Need context banner — shown when arriving from a need page -->
     <div id="need-context-banner" class="need-context-banner" hidden>
@@ -206,10 +219,19 @@
     });
     dropdown.addEventListener("click", (e) => e.stopPropagation());
 
-    // Populate nav avatar
+    // Populate nav avatar + check profile completeness for browse gate
     try {
       const { member } = await api.get("/members/me");
       renderAvatar(document.getElementById("nav-avatar"), member);
+
+      const hasRole  = !!member.role?.trim();
+      const hasSkill = (member.skills || []).length > 0;
+      const hasAvail = !!member.availability_status;
+
+      if (!hasRole || !hasSkill || !hasAvail) {
+        document.getElementById("browse-gate").hidden = false;
+        document.getElementById("browse-main").classList.add("browse-main--locked");
+      }
     } catch { /* silently skip */ }
 
     // Need context — if arriving from a need page, show banner and enable reach-out CTAs
