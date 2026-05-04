@@ -384,7 +384,6 @@
         rate_max:           parseInt(document.getElementById("rate-max").value) || null,
         rate_notes:         document.getElementById("rate-notes").value.trim(),
         visibility,
-        invited_member_ids: visibility === "invite" ? [...invitedMembers] : [],
       };
 
       try {

@@ -138,7 +138,6 @@ router.put("/:id", requireAuth, async (req, res) => {
     "skill_title", "skill_tags", "description",
     "start_date_label", "duration_label", "commitment_label",
     "rate_min", "rate_max", "rate_notes", "visibility", "status",
-    "invited_member_ids",
   ];
 
   const updates = {};
