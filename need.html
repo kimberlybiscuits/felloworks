@@ -255,13 +255,13 @@
 
         document.getElementById("mark-filled-btn").addEventListener("click", async () => {
           if (!confirm("Mark this need as filled? It will be removed from the browse list.")) return;
-          await api.put(`/needs/${need.id}`, { status: "filled" });
+          await api.put(`/needs/${need.id}`, { status: "closed" });
           window.location.href = "/dashboard.html";
         });
 
         document.getElementById("remove-need-btn").addEventListener("click", async () => {
           if (!confirm("Remove this need? This can't be undone.")) return;
-          await api.put(`/needs/${need.id}`, { status: "removed" });
+          await api.put(`/needs/${need.id}`, { status: "closed" });
           window.location.href = "/dashboard.html";
         });
       } else {
