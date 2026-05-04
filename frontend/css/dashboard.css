@@ -465,9 +465,17 @@ body {
   border-left: 3px solid var(--accent);
   padding: var(--space-5) var(--space-6);
   display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.completion-prompt__content {
+  display: flex;
   align-items: center;
   gap: var(--space-6);
   flex-wrap: wrap;
+  flex: 1;
 }
 
 .completion-prompt__heading {
@@ -481,13 +489,27 @@ body {
   font-size: 0.875rem;
   color: var(--text-secondary);
   margin: 0;
-  flex: 1;
-  min-width: 200px;
 }
 
 .completion-prompt .btn {
   flex-shrink: 0;
   white-space: nowrap;
+}
+
+.completion-prompt__dismiss {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 0;
+  flex-shrink: 0;
+  opacity: 0.5;
+}
+
+.completion-prompt__dismiss:hover {
+  opacity: 1;
 }
 
 /* -----------------------------------------------------------------------
