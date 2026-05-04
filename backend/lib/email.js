@@ -46,8 +46,11 @@ function emailShell(bodyHtml) {
 }
 
 // Send an invite email to a prospective member
-async function sendInviteEmail({ inviterName, inviteeEmail, token }) {
+async function sendInviteEmail({ inviterName, inviteeEmail, token, note }) {
   const inviteUrl = `${process.env.FRONTEND_URL}/invite.html?token=${token}`;
+  const noteHtml = note
+    ? `<p style="margin:16px 0 0;font-size:15px;line-height:1.6;color:#6B6259;font-style:italic;">&ldquo;${note}&rdquo;</p>`
+    : `<p style="margin:16px 0 0;font-size:15px;line-height:1.6;color:#6B6259;">${inviterName} thought you'd be a good fit.</p>`;
 
   const body = `
     <tr>
@@ -59,8 +62,8 @@ async function sendInviteEmail({ inviterName, inviteeEmail, token }) {
         <p style="margin:0;font-size:15px;line-height:1.6;color:#6B6259;">
           FelloWorks is an invite-only collaboration network for freelancers, consultants and fractional leaders.
           Every member is vouched for by someone already inside.
-          ${inviterName} thought you'd be a good fit.
         </p>
+        ${noteHtml}
       </td>
     </tr>
     <tr>
