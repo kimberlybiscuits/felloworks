@@ -48,7 +48,7 @@ router.get("/:token", async (req, res) => {
 
 // Create an invite — requires the sender to be authenticated
 router.post("/", requireAuth, async (req, res) => {
-  const { invitee_email } = req.body;
+  const { invitee_email, note } = req.body;
 
   if (!invitee_email) {
     return res.status(400).json({ error: "invitee_email is required." });
@@ -85,7 +85,7 @@ router.post("/", requireAuth, async (req, res) => {
     : "A FelloWorks member";
 
   try {
-    await sendInviteEmail({ inviterName, inviteeEmail: invitee_email, token });
+    await sendInviteEmail({ inviterName, inviteeEmail: invitee_email, token, note });
   } catch (emailErr) {
     // Log the failure but don't block the response — the invite record exists
     // and the link can be shared manually if needed
