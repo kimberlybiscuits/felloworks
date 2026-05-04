@@ -100,6 +100,12 @@
             <a href="/needs-new.html" id="edit-link" class="btn btn--secondary btn--full" style="margin-top: var(--space-3)">
               Edit this need
             </a>
+            <button id="mark-filled-btn" class="btn btn--secondary btn--full" style="margin-top: var(--space-3)">
+              Mark as filled
+            </button>
+            <button id="remove-need-btn" class="need-remove-btn" style="margin-top: var(--space-4)">
+              Remove this need
+            </button>
           </div>
           <div id="action-other" hidden>
             <a id="message-link" href="#" class="btn btn--primary btn--full">
@@ -246,6 +252,18 @@
         document.getElementById("find-members-link").href =
           `/browse.html?need=${encodeURIComponent(need.id)}`;
         document.getElementById("action-own").hidden = false;
+
+        document.getElementById("mark-filled-btn").addEventListener("click", async () => {
+          if (!confirm("Mark this need as filled? It will be removed from the browse list.")) return;
+          await api.put(`/needs/${need.id}`, { status: "filled" });
+          window.location.href = "/dashboard.html";
+        });
+
+        document.getElementById("remove-need-btn").addEventListener("click", async () => {
+          if (!confirm("Remove this need? This can't be undone.")) return;
+          await api.put(`/needs/${need.id}`, { status: "removed" });
+          window.location.href = "/dashboard.html";
+        });
       } else {
         // Other's need — show message link
         const msgHref = poster?.username

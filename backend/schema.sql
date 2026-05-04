@@ -43,7 +43,8 @@ create table public.members (
   availability_updated_at timestamptz,         -- shown on profile as trust signal
 
   invited_by            uuid references public.members(id) on delete set null,
-  member_since          date not null default current_date
+  member_since          date not null default current_date,
+  abandonment_email_sent boolean not null default false  -- set true after 24h nudge email sent
 );
 
 -- Allow members to read all other members (network is authenticated-only)

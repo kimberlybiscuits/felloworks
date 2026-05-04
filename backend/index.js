@@ -30,6 +30,7 @@ app.use("/api/portfolio", require("./routes/portfolio"));
 app.use("/api/admin", require("./routes/admin"));
 app.use("/api/og",     require("./routes/og")); // Open Graph metadata fetch for portfolio links
 app.use("/api/report", require("./routes/report"));
+app.use("/api/cron",   require("./routes/cron"));
 
 // Basic health check — useful for Render/Railway uptime monitoring
 app.get("/health", (req, res) => {

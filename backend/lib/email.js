@@ -169,4 +169,36 @@ async function sendFeedbackReportEmail({ memberName, type, message, page }) {
   return data;
 }
 
-module.exports = { sendInviteEmail, sendFeedbackNotificationEmail, sendFeedbackReportEmail };
+async function sendAbandonmentEmail({ firstName, email }) {
+  const body = `
+    <tr>
+      <td style="padding:32px 48px 16px;">
+        <h1 style="margin:0 0 16px;font-size:24px;font-weight:400;color:#1A1A1A;line-height:1.2;">
+          You're in, ${firstName} — but you're not findable yet.
+        </h1>
+        <p style="margin:0 0 16px;font-size:15px;line-height:1.6;color:#6B6259;">
+          You've joined FelloWorks, but other members can't find you yet. Three things unlock your profile: your role, at least one skill, and your availability.
+        </p>
+        <p style="margin:0 0 24px;font-size:15px;line-height:1.6;color:#6B6259;">
+          It takes two minutes.
+        </p>
+        <a href="https://fello.works/profile.html"
+           style="display:inline-block;background:#FF2D55;color:#fff;font-size:13px;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;text-decoration:none;padding:14px 28px;">
+          Complete your profile
+        </a>
+      </td>
+    </tr>
+  `;
+
+  const { data, error } = await resend.emails.send({
+    from:    FROM,
+    to:      email,
+    subject: "You're in — but not findable yet",
+    html:    emailShell(body),
+  });
+
+  if (error) throw new Error(`Email send failed: ${error.message}`);
+  return data;
+}
+
+module.exports = { sendInviteEmail, sendFeedbackNotificationEmail, sendFeedbackReportEmail, sendAbandonmentEmail };
