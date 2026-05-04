@@ -183,7 +183,8 @@
       succEl.hidden   = true;
 
       try {
-        await api.post("/invites", { invitee_email: email });
+        const note = document.getElementById("personal-note").value.trim();
+        await api.post("/invites", { invitee_email: email, ...(note && { note }) });
         succEl.textContent = `Invite sent to ${email}. They'll receive an email shortly.`;
         succEl.hidden = false;
         e.target.reset();
