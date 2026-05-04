@@ -225,10 +225,11 @@
       renderAvatar(document.getElementById("nav-avatar"), member);
 
       const hasRole  = !!member.role?.trim();
+      const hasBio   = !!member.bio?.trim();
       const hasSkill = (member.skills || []).length > 0;
       const hasAvail = !!member.availability_status;
 
-      if (!hasRole || !hasSkill || !hasAvail) {
+      if (!hasRole || !hasBio || !hasSkill || !hasAvail) {
         document.getElementById("browse-gate").hidden = false;
         document.getElementById("browse-main").classList.add("browse-main--locked");
       }

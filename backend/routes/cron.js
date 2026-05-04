@@ -21,7 +21,7 @@ router.post("/abandonment", async (req, res) => {
   // Find members who joined in that window and haven't completed their profile
   const { data: members, error } = await supabaseAdmin
     .from("members")
-    .select("id, first_name, email, role, skills, availability_status, abandonment_email_sent")
+    .select("id, first_name, email, role, bio, skills, availability_status, abandonment_email_sent")
     .gte("created_at", from)
     .lte("created_at", to)
     .eq("abandonment_email_sent", false);
@@ -35,6 +35,7 @@ router.post("/abandonment", async (req, res) => {
   for (const m of members || []) {
     const isComplete =
       m.role?.trim() &&
+      m.bio?.trim() &&
       (m.skills || []).length > 0 &&
       m.availability_status;
 
