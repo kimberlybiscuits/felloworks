@@ -26,9 +26,10 @@ router.get("/", requireAuth, async (req, res) => {
     );
   }
 
-  // Skill filter — checks if the skills array contains the requested skill
+  // Skill filter — one or more skills; member must have at least one (OR logic)
   if (skill) {
-    query = query.contains("skills", [skill]);
+    const skills = [].concat(skill); // handles ?skill=X or ?skill=X&skill=Y
+    query = query.overlaps("skills", skills);
   }
 
   // Language filter

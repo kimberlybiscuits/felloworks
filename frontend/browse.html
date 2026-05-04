@@ -246,6 +246,14 @@
         document.getElementById("need-context-title").textContent = need.skill_title;
         document.getElementById("need-context-back").href = `/need.html?id=${contextNeedId}`;
         document.getElementById("need-context-banner").hidden = false;
+
+        // Pre-select the need's skill tags in the sidebar and filter state
+        const needSkills = need.skill_tags || [];
+        needSkills.forEach((skill) => {
+          const cb = document.querySelector(`input[name="skill"][value="${skill}"]`);
+          if (cb) cb.checked = true;
+        });
+        filters.skill = needSkills;
       } catch { /* silently ignore — treat as normal browse */ }
     }
 
@@ -307,8 +315,8 @@
 
     async function fetchAndRender() {
       const params = new URLSearchParams();
-      if (filters.q)                params.set("q", filters.q);
-      if (filters.skill.length)     params.set("skill", filters.skill[0]); // API takes one skill for now
+      if (filters.q)            params.set("q", filters.q);
+      filters.skill.forEach((s) => params.append("skill", s));
       if (filters.availability[0])  params.set("availability", filters.availability[0]);
       if (filters.rate_max < 2000)  params.set("rate_max", filters.rate_max);
       if (filters.language.length)  params.set("language", filters.language[0]);
@@ -374,9 +382,9 @@
     }
 
     function buildCard(m) {
-      const availPill    = availabilityPill(m);
-      const langPills    = (m.languages || []).map((l) =>
-        `<span class="pill">${escHtml(l)}</span>`).join("");
+      const availPill  = availabilityPill(m);
+      const skillPills = (m.skills || []).slice(0, 3).map((s) =>
+        `<span class="pill pill--skill">${escHtml(s)}</span>`).join("");
       const rate         = m.rate_min && m.rate_max
         ? `€${m.rate_min}–€${m.rate_max}/day`
         : m.rate_min ? `from €${m.rate_min}/day` : "";
@@ -402,7 +410,7 @@
           <div class="member-card__role">${escHtml(m.role || "")}</div>
           <div class="member-card__pills">
             ${availPill}
-            ${langPills}
+            ${skillPills}
           </div>
           <div class="member-card__footer">
             <span>${rate}</span>
