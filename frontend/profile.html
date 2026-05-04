@@ -45,350 +45,310 @@
   <main class="profile-edit-main">
     <div class="profile-edit-container">
 
-      <!-- ── Step progress header ──────────────────────────────── -->
-      <div class="profile-steps-header">
-        <div class="profile-steps-bar" role="list" aria-label="Profile sections">
-          <button class="profile-steps-bar__dot profile-steps-bar__dot--active" id="dot-1" data-step="1" aria-label="Step 1: Who you are"></button>
-          <div class="profile-steps-bar__line"></div>
-          <button class="profile-steps-bar__dot" id="dot-2" data-step="2" aria-label="Step 2: What you do"></button>
-          <div class="profile-steps-bar__line"></div>
-          <button class="profile-steps-bar__dot" id="dot-3" data-step="3" aria-label="Step 3: Availability & rate"></button>
-          <div class="profile-steps-bar__line"></div>
-          <button class="profile-steps-bar__dot" id="dot-4" data-step="4" aria-label="Step 4: Work samples"></button>
-        </div>
-        <div class="profile-steps-info">
-          <span id="step-counter" class="profile-steps-counter">Step 1 of 4</span>
-          <span class="profile-steps-divider">—</span>
-          <span id="step-title-label" class="profile-steps-title">Who you are</span>
-          <a id="view-profile-link" href="#" class="profile-steps-view" hidden>View profile →</a>
+      <header class="profile-edit-header">
+        <div class="profile-edit-header__row">
+          <h1 class="profile-edit-title">My profile</h1>
+          <a id="view-profile-link" href="#" class="profile-edit-view-link" hidden>View as others see it →</a>
         </div>
 
-        <!-- 3-field completion bar -->
+        <!-- 4-field completion bar -->
         <div class="profile-completion" id="profile-completion">
-          <span class="profile-completion__item" id="compl-role" title="Add your role">Role</span>
+          <span class="profile-completion__item" id="compl-role">Role</span>
           <span class="profile-completion__sep">·</span>
-          <span class="profile-completion__item" id="compl-skills" title="Select at least one skill">Skills</span>
+          <span class="profile-completion__item" id="compl-bio">Bio</span>
           <span class="profile-completion__sep">·</span>
-          <span class="profile-completion__item" id="compl-avail" title="Set your availability">Availability</span>
+          <span class="profile-completion__item" id="compl-skills">Skills</span>
+          <span class="profile-completion__sep">·</span>
+          <span class="profile-completion__item" id="compl-avail">Availability</span>
           <span class="profile-completion__hint" id="compl-hint">→ unlock browsing</span>
         </div>
-      </div>
+      </header>
 
-      <!-- Banners -->
-      <div id="save-banner" class="save-banner" hidden>Saved.</div>
+      <div id="save-banner" class="save-banner" hidden>Profile saved.</div>
       <div id="error-banner" class="alert alert--error" hidden></div>
 
-      <!-- ── STEP 1: Who you are ────────────────────────────────── -->
-      <div class="profile-step" id="step-1">
+      <!-- ── Required fields ───────────────────────────────────────── -->
+      <section class="profile-section-block">
+        <h2 class="profile-section-block__title">The essentials</h2>
+        <p class="profile-section-block__desc">
+          Complete these four fields to unlock browsing and your public profile.
+        </p>
 
-        <section class="profile-section-block">
-          <h2 class="profile-section-block__title">
-            Photo <span class="form-optional">(optional)</span>
-          </h2>
-          <p class="profile-section-block__desc">
-            If you'd rather not upload one, your initials are shown instead.
-          </p>
-
-          <div class="avatar-upload">
-            <div class="avatar avatar--lg" id="avatar-preview"></div>
-            <div class="avatar-upload__controls">
-              <label class="btn btn--secondary avatar-upload__label" for="avatar-input">
-                Choose photo
-              </label>
-              <input type="file" id="avatar-input" accept="image/*"
-                     class="avatar-upload__input" aria-label="Upload profile photo" />
-              <button type="button" class="avatar-remove-btn text-muted" id="avatar-remove-btn" hidden>
-                Remove photo
-              </button>
-            </div>
-          </div>
-          <p class="form-hint">JPG or PNG. Will be cropped to a circle. Max 2MB.</p>
-        </section>
-
-        <section class="profile-section-block">
-          <h2 class="profile-section-block__title">The basics</h2>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="first-name">First name</label>
-              <input class="form-input" type="text" id="first-name" autocomplete="given-name" />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="last-name">Last name</label>
-              <input class="form-input" type="text" id="last-name" autocomplete="family-name" />
-            </div>
-          </div>
-
+        <div class="form-row">
           <div class="form-group">
-            <label class="form-label" for="role">
-              Role <span class="form-optional">(optional)</span>
-            </label>
-            <input class="form-input" type="text" id="role"
-                   placeholder="e.g. Brand designer & art director" />
+            <label class="form-label" for="first-name">First name</label>
+            <input class="form-input" type="text" id="first-name" autocomplete="given-name" />
           </div>
-
           <div class="form-group">
-            <label class="form-label" for="bio">
-              Bio <span class="form-optional">(optional)</span>
-            </label>
-            <textarea class="form-textarea" id="bio" rows="5"
-                      placeholder="A few sentences about your work and how you collaborate."></textarea>
+            <label class="form-label" for="last-name">Last name</label>
+            <input class="form-input" type="text" id="last-name" autocomplete="family-name" />
           </div>
-
-          <div class="form-group">
-            <label class="form-label" for="location">
-              Location <span class="form-optional">(optional)</span>
-            </label>
-            <input class="form-input" type="text" id="location"
-                   placeholder="e.g. Amsterdam, NL"
-                   list="location-suggestions"
-                   autocomplete="off" />
-            <datalist id="location-suggestions">
-              <option value="Amsterdam, NL" />
-              <option value="Athens, GR" />
-              <option value="Barcelona, ES" />
-              <option value="Berlin, DE" />
-              <option value="Brussels, BE" />
-              <option value="Budapest, HU" />
-              <option value="Copenhagen, DK" />
-              <option value="Dublin, IE" />
-              <option value="Edinburgh, UK" />
-              <option value="Frankfurt, DE" />
-              <option value="Geneva, CH" />
-              <option value="Hamburg, DE" />
-              <option value="Helsinki, FI" />
-              <option value="Lisbon, PT" />
-              <option value="Ljubljana, SI" />
-              <option value="London, UK" />
-              <option value="Luxembourg, LU" />
-              <option value="Lyon, FR" />
-              <option value="Madrid, ES" />
-              <option value="Marseille, FR" />
-              <option value="Milan, IT" />
-              <option value="Munich, DE" />
-              <option value="Oslo, NO" />
-              <option value="Paris, FR" />
-              <option value="Prague, CZ" />
-              <option value="Remote" />
-              <option value="Riga, LV" />
-              <option value="Rome, IT" />
-              <option value="Rotterdam, NL" />
-              <option value="Stockholm, SE" />
-              <option value="Tallinn, EE" />
-              <option value="Vienna, AT" />
-              <option value="Vilnius, LT" />
-              <option value="Warsaw, PL" />
-              <option value="Zurich, CH" />
-            </datalist>
-          </div>
-        </section>
-
-      </div>
-
-      <!-- ── STEP 2: What you do ────────────────────────────────── -->
-      <div class="profile-step" id="step-2" hidden>
-
-        <!-- Live preview of current appearance -->
-        <div class="profile-preview-banner" id="profile-preview-banner">
-          <p class="profile-preview-banner__label">This is how you appear right now</p>
-          <div class="profile-preview-card">
-            <div class="avatar" id="preview-avatar"></div>
-            <div class="profile-preview-card__meta">
-              <p class="profile-preview-card__name" id="preview-name"></p>
-              <p class="profile-preview-card__role" id="preview-role"></p>
-            </div>
-          </div>
-          <p class="profile-preview-banner__hint" id="preview-hint"></p>
         </div>
 
-        <section class="profile-section-block">
-          <h2 class="profile-section-block__title">
-            Skills <span class="form-optional">(optional)</span>
-          </h2>
-          <p class="profile-section-block__desc">
-            Select everything that applies. This is how members find you in browse.
-          </p>
+        <div class="form-group">
+          <label class="form-label" for="role">Role</label>
+          <input class="form-input" type="text" id="role"
+                 placeholder="e.g. Brand designer & art director" />
+        </div>
 
-          <div class="skill-chips" id="skill-chips">
-            <button type="button" class="pill pill--skill" data-skill="Brand design">Brand design</button>
-            <button type="button" class="pill pill--skill" data-skill="UX / product design">UX / product design</button>
-            <button type="button" class="pill pill--skill" data-skill="Content design">Content design</button>
-            <button type="button" class="pill pill--skill" data-skill="Editorial design">Editorial design</button>
-            <button type="button" class="pill pill--skill" data-skill="Motion design">Motion design</button>
-            <button type="button" class="pill pill--skill" data-skill="Illustration">Illustration</button>
-            <button type="button" class="pill pill--skill" data-skill="Art direction">Art direction</button>
-            <button type="button" class="pill pill--skill" data-skill="Photography">Photography</button>
-            <button type="button" class="pill pill--skill" data-skill="Video production">Video production</button>
-            <button type="button" class="pill pill--skill" data-skill="Copywriting">Copywriting</button>
-            <button type="button" class="pill pill--skill" data-skill="Content writing">Content writing</button>
-            <button type="button" class="pill pill--skill" data-skill="Content strategy">Content strategy</button>
-            <button type="button" class="pill pill--skill" data-skill="Communications strategy">Communications strategy</button>
-            <button type="button" class="pill pill--skill" data-skill="Campaign planning">Campaign planning</button>
-            <button type="button" class="pill pill--skill" data-skill="Social media">Social media</button>
-            <button type="button" class="pill pill--skill" data-skill="PR & media relations">PR & media relations</button>
-            <button type="button" class="pill pill--skill" data-skill="Research & insights">Research & insights</button>
-            <button type="button" class="pill pill--skill" data-skill="Translation & localisation">Translation & localisation</button>
-            <button type="button" class="pill pill--skill" data-skill="Frontend development">Frontend development</button>
-            <button type="button" class="pill pill--skill" data-skill="No-code / Webflow">No-code / Webflow</button>
-            <button type="button" class="pill pill--skill" data-skill="Web development">Web development</button>
-            <!-- Custom skills added by JS appear here -->
-            <div class="skill-add-row" id="skill-add-row">
-              <input
-                type="text"
-                id="skill-other-input"
-                class="form-input skill-other-input"
-                placeholder="Add your own skill…"
-                autocomplete="off"
-                maxlength="60"
-              />
-              <button type="button" class="btn btn--sm btn--secondary" id="skill-other-add">Add</button>
-            </div>
-          </div>
-        </section>
+        <div class="form-group">
+          <label class="form-label" for="bio">Bio</label>
+          <textarea class="form-textarea" id="bio" rows="4"
+                    placeholder="A few sentences about your work and how you collaborate."></textarea>
+        </div>
+      </section>
 
-        <section class="profile-section-block">
-          <h2 class="profile-section-block__title">
-            Languages <span class="form-optional">(optional)</span>
-          </h2>
+      <!-- ── Skills ─────────────────────────────────────────────────── -->
+      <section class="profile-section-block">
+        <h2 class="profile-section-block__title">Skills</h2>
+        <p class="profile-section-block__desc">
+          Select everything that applies. This is how members find you in browse.
+        </p>
 
-          <div class="checkbox-grid">
-            <label class="filter-option"><input type="checkbox" name="language" value="English" /> English</label>
-            <label class="filter-option"><input type="checkbox" name="language" value="French" /> French</label>
-            <label class="filter-option"><input type="checkbox" name="language" value="Spanish" /> Spanish</label>
-            <label class="filter-option"><input type="checkbox" name="language" value="German" /> German</label>
-            <label class="filter-option"><input type="checkbox" name="language" value="Italian" /> Italian</label>
-            <label class="filter-option"><input type="checkbox" name="language" value="Dutch" /> Dutch</label>
-            <label class="filter-option"><input type="checkbox" name="language" value="Portuguese" /> Portuguese</label>
-            <label class="filter-option"><input type="checkbox" name="language" value="Swedish" /> Swedish</label>
-          </div>
-          <div class="skill-add-row" id="lang-add-row">
+        <div class="skill-chips" id="skill-chips">
+          <button type="button" class="pill pill--skill" data-skill="Brand design">Brand design</button>
+          <button type="button" class="pill pill--skill" data-skill="UX / product design">UX / product design</button>
+          <button type="button" class="pill pill--skill" data-skill="Content design">Content design</button>
+          <button type="button" class="pill pill--skill" data-skill="Editorial design">Editorial design</button>
+          <button type="button" class="pill pill--skill" data-skill="Motion design">Motion design</button>
+          <button type="button" class="pill pill--skill" data-skill="Illustration">Illustration</button>
+          <button type="button" class="pill pill--skill" data-skill="Art direction">Art direction</button>
+          <button type="button" class="pill pill--skill" data-skill="Photography">Photography</button>
+          <button type="button" class="pill pill--skill" data-skill="Video production">Video production</button>
+          <button type="button" class="pill pill--skill" data-skill="Copywriting">Copywriting</button>
+          <button type="button" class="pill pill--skill" data-skill="Content writing">Content writing</button>
+          <button type="button" class="pill pill--skill" data-skill="Content strategy">Content strategy</button>
+          <button type="button" class="pill pill--skill" data-skill="Communications strategy">Communications strategy</button>
+          <button type="button" class="pill pill--skill" data-skill="Campaign planning">Campaign planning</button>
+          <button type="button" class="pill pill--skill" data-skill="Social media">Social media</button>
+          <button type="button" class="pill pill--skill" data-skill="PR & media relations">PR & media relations</button>
+          <button type="button" class="pill pill--skill" data-skill="Research & insights">Research & insights</button>
+          <button type="button" class="pill pill--skill" data-skill="Translation & localisation">Translation & localisation</button>
+          <button type="button" class="pill pill--skill" data-skill="Frontend development">Frontend development</button>
+          <button type="button" class="pill pill--skill" data-skill="No-code / Webflow">No-code / Webflow</button>
+          <button type="button" class="pill pill--skill" data-skill="Web development">Web development</button>
+          <div class="skill-add-row" id="skill-add-row">
             <input
               type="text"
-              id="lang-other-input"
+              id="skill-other-input"
               class="form-input skill-other-input"
-              placeholder="Add another language…"
+              placeholder="Add your own skill…"
               autocomplete="off"
-              maxlength="40"
+              maxlength="60"
             />
-            <button type="button" class="btn btn--sm btn--secondary" id="lang-other-add">Add</button>
+            <button type="button" class="btn btn--sm btn--secondary" id="skill-other-add">Add</button>
           </div>
-          <div id="custom-language-chips" class="skill-chips"></div>
-        </section>
-
-      </div>
-
-      <!-- ── STEP 3: Availability & rate ────────────────────────── -->
-      <div class="profile-step" id="step-3" hidden>
-
-        <section class="profile-section-block">
-          <h2 class="profile-section-block__title">
-            Availability <span class="form-optional">(optional)</span>
-          </h2>
-          <p class="profile-section-block__desc">
-            Members set a specific date. Browse works out which bracket you fall into automatically.
-          </p>
-
-          <div class="availability-options">
-            <label class="availability-option">
-              <input type="radio" name="availability_status" value="now" />
-              <span>Available now</span>
-            </label>
-            <label class="availability-option">
-              <input type="radio" name="availability_status" value="from_date" />
-              <span>Available from a specific date</span>
-            </label>
-            <label class="availability-option">
-              <input type="radio" name="availability_status" value="unavailable" />
-              <span>Not available right now</span>
-            </label>
-          </div>
-
-          <div id="availability-date-row" class="form-group" hidden>
-            <label class="form-label" for="availability-date">Available from</label>
-            <input class="form-input form-input--date" type="date" id="availability-date" />
-          </div>
-
-          <p id="availability-updated" class="availability-updated text-muted" hidden></p>
-        </section>
-
-        <section class="profile-section-block">
-          <h2 class="profile-section-block__title">
-            Day rate <span class="form-optional">(optional)</span>
-          </h2>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="rate-min">Min (€/day)</label>
-              <input class="form-input" type="number" id="rate-min" placeholder="e.g. 600" min="0" />
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="rate-max">Max (€/day)</label>
-              <input class="form-input" type="number" id="rate-max" placeholder="e.g. 1000" min="0" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="rate-notes">
-              Rate notes <span class="form-optional">(optional)</span>
-            </label>
-            <input class="form-input" type="text" id="rate-notes"
-                   placeholder="Fixed fee, open to discussion, project-dependent, etc." />
-          </div>
-        </section>
-
-        <section class="profile-section-block">
-          <h2 class="profile-section-block__title">
-            Links <span class="form-optional">(optional)</span>
-          </h2>
-
-          <div class="form-group">
-            <label class="form-label" for="website-url">Website</label>
-            <input class="form-input" type="url" id="website-url" placeholder="https://" />
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="linkedin-url">LinkedIn</label>
-            <input class="form-input" type="url" id="linkedin-url"
-                   placeholder="https://linkedin.com/in/yourname" />
-          </div>
-        </section>
-
-      </div>
-
-      <!-- ── STEP 4: Work samples ───────────────────────────────── -->
-      <div class="profile-step" id="step-4" hidden>
-
-        <section class="profile-section-block">
-          <h2 class="profile-section-block__title">
-            Work samples <span class="form-optional">(optional)</span>
-          </h2>
-          <p class="profile-section-block__desc">
-            Paste a URL and we'll pull in the title, description, and preview image automatically.
-            You can edit any field before saving.
-          </p>
-
-          <div id="portfolio-items"></div>
-
-          <button type="button" class="btn btn--secondary" id="add-portfolio-btn">
-            + Add a work sample
-          </button>
-        </section>
-
-      </div>
-
-      <!-- ── Step navigation ──────────────────────────────────────── -->
-      <div class="profile-step-nav">
-        <button class="btn btn--secondary" id="step-back-btn" hidden>← Back</button>
-        <div class="profile-step-nav__actions">
-          <button class="btn btn--ghost" id="save-only-btn">Save progress</button>
-          <button class="btn btn--primary" id="step-next-btn">Save & continue →</button>
         </div>
+      </section>
+
+      <!-- ── Availability ───────────────────────────────────────────── -->
+      <section class="profile-section-block">
+        <h2 class="profile-section-block__title">Availability</h2>
+        <p class="profile-section-block__desc">
+          Members set a specific date. The browse screen works out which bracket you fall into automatically.
+        </p>
+
+        <div class="availability-options">
+          <label class="availability-option">
+            <input type="radio" name="availability_status" value="now" />
+            <span>Available now</span>
+          </label>
+          <label class="availability-option">
+            <input type="radio" name="availability_status" value="from_date" />
+            <span>Available from a specific date</span>
+          </label>
+          <label class="availability-option">
+            <input type="radio" name="availability_status" value="unavailable" />
+            <span>Not available right now</span>
+          </label>
+        </div>
+
+        <div id="availability-date-row" class="form-group" hidden>
+          <label class="form-label" for="availability-date">Available from</label>
+          <input class="form-input form-input--date" type="date" id="availability-date" />
+        </div>
+
+        <p id="availability-updated" class="availability-updated text-muted" hidden></p>
+      </section>
+
+      <!-- ── Photo ──────────────────────────────────────────────────── -->
+      <section class="profile-section-block">
+        <h2 class="profile-section-block__title">
+          Photo <span class="form-optional">(optional)</span>
+        </h2>
+        <p class="profile-section-block__desc">
+          If you'd rather not upload one, your initials are shown instead.
+        </p>
+
+        <div class="avatar-upload">
+          <div class="avatar avatar--lg" id="avatar-preview"></div>
+          <div class="avatar-upload__controls">
+            <label class="btn btn--secondary avatar-upload__label" for="avatar-input">
+              Choose photo
+            </label>
+            <input type="file" id="avatar-input" accept="image/*"
+                   class="avatar-upload__input" aria-label="Upload profile photo" />
+            <button type="button" class="avatar-remove-btn text-muted" id="avatar-remove-btn" hidden>
+              Remove photo
+            </button>
+          </div>
+        </div>
+        <p class="form-hint">JPG or PNG. Will be cropped to a circle. Max 2MB.</p>
+      </section>
+
+      <!-- ── Location ───────────────────────────────────────────────── -->
+      <section class="profile-section-block">
+        <h2 class="profile-section-block__title">
+          Location <span class="form-optional">(optional)</span>
+        </h2>
+
+        <div class="form-group">
+          <input class="form-input" type="text" id="location"
+                 placeholder="e.g. Amsterdam, NL"
+                 list="location-suggestions"
+                 autocomplete="off" />
+          <datalist id="location-suggestions">
+            <option value="Amsterdam, NL" />
+            <option value="Athens, GR" />
+            <option value="Barcelona, ES" />
+            <option value="Berlin, DE" />
+            <option value="Brussels, BE" />
+            <option value="Budapest, HU" />
+            <option value="Copenhagen, DK" />
+            <option value="Dublin, IE" />
+            <option value="Edinburgh, UK" />
+            <option value="Frankfurt, DE" />
+            <option value="Geneva, CH" />
+            <option value="Hamburg, DE" />
+            <option value="Helsinki, FI" />
+            <option value="Lisbon, PT" />
+            <option value="Ljubljana, SI" />
+            <option value="London, UK" />
+            <option value="Luxembourg, LU" />
+            <option value="Lyon, FR" />
+            <option value="Madrid, ES" />
+            <option value="Marseille, FR" />
+            <option value="Milan, IT" />
+            <option value="Munich, DE" />
+            <option value="Oslo, NO" />
+            <option value="Paris, FR" />
+            <option value="Prague, CZ" />
+            <option value="Remote" />
+            <option value="Riga, LV" />
+            <option value="Rome, IT" />
+            <option value="Rotterdam, NL" />
+            <option value="Stockholm, SE" />
+            <option value="Tallinn, EE" />
+            <option value="Vienna, AT" />
+            <option value="Vilnius, LT" />
+            <option value="Warsaw, PL" />
+            <option value="Zurich, CH" />
+          </datalist>
+        </div>
+      </section>
+
+      <!-- ── Languages ──────────────────────────────────────────────── -->
+      <section class="profile-section-block">
+        <h2 class="profile-section-block__title">
+          Languages <span class="form-optional">(optional)</span>
+        </h2>
+
+        <div class="checkbox-grid">
+          <label class="filter-option"><input type="checkbox" name="language" value="English" /> English</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="French" /> French</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="Spanish" /> Spanish</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="German" /> German</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="Italian" /> Italian</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="Dutch" /> Dutch</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="Portuguese" /> Portuguese</label>
+          <label class="filter-option"><input type="checkbox" name="language" value="Swedish" /> Swedish</label>
+        </div>
+        <div class="skill-add-row" id="lang-add-row" style="margin-top:var(--space-4);">
+          <input
+            type="text"
+            id="lang-other-input"
+            class="form-input skill-other-input"
+            placeholder="Add another language…"
+            autocomplete="off"
+            maxlength="40"
+          />
+          <button type="button" class="btn btn--sm btn--secondary" id="lang-other-add">Add</button>
+        </div>
+        <div id="custom-language-chips" class="skill-chips" style="margin-top:var(--space-3);"></div>
+      </section>
+
+      <!-- ── Day rate ───────────────────────────────────────────────── -->
+      <section class="profile-section-block">
+        <h2 class="profile-section-block__title">
+          Day rate <span class="form-optional">(optional)</span>
+        </h2>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="rate-min">Min (€/day)</label>
+            <input class="form-input" type="number" id="rate-min" placeholder="e.g. 600" min="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="rate-max">Max (€/day)</label>
+            <input class="form-input" type="number" id="rate-max" placeholder="e.g. 1000" min="0" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="rate-notes">
+            Rate notes <span class="form-optional">(optional)</span>
+          </label>
+          <input class="form-input" type="text" id="rate-notes"
+                 placeholder="Fixed fee, open to discussion, project-dependent, etc." />
+        </div>
+      </section>
+
+      <!-- ── Links ──────────────────────────────────────────────────── -->
+      <section class="profile-section-block">
+        <h2 class="profile-section-block__title">
+          Links <span class="form-optional">(optional)</span>
+        </h2>
+
+        <div class="form-group">
+          <label class="form-label" for="website-url">Website</label>
+          <input class="form-input" type="url" id="website-url" placeholder="https://" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="linkedin-url">LinkedIn</label>
+          <input class="form-input" type="url" id="linkedin-url"
+                 placeholder="https://linkedin.com/in/yourname" />
+        </div>
+      </section>
+
+      <!-- ── Portfolio ──────────────────────────────────────────────── -->
+      <section class="profile-section-block">
+        <h2 class="profile-section-block__title">
+          Work samples <span class="form-optional">(optional)</span>
+        </h2>
+        <p class="profile-section-block__desc">
+          Paste a URL and we'll pull in the title, description, and preview image automatically.
+          You can edit any field before saving.
+        </p>
+
+        <div id="portfolio-items"></div>
+
+        <button type="button" class="btn btn--secondary" id="add-portfolio-btn">
+          + Add a work sample
+        </button>
+      </section>
+
+      <!-- ── Save ───────────────────────────────────────────────────── -->
+      <div class="profile-save-bar">
+        <button type="button" class="btn btn--primary" id="save-btn">Save profile</button>
+        <a href="/dashboard.html" class="btn btn--secondary">Back to dashboard</a>
+        <a id="view-profile-btn" href="#" class="btn btn--secondary" hidden>View live profile →</a>
       </div>
 
     </div>
   </main>
 
-  <!-- Portfolio item template — cloned by JS for each work sample -->
+  <!-- Portfolio item template -->
   <template id="portfolio-item-template">
     <div class="portfolio-item-block">
       <div class="portfolio-item-block__url-row">
@@ -450,100 +410,49 @@
     });
     dropdown.addEventListener("click", (e) => e.stopPropagation());
 
-    let portfolioItems = [];
     let pendingAvatarFile = null;
-    let currentStep = 1;
-
-    const STEP_TITLES = ["Who you are", "What you do", "Availability & rate", "Work samples"];
-
-    // ── Step management ────────────────────────────────────────────
-
-    function showStep(n) {
-      currentStep = n;
-
-      for (let i = 1; i <= 4; i++) {
-        document.getElementById(`step-${i}`).hidden = i !== n;
-        const dot = document.getElementById(`dot-${i}`);
-        dot.classList.toggle("profile-steps-bar__dot--active", i === n);
-        dot.classList.toggle("profile-steps-bar__dot--done", i < n);
-      }
-
-      document.getElementById("step-counter").textContent = `Step ${n} of 4`;
-      document.getElementById("step-title-label").textContent = STEP_TITLES[n - 1];
-      document.getElementById("step-back-btn").hidden = n === 1;
-
-      const nextBtn = document.getElementById("step-next-btn");
-      nextBtn.textContent = n === 4 ? "Save & finish" : "Save & continue →";
-
-      if (n === 2) updatePreview();
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    // Allow clicking step dots to jump to any step
-    document.querySelectorAll(".profile-steps-bar__dot").forEach((dot) => {
-      dot.addEventListener("click", () => {
-        const target = parseInt(dot.dataset.step);
-        if (target !== currentStep) showStep(target);
-      });
-    });
 
     // ── Completion indicator ───────────────────────────────────────
 
     function updateCompletion() {
       const hasRole  = !!document.getElementById("role").value.trim();
+      const hasBio   = !!document.getElementById("bio").value.trim();
       const hasSkill = document.querySelectorAll(".pill--skill.selected").length > 0;
       const hasAvail = !!document.querySelector("input[name='availability_status']:checked");
 
-      const tick = (id, done) => {
+      const tick = (id, done) =>
         document.getElementById(id).classList.toggle("profile-completion__item--done", done);
-      };
-      tick("compl-role", hasRole);
+
+      tick("compl-role",  hasRole);
+      tick("compl-bio",   hasBio);
       tick("compl-skills", hasSkill);
       tick("compl-avail", hasAvail);
 
-      const hintEl = document.getElementById("compl-hint");
-      if (hasRole && hasSkill && hasAvail) {
+      const complete = hasRole && hasBio && hasSkill && hasAvail;
+      const hintEl   = document.getElementById("compl-hint");
+
+      if (complete) {
         hintEl.textContent = "✓ You're findable in browse";
         hintEl.classList.add("profile-completion__hint--done");
       } else {
         hintEl.textContent = "→ unlock browsing";
         hintEl.classList.remove("profile-completion__hint--done");
       }
+
+      // Show / hide "view profile" links based on completion
+      const viewLink = document.getElementById("view-profile-link");
+      const viewBtn  = document.getElementById("view-profile-btn");
+      if (complete) {
+        viewLink.hidden = false;
+        viewBtn.hidden  = false;
+      }
     }
 
-    // Update completion whenever relevant inputs change
     document.getElementById("role").addEventListener("input", updateCompletion);
-    document.querySelectorAll("input[name='availability_status']").forEach((r) => {
-      r.addEventListener("change", updateCompletion);
-    });
-
-    // ── Live preview (shown in step 2 header) ──────────────────────
-
-    function updatePreview() {
-      const firstName = document.getElementById("first-name").value.trim();
-      const lastName  = document.getElementById("last-name").value.trim();
-      const role      = document.getElementById("role").value.trim();
-
-      document.getElementById("preview-name").textContent =
-        `${firstName} ${lastName}`.trim() || "Your name";
-      document.getElementById("preview-role").textContent =
-        role || "";
-
-      const initials = `${(firstName[0] || "?").toUpperCase()}${(lastName[0] || "").toUpperCase()}`;
-      const avatarEl = document.getElementById("preview-avatar");
-      const existingImg = avatarEl.querySelector("img");
-      if (!existingImg) {
-        avatarEl.textContent = initials;
-      }
-
-      const hint = document.getElementById("preview-hint");
-      if (!role) {
-        hint.textContent = "Add your role above, then select skills to become searchable.";
-      } else {
-        hint.textContent = "Add your skills below to become searchable in browse.";
-      }
-    }
+    document.getElementById("bio").addEventListener("input", updateCompletion);
+    document.querySelectorAll("input[name='availability_status']").forEach((r) =>
+      r.addEventListener("change", updateCompletion)
+    );
 
     // ── Avatar ─────────────────────────────────────────────────────
 
@@ -556,11 +465,6 @@
         preview.innerHTML = `<img src="${src}" alt="Profile photo"
           style="width:100%;height:100%;object-fit:cover;" />`;
         removeBtn.hidden = false;
-
-        // Mirror into the step-2 preview avatar
-        const previewAv = document.getElementById("preview-avatar");
-        previewAv.innerHTML = `<img src="${src}" alt=""
-          style="width:100%;height:100%;object-fit:cover;" />`;
       } else {
         const initials = `${(member?.first_name || "?")[0]}${(member?.last_name || "")[0]}`.toUpperCase();
         preview.textContent = initials;
@@ -587,7 +491,7 @@
       renderAvatarPreview(null, null);
     });
 
-    // ── Load existing profile ──────────────────────────────────────
+    // ── Load profile ───────────────────────────────────────────────
 
     async function loadProfile() {
       const { member } = await api.get("/members/me");
@@ -595,21 +499,20 @@
       renderAvatar(document.getElementById("nav-avatar"), member);
 
       const profileUrl = `/member.html?username=${encodeURIComponent(member.username)}`;
-      const viewLink = document.getElementById("view-profile-link");
-      viewLink.href = profileUrl;
-      viewLink.hidden = false;
+      document.getElementById("view-profile-link").href = profileUrl;
+      document.getElementById("view-profile-btn").href  = profileUrl;
 
       renderAvatarPreview(member);
 
-      document.getElementById("first-name").value  = member.first_name  || "";
-      document.getElementById("last-name").value   = member.last_name   || "";
-      document.getElementById("role").value        = member.role        || "";
-      document.getElementById("bio").value         = member.bio         || "";
-      document.getElementById("location").value    = member.location    || "";
-      document.getElementById("rate-min").value    = member.rate_min    || "";
-      document.getElementById("rate-max").value    = member.rate_max    || "";
-      document.getElementById("rate-notes").value  = member.rate_notes  || "";
-      document.getElementById("website-url").value = member.website_url  || "";
+      document.getElementById("first-name").value   = member.first_name  || "";
+      document.getElementById("last-name").value    = member.last_name   || "";
+      document.getElementById("role").value         = member.role        || "";
+      document.getElementById("bio").value          = member.bio         || "";
+      document.getElementById("location").value     = member.location    || "";
+      document.getElementById("rate-min").value     = member.rate_min    || "";
+      document.getElementById("rate-max").value     = member.rate_max    || "";
+      document.getElementById("rate-notes").value   = member.rate_notes  || "";
+      document.getElementById("website-url").value  = member.website_url  || "";
       document.getElementById("linkedin-url").value = member.linkedin_url || "";
 
       // Skills
@@ -645,7 +548,6 @@
       }
 
       updateCompletion();
-
       await loadPortfolio();
     }
 
@@ -654,7 +556,7 @@
         const { portfolio } = await api.get("/members/me/portfolio");
         (portfolio || []).forEach((item) => addPortfolioBlock(item));
       } catch {
-        // silent — portfolio stays empty
+        // silent
       }
     }
 
@@ -681,13 +583,10 @@
       if (!val) return;
       const existing = [...document.querySelectorAll(".pill--skill")]
         .find((c) => c.dataset.skill?.toLowerCase() === val.toLowerCase());
-      if (existing) {
-        existing.classList.add("selected");
-        return;
-      }
+      if (existing) { existing.classList.add("selected"); updateCompletion(); return; }
       const chip = document.createElement("button");
-      chip.type      = "button";
-      chip.className = "pill pill--skill selected";
+      chip.type        = "button";
+      chip.className   = "pill pill--skill selected";
       chip.dataset.skill = val;
       chip.textContent   = val;
       chip.addEventListener("click", () => {
@@ -705,14 +604,10 @@
     });
 
     document.getElementById("skill-other-input").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        addCustomSkill(e.target.value);
-        e.target.value = "";
-      }
+      if (e.key === "Enter") { e.preventDefault(); addCustomSkill(e.target.value); e.target.value = ""; }
     });
 
-    // ── Custom language chips ──────────────────────────────────────
+    // ── Custom languages ───────────────────────────────────────────
 
     const customLangs = new Set();
 
@@ -723,14 +618,11 @@
       if (existing) { existing.checked = true; return; }
       customLangs.add(val.toLowerCase());
       const chip = document.createElement("button");
-      chip.type      = "button";
-      chip.className = "pill pill--skill selected";
+      chip.type        = "button";
+      chip.className   = "pill pill--skill selected";
       chip.dataset.lang = val;
       chip.textContent  = `${val} ×`;
-      chip.addEventListener("click", () => {
-        customLangs.delete(val.toLowerCase());
-        chip.remove();
-      });
+      chip.addEventListener("click", () => { customLangs.delete(val.toLowerCase()); chip.remove(); });
       document.getElementById("custom-language-chips").appendChild(chip);
     }
 
@@ -741,18 +633,12 @@
     });
 
     document.getElementById("lang-other-input").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        addCustomLanguage(e.target.value);
-        e.target.value = "";
-      }
+      if (e.key === "Enter") { e.preventDefault(); addCustomLanguage(e.target.value); e.target.value = ""; }
     });
 
-    // ── Portfolio blocks ───────────────────────────────────────────
+    // ── Portfolio ──────────────────────────────────────────────────
 
-    document.getElementById("add-portfolio-btn").addEventListener("click", () => {
-      addPortfolioBlock(null);
-    });
+    document.getElementById("add-portfolio-btn").addEventListener("click", () => addPortfolioBlock(null));
 
     function addPortfolioBlock(existingItem) {
       const template = document.getElementById("portfolio-item-template");
@@ -765,7 +651,6 @@
         block.querySelector(".portfolio-type-input").value  = existingItem.type  || "";
         block.querySelector(".portfolio-year-input").value  = existingItem.year  || "";
         block.querySelector(".portfolio-desc-input").value  = existingItem.description || "";
-
         if (existingItem.image_url) {
           const preview = block.querySelector(".portfolio-item-block__preview");
           block.querySelector(".portfolio-preview-img").src = existingItem.image_url;
@@ -777,8 +662,7 @@
         const btn = e.currentTarget;
         const url = block.querySelector(".portfolio-url-input").value.trim();
         if (!url) return;
-        btn.disabled    = true;
-        btn.textContent = "Fetching…";
+        btn.disabled = true; btn.textContent = "Fetching…";
         try {
           const og = await api.post("/og", { url });
           if (og.title)       block.querySelector(".portfolio-title-input").value = og.title;
@@ -788,22 +672,15 @@
             block.querySelector(".portfolio-preview-img").src = og.image;
             preview.hidden = false;
           }
-        } catch {
-          // silent — manual entry still works
-        }
-        btn.disabled    = false;
-        btn.textContent = "Fetch";
+        } catch { /* silent */ }
+        btn.disabled = false; btn.textContent = "Fetch";
       });
 
       block.querySelector(".portfolio-remove-btn").addEventListener("click", async () => {
         const itemId = block.dataset.itemId;
         if (itemId) {
-          try {
-            await api.delete(`/portfolio/${itemId}`);
-          } catch (err) {
-            console.error("Could not delete portfolio item:", err.message);
-            return;
-          }
+          try { await api.delete(`/portfolio/${itemId}`); }
+          catch (err) { console.error("Could not delete portfolio item:", err.message); return; }
         }
         block.remove();
       });
@@ -811,9 +688,18 @@
       document.getElementById("portfolio-items").appendChild(block);
     }
 
-    // ── Core save ─────────────────────────────────────────────────
+    // ── Save ───────────────────────────────────────────────────────
 
-    async function saveProfile() {
+    document.getElementById("save-btn").addEventListener("click", async () => {
+      const btn       = document.getElementById("save-btn");
+      const errorEl   = document.getElementById("error-banner");
+      const successEl = document.getElementById("save-banner");
+
+      btn.disabled    = true;
+      btn.textContent = "Saving…";
+      errorEl.hidden  = true;
+      successEl.hidden = true;
+
       const skills = [...document.querySelectorAll(".pill--skill.selected")]
         .map((c) => c.dataset.skill);
 
@@ -825,36 +711,45 @@
       const availStatus = document.querySelector("input[name='availability_status']:checked")?.value;
       const availDate   = document.getElementById("availability-date").value || null;
 
-      let avatarUrl;
-      if (pendingAvatarFile) {
-        avatarUrl = await uploadAvatar(pendingAvatarFile);
-        pendingAvatarFile = null;
-      }
+      try {
+        let avatarUrl;
+        if (pendingAvatarFile) {
+          avatarUrl = await uploadAvatar(pendingAvatarFile);
+          pendingAvatarFile = null;
+        }
 
-      await api.put("/members/me", {
-        ...(avatarUrl !== undefined ? { avatar_url: avatarUrl } : {}),
-        first_name:          document.getElementById("first-name").value.trim(),
-        last_name:           document.getElementById("last-name").value.trim(),
-        role:                document.getElementById("role").value.trim(),
-        bio:                 document.getElementById("bio").value.trim(),
-        location:            document.getElementById("location").value.trim(),
-        skills,
-        languages,
-        availability_status: availStatus || null,
-        availability_date:   availStatus === "from_date" ? availDate : null,
-        rate_min:            parseInt(document.getElementById("rate-min").value) || null,
-        rate_max:            parseInt(document.getElementById("rate-max").value) || null,
-        rate_notes:          document.getElementById("rate-notes").value.trim(),
-        website_url:         document.getElementById("website-url").value.trim(),
-        linkedin_url:        document.getElementById("linkedin-url").value.trim(),
-      });
+        await api.put("/members/me", {
+          ...(avatarUrl !== undefined ? { avatar_url: avatarUrl } : {}),
+          first_name:          document.getElementById("first-name").value.trim(),
+          last_name:           document.getElementById("last-name").value.trim(),
+          role:                document.getElementById("role").value.trim(),
+          bio:                 document.getElementById("bio").value.trim(),
+          location:            document.getElementById("location").value.trim(),
+          skills,
+          languages,
+          availability_status: availStatus || null,
+          availability_date:   availStatus === "from_date" ? availDate : null,
+          rate_min:            parseInt(document.getElementById("rate-min").value) || null,
+          rate_max:            parseInt(document.getElementById("rate-max").value) || null,
+          rate_notes:          document.getElementById("rate-notes").value.trim(),
+          website_url:         document.getElementById("website-url").value.trim(),
+          linkedin_url:        document.getElementById("linkedin-url").value.trim(),
+        });
 
-      if (currentStep === 4) {
         await savePortfolioItems();
+        updateCompletion();
+
+        successEl.hidden = false;
+        successEl.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+      } catch (err) {
+        errorEl.textContent = err.message;
+        errorEl.hidden      = false;
       }
 
-      updateCompletion();
-    }
+      btn.disabled    = false;
+      btn.textContent = "Save profile";
+    });
 
     async function savePortfolioItems() {
       const blocks = document.querySelectorAll(".portfolio-item-block");
@@ -882,62 +777,6 @@
         }
       }
     }
-
-    // ── Navigation handlers ────────────────────────────────────────
-
-    async function handleSave({ advance }) {
-      const btn      = advance
-        ? document.getElementById("step-next-btn")
-        : document.getElementById("save-only-btn");
-      const errorEl  = document.getElementById("error-banner");
-      const successEl = document.getElementById("save-banner");
-
-      if (currentStep === 1) {
-        const firstName = document.getElementById("first-name").value.trim();
-        const lastName  = document.getElementById("last-name").value.trim();
-        if (!firstName || !lastName) {
-          errorEl.textContent = "Please enter your first and last name.";
-          errorEl.hidden = false;
-          return;
-        }
-      }
-
-      btn.disabled    = true;
-      const origText  = btn.textContent;
-      btn.textContent = "Saving…";
-      errorEl.hidden  = true;
-      successEl.hidden = true;
-
-      try {
-        await saveProfile();
-        if (advance && currentStep < 4) {
-          showStep(currentStep + 1);
-        } else if (advance && currentStep === 4) {
-          const { member } = await api.get("/members/me");
-          window.location.href = `/member.html?username=${member.username}`;
-        } else {
-          successEl.hidden = false;
-        }
-      } catch (err) {
-        errorEl.textContent = err.message;
-        errorEl.hidden      = false;
-      }
-
-      btn.disabled    = false;
-      btn.textContent = origText;
-    }
-
-    document.getElementById("step-next-btn").addEventListener("click", () =>
-      handleSave({ advance: true })
-    );
-
-    document.getElementById("save-only-btn").addEventListener("click", () =>
-      handleSave({ advance: false })
-    );
-
-    document.getElementById("step-back-btn").addEventListener("click", () => {
-      showStep(currentStep - 1);
-    });
 
     loadProfile();
   </script>
